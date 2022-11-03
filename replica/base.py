@@ -7,8 +7,8 @@ import numpy as np
 
 
 class BaseProcess(ABC):
-    def __int__(self, rng=None):
-        self.gen = rng
+    def __init__(self, rng=None):
+        self.rng = rng
 
     @property
     def rng(self):
@@ -16,19 +16,24 @@ class BaseProcess(ABC):
             return np.random.default_rng()
         return self._rng
 
+    @rng.setter
+    def rng(self, value):
+        if value is None:
+            self._rng = None
+        elif isinstance(value, (np.random.RandomState, np.random.Generator)):
+            self._rng = value
+        else:
+            raise TypeError("rng must be of type `numpy.random.Generator`")
+
     @abstractmethod
     def sample(self, n):  # pragma: no cover
         pass
 
-    @abstractmethod
-    def plot(self):
-        pass
-
 
 class StochasticProcess(BaseProcess, ABC):
-    def __int__(self, T=1.0, rng=None):
+    def __init__(self, T=1.0, rng=None):
         super().__init__(rng=rng)
-        self.T = T
+        self.t = T
         self._n = None
         self._times = None
 
@@ -46,7 +51,7 @@ class StochasticProcess(BaseProcess, ABC):
         if self._n != n:
             check_positive_integer(n)
             self._n = n
-            self._times = get_times(self.T, n)
+            self._times = get_times(self.T, n-1)
 
     def times(self, n):
         """Generate times associated with n increments on [0, t].
