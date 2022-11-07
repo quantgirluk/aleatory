@@ -30,9 +30,8 @@ class BrownianMotion(Gaussian):
 
     def _sample_brownian_motion(self, n):
 
-        if self.drift !=0 and (self._times is None or len(self._times)!= n):
-            self._n = n
-            self._times = get_times(self.drift, n)
+        self._n = n
+        self._times = get_times(self.T, n)
 
         bm = np.cumsum(self.scale * self._sample_gaussian_noise(n))
         bm = np.insert(bm, [0], 0)
@@ -40,4 +39,16 @@ class BrownianMotion(Gaussian):
         if self.drift == 0:
             return bm
         else:
-            return self._times + bm
+            return self._times*self.drift + bm
+
+    def sample(self, n):
+
+        return self._sample_brownian_motion(n)
+
+    def sample_at(self, times):
+        """
+        GGenerate Gaussian increments at specified times starting  from zero
+        :param times:
+        :return:
+        """
+        return self._sample_gaussian_noise_at(times)
