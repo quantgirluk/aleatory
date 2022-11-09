@@ -13,6 +13,7 @@ class Gaussian(StochasticProcess):
 
     def __repr__(self):
         return "GaussianNoise(T={T})".format(T=str(self.T))
+
     def _sample_gaussian_noise(self, n):
         """
         Generates a random sample of size n from N(0, t/n)
