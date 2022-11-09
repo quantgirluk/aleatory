@@ -2,6 +2,7 @@ from gaussian import Gaussian
 from utils import check_positive_number, check_numeric, get_times
 import numpy as np
 
+
 class BrownianMotion(Gaussian):
 
     def __init__(self, drift=0.0, scale=1.0, T=1.0, rng=None):
@@ -30,8 +31,8 @@ class BrownianMotion(Gaussian):
 
     def _sample_brownian_motion(self, n):
 
-        self._n = n
-        self._times = get_times(self.T, n)
+        self.n = n
+        self.times = get_times(self.T, n)
 
         bm = np.cumsum(self.scale * self._sample_gaussian_noise(n))
         bm = np.insert(bm, [0], 0)
@@ -39,16 +40,26 @@ class BrownianMotion(Gaussian):
         if self.drift == 0:
             return bm
         else:
-            return self._times*self.drift + bm
+            return self.times * self.drift + bm
 
     def sample(self, n):
 
         return self._sample_brownian_motion(n)
 
+    def _sample_brownian_motion_at(self, times):
+        """Generate a Brownian motion at specified times."""
+        bm = np.cumsum(self.scale * self._sample_gaussian_noise_at(times))
+
+        if times[0] == 0:
+            bm = np.insert(bm, 0, [0])
+
+        if self.drift != 0:
+            bm += [self.drift * t for t in times]
+
+        return bm
+
     def sample_at(self, times):
         """
-        GGenerate Gaussian increments at specified times starting  from zero
-        :param times:
-        :return:
         """
-        return self._sample_gaussian_noise_at(times)
+        temp = self._sample_brownian_motion_at(times)
+        return temp
