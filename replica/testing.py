@@ -29,6 +29,10 @@ import matplotlib.pyplot as plt
 
 from brownian_motion_paths import BrownianPaths
 
-my_times = np.linspace(0, 5, 100, endpoint=True)
-paths = BrownianPaths(N=20, times=my_times).draw()
+my_times = np.linspace(0, 1, 100, endpoint=True)
+BMP = BrownianPaths(N=200, times=my_times, drift=1.0, scale=1.5)
+
+
+BMP.draw()
+
 
