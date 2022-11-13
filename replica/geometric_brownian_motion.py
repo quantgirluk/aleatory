@@ -62,7 +62,7 @@ class GeometricBrownianMotion(StochasticProcess):
         self._volatility = value
 
     def _sample_geometric_brownian_motion(self, n, initial=1.0):
-        """Generate a realization of geometric Brownian motion."""
+        """Generate a realization of a geometric Brownian motion."""
         check_positive_integer(n)
         check_positive_number(initial, "Initial")
 
@@ -74,7 +74,7 @@ class GeometricBrownianMotion(StochasticProcess):
                                 + self.volatility * self._brownian_motion.sample(n))
 
     def _sample_geometric_brownian_motion_at(self, times, initial=1.0):
-        """Generate a realization of geometric Brownian motion."""
+        """Generate a realization of a Geometric Brownian motion."""
 
         return initial * np.exp((self.drift - 0.5 * self.volatility ** 2) * times
                                 + self.volatility * self._brownian_motion.sample_at(times))
