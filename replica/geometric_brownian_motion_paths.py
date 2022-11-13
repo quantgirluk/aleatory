@@ -1,0 +1,2 @@
+from geometric_brownian_motion import GeometricBrownianMotion
+
