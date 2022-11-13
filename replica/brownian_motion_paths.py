@@ -4,13 +4,39 @@ from matplotlib.gridspec import GridSpec
 from scipy.stats import norm
 import numpy as np
 import pandas as pd
+from abc import ABC
+from abc import abstractmethod
 
 SAVE = False
 plt.style.use(
     'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-light.mplstyle')
 
 
-class BrownianPaths:
+class StochasticProcessPaths(ABC):
+    def __init__(self, rng=None):
+        self.rng = rng
+
+    @property
+    def rng(self):
+        if self._rng is None:
+            return np.random.default_rng()
+        return self._rng
+
+    @rng.setter
+    def rng(self, value):
+        if value is None:
+            self._rng = None
+        elif isinstance(value, (np.random.RandomState, np.random.Generator)):
+            self._rng = value
+        else:
+            raise TypeError("rng must be of type `numpy.random.Generator`")
+
+    @abstractmethod
+    def sample(self, n):  # pragma: no cover
+        pass
+
+
+class BrownianPaths(StochasticProcessPaths):
 
     def __init__(self, N, times, drift=0.0, scale=1.0):
         self.N = N
@@ -28,7 +54,7 @@ class BrownianPaths:
         return expectations
 
     def _process_variance(self):
-        return self.scale*np.sqrt(self.times)
+        return self.scale * np.sqrt(self.times)
 
     def process_variance(self):
         variances = self._process_variance()
