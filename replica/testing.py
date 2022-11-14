@@ -1,6 +1,7 @@
 import unittest
 import numpy as np
 from brownian_motion_paths import BrownianPaths
+from geometric_brownian_motion_paths import GBMPaths
 from geometric_brownian_motion import GeometricBrownianMotion
 from gaussian import Gaussian
 from brownian_motion import BrownianMotion
@@ -48,9 +49,16 @@ class TestProcesses(unittest.TestCase):
 class TestPaths(unittest.TestCase):
     def test_BrownianPaths(self):
         my_times = np.linspace(0, 1, 100, endpoint=True)
-        BMP = BrownianPaths(N=200, times=my_times, drift=1.0, scale=1.5)
+        BMP = BrownianPaths(N=200, times=my_times, drift=4.0, scale=1.5)
         BMP.plot()
         BMP.draw()
+
+    def test_GBMPaths(self):
+        my_times = np.linspace(0, 1, 100, endpoint=True)
+        GBMP = GBMPaths(N=200, drift=1.0, volatility=0.25, initial=1.0, times=my_times)
+        GBMP.plot()
+        GBMP.draw()
+
 
 
 if __name__ == '__main__':
