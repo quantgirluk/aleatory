@@ -54,8 +54,8 @@ class TestPaths(unittest.TestCase):
         BMP.draw()
 
     def test_GBMPaths(self):
-        my_times = np.linspace(0, 1, 100, endpoint=True)
-        GBMP = GBMPaths(N=200, drift=1.0, volatility=0.25, initial=1.0, times=my_times)
+        my_times = np.linspace(0, 1, 250, endpoint=True)
+        GBMP = GBMPaths(N=500, drift=2.0, volatility=0.15, initial=1.0, times=my_times)
         GBMP.plot()
         GBMP.draw()
 
