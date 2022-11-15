@@ -105,7 +105,8 @@ class StochasticProcessPaths(ABC):
 
 class BrownianPaths(StochasticProcessPaths):
 
-    def __init__(self, N, times, drift=0.0, scale=1.0):
+    def __init__(self, N, times, drift=0.0, scale=1.0, rng=None):
+        super().__init__(rng=rng)
         self.N = N
         self.times = times
         self.drift = drift
