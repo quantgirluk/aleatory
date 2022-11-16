@@ -1,11 +1,12 @@
 from geometric_brownian_motion import GeometricBrownianMotion
-from brownian_motion_paths import StochasticProcessPaths
+from base_paths import StochasticProcessPaths
 from scipy.stats import lognorm
 import numpy as np
 
 
 class GBMPaths(StochasticProcessPaths):
-    def __init__(self, N, times, drift=0.0, volatility=1.0, initial=1.0):
+    def __init__(self, N, times, drift=0.0, volatility=1.0, initial=1.0, rng=None):
+        super().__init__(rng=rng)
         self.N = N
         self.times = times
         self.drift = drift
