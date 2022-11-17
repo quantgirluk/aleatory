@@ -1,11 +1,14 @@
 import unittest
-import numpy as np
-from brownian_motion_paths import BrownianPaths
-from geometric_brownian_motion_paths import GBMPaths
-from geometric_brownian_motion import GeometricBrownianMotion
-from gaussian import Gaussian
-from brownian_motion import BrownianMotion
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+from brownian_motion import BrownianMotion
+from brownian_motion_paths import BrownianPaths
+from gaussian import Gaussian
+from geometric_brownian_motion import GeometricBrownianMotion
+from geometric_brownian_motion_paths import GBMPaths
+from ou_process import OUProcess
 
 
 # my_process = Gaussian()
@@ -25,6 +28,25 @@ import matplotlib.pyplot as plt
 # plt.show()
 
 class TestProcesses(unittest.TestCase):
+    def test_Gaussian(self):
+        process = Gaussian()
+        n = 100
+        times = process.times(n)
+        sample = process.sample(n)
+
+        check_times = np.linspace(0, 1, n)
+        for (t1, t2) in zip(times, check_times):
+            self.assertEqual(t1, t2)
+        plt.plot(times, sample)
+        plt.show()
+
+        process = Gaussian()
+        times = np.arange(1, 11, 1)
+        sample = process.sample_at(times)
+        print(process._times)
+
+        plt.plot(times, sample)
+        plt.show()
 
     def test_BrownianMotion(self):
         my_times = np.linspace(0, 5, 100, endpoint=True)
@@ -45,6 +67,16 @@ class TestProcesses(unittest.TestCase):
             plt.plot(my_times, sample)
         plt.show()
 
+    def test_OUProcess(self):
+        process = OUProcess(T=10.0, theta=0.7, mu=1.50, sigma=0.06)
+        n = 100
+
+        for k in range(200):
+            sample = process.sample(n)
+            times = process._times
+            plt.plot(times, sample)
+        plt.show()
+
 
 class TestPaths(unittest.TestCase):
     def test_BrownianPaths(self):
@@ -58,7 +90,6 @@ class TestPaths(unittest.TestCase):
         GBMP = GBMPaths(N=100, drift=.4, volatility=0.2, initial=1.0, times=my_times)
         GBMP.plot()
         GBMP.draw()
-
 
 
 if __name__ == '__main__':
