@@ -2,21 +2,21 @@ import numpy as np
 
 from base import StochasticProcess
 from utils import check_positive_integer, times_to_increments
-import matplotlib.pyplot as plt
 
 
 class Gaussian(StochasticProcess):
     def __int__(self, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
+
     def __str__(self):
-        return "Gaussian noise generator on interval [0, {t}]".format(t=str(self.t))
+        return "Gaussian noise generator on interval [0, {T}]".format(T=str(self.T))
 
     def __repr__(self):
         return "GaussianNoise(T={T})".format(T=str(self.T))
 
     def _sample_gaussian_noise(self, n):
         """
-        Generates a random sample of size n from N(0, t/n)
+        Generates a random sample of size n from N(0, T/n)
         :param n:
         :return:
         """
@@ -35,7 +35,6 @@ class Gaussian(StochasticProcess):
         if times[0] != 0:
             times = np.concatenate(([0], times))
         increments = times_to_increments(times)
-
         noise = np.array([self.rng.normal(scale=np.sqrt(inc)) for inc in increments])
 
         return noise
