@@ -33,7 +33,7 @@ class BaseProcess(ABC):
 class StochasticProcess(BaseProcess, ABC):
     def __init__(self, T=1.0, rng=None):
         super().__init__(rng=rng)
-        self.t = T
+        self.T = T
         self._n = None
         self._times = None
 
@@ -43,7 +43,7 @@ class StochasticProcess(BaseProcess, ABC):
         return self._T
 
     @T.setter
-    def t(self, value):
+    def T(self, value):
         check_positive_number(value, "Time end")
         self._T = float(value)
 
