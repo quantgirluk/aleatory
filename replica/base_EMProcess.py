@@ -1,7 +1,7 @@
-from gaussian import Gaussian
-from base import StochasticProcess
-from utils import check_positive_number, check_positive_integer
 import numpy as np
+
+from base import StochasticProcess
+from utils import check_positive_integer
 
 
 class BaseEulerMaruyamaProcess(StochasticProcess):
@@ -14,7 +14,6 @@ class BaseEulerMaruyamaProcess(StochasticProcess):
         self.n = None
         self.dt = None
         self.times = None
-
 
     def _sample_em_process(self, n):
         check_positive_integer(n)
