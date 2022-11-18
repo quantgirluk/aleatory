@@ -35,7 +35,7 @@ class StochasticProcess(BaseProcess, ABC):
         super().__init__(rng=rng)
         self.T = T
         self._n = None
-        self._times = None
+        self.times = None
 
     @property
     def T(self):
@@ -51,11 +51,11 @@ class StochasticProcess(BaseProcess, ABC):
         if self._n != n:
             check_positive_integer(n)
             self._n = n
-            self._times = get_times(self.T, n-1)
+            self.times = get_times(self.T, n - 1)
 
     def times(self, n):
         """Generate times associated with n increments on [0, t].
         :param int n: the number of increments
         """
         self._set_times(n)
-        return self._times
+        return self.times

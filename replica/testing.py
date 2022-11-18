@@ -9,6 +9,7 @@ from gaussian import Gaussian
 from geometric_brownian_motion import GeometricBrownianMotion
 from geometric_brownian_motion_paths import GBMPaths
 from ou_process import OUProcess
+from ou_process_paths import OUProcessPaths
 
 
 # my_process = Gaussian()
@@ -43,7 +44,7 @@ class TestProcesses(unittest.TestCase):
         process = Gaussian()
         times = np.arange(1, 11, 1)
         sample = process.sample_at(times)
-        print(process._times)
+        print(process.times)
 
         plt.plot(times, sample)
         plt.show()
@@ -73,7 +74,7 @@ class TestProcesses(unittest.TestCase):
 
         for k in range(200):
             sample = process.sample(n)
-            times = process._times
+            times = process.times
             plt.plot(times, sample)
         plt.show()
 
@@ -87,9 +88,15 @@ class TestPaths(unittest.TestCase):
 
     def test_GBMPaths(self):
         my_times = np.linspace(0, 1, 250, endpoint=True)
-        GBMP = GBMPaths(N=100, drift=.4, volatility=0.2, initial=1.0, times=my_times)
+        GBMP = GBMPaths(N=200, drift=2.0, volatility=0.5, initial=1.0, times=my_times)
         GBMP.plot()
         GBMP.draw()
+
+    def test_OUPaths(self):
+
+        OUP = OUProcessPaths(N=100, n=200, theta=2.5, mu=1.50, sigma=0.6)
+        OUP.plot()
+        OUP.draw()
 
 
 if __name__ == '__main__':
