@@ -1,12 +1,14 @@
 import numpy as np
 
 from base import StochasticProcess
-from utils import check_positive_integer, times_to_increments
+from utils import check_positive_integer, times_to_increments, get_times
 
 
 class Gaussian(StochasticProcess):
     def __int__(self, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
+        self.n = None
+        self.times = None
 
     def __str__(self):
         return "Gaussian noise generator on interval [0, {T}]".format(T=str(self.T))
@@ -21,8 +23,10 @@ class Gaussian(StochasticProcess):
         :return:
         """
         check_positive_integer(n)
-        delta_t = 1.0 * self.T / n
-        noise = self.rng.normal(scale=np.sqrt(delta_t), size=n)
+        self.n = n
+        delta_t = 1.0 * self.T / self.n
+        self.times = get_times(self.T, self.n - 1)
+        noise = self.rng.normal(scale=np.sqrt(delta_t), size=self.n)
 
         return noise
 
@@ -35,6 +39,7 @@ class Gaussian(StochasticProcess):
         if times[0] != 0:
             times = np.concatenate(([0], times))
         increments = times_to_increments(times)
+        self.times = times
         noise = np.array([self.rng.normal(scale=np.sqrt(inc)) for inc in increments])
 
         return noise

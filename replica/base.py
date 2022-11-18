@@ -47,15 +47,15 @@ class StochasticProcess(BaseProcess, ABC):
         check_positive_number(value, "Time end")
         self._T = float(value)
 
-    def _set_times(self, n):
-        if self._n != n:
-            check_positive_integer(n)
-            self._n = n
-            self.times = get_times(self.T, n - 1)
-
-    def times(self, n):
-        """Generate times associated with n increments on [0, t].
-        :param int n: the number of increments
-        """
-        self._set_times(n)
-        return self.times
+    # def _set_times(self, n):
+    #     if self._n != n:
+    #         check_positive_integer(n)
+    #         self._n = n
+    #         self.times = get_times(self.T, n - 1)
+    #
+    # def times(self, n):
+    #     """Generate times associated with n increments on [0, t].
+    #     :param int n: the number of increments
+    #     """
+    #     self._set_times(n)
+    #     return self.times
