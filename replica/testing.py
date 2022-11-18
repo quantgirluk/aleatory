@@ -10,23 +10,8 @@ from geometric_brownian_motion import GeometricBrownianMotion
 from geometric_brownian_motion_paths import GBMPaths
 from ou_process import OUProcess
 from ou_process_paths import OUProcessPaths
-
-
-# my_process = Gaussian()
-# n =200
-#
-# print(my_process.sample_at(times=[1,2,3, 4.5]))
-# plt.plot(my_process.times(n=n), my_process.sample(n=n))
-# plt.show()
-
-# n = 200
-# for k in range(2):
-#     my_brownian = BrownianMotion(drift=-1.0, scale=2.0, T=5.0)
-#     sample = my_brownian.sample(n=n)
-#     print(type(sample))
-#     times = my_brownian.times
-#     plt.plot(times, sample)
-# plt.show()
+from cir_process import CIRProcess
+from cir_process_paths import CIRProcessPaths
 
 class TestProcesses(unittest.TestCase):
     def test_Gaussian(self):
@@ -48,13 +33,13 @@ class TestProcesses(unittest.TestCase):
 
     def test_BrownianMotion(self):
         my_times = np.linspace(0, 5, 100, endpoint=True)
+        process = BrownianMotion(drift=-1.0, scale=2.0)
         for k in range(10):
-            my_brownian = BrownianMotion(drift=-1.0, scale=2.0)
-            sample = my_brownian.sample_at(my_times)
+            sample = process.sample_at(my_times)
             plt.plot(my_times, sample)
         plt.show()
-        self.assertEqual(len(my_times), len(my_brownian.times))
-        for t, s in zip(my_times, my_brownian.times):
+        self.assertEqual(len(my_times), len(process.times))
+        for t, s in zip(my_times, process.times):
             self.assertEqual(t, s)
 
     def test_GeometricBrownianMotion(self):
@@ -70,6 +55,16 @@ class TestProcesses(unittest.TestCase):
         n = 100
 
         for k in range(200):
+            sample = process.sample(n)
+            times = process.times
+            plt.plot(times, sample)
+        plt.show()
+
+    def test_CIRProcess(self):
+        process = CIRProcess(T=1000.0, theta=0.06, mu=0.01, sigma=0.009)
+        n = 1000
+
+        for k in range(2):
             sample = process.sample(n)
             times = process.times
             plt.plot(times, sample)
@@ -92,6 +87,12 @@ class TestPaths(unittest.TestCase):
     def test_OUPaths(self):
 
         OUP = OUProcessPaths(N=100, n=200, theta=2.5, mu=1.50, sigma=0.6)
+        OUP.plot()
+        OUP.draw()
+
+    def test_CIRPaths(self):
+
+        OUP = CIRProcessPaths(N=100, n=10, theta=2.5, mu=1.50, sigma=0.6)
         OUP.plot()
         OUP.draw()
 
