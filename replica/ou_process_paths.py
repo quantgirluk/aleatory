@@ -36,7 +36,7 @@ class OUProcessPaths(StochasticProcessPaths):
         return variances
 
     def get_marginal(self, t):
-        mu_x = self.initial * np.exp((-1.0)*self.theta * t) + self.mu*(1.0-np.exp(-1.0*self.theta * t))
+        mu_x = self.initial * np.exp(-1.0*self.theta * t) + self.mu*(1.0-np.exp(-1.0*self.theta * t))
         variance_x = (self.sigma**2/(2.0*self.theta))*(1.0-np.exp(-2.0*self.theta*t))
         sigma_x = np.sqrt(variance_x)
         marginal = norm(loc=mu_x, scale=sigma_x)
