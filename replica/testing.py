@@ -32,9 +32,8 @@ class TestProcesses(unittest.TestCase):
     def test_Gaussian(self):
         process = Gaussian()
         n = 100
-        times = process.times(n)
         sample = process.sample(n)
-
+        times = process.times
         check_times = np.linspace(0, 1, n)
         for (t1, t2) in zip(times, check_times):
             self.assertEqual(t1, t2)
@@ -44,8 +43,6 @@ class TestProcesses(unittest.TestCase):
         process = Gaussian()
         times = np.arange(1, 11, 1)
         sample = process.sample_at(times)
-        print(process.times)
-
         plt.plot(times, sample)
         plt.show()
 
