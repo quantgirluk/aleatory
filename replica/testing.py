@@ -1,8 +1,6 @@
 import unittest
-
 import matplotlib.pyplot as plt
 import numpy as np
-
 from brownian_motion import BrownianMotion
 from brownian_motion_paths import BrownianPaths
 from gaussian import Gaussian
@@ -12,7 +10,6 @@ from ou_process import OUProcess
 from ou_process_paths import OUProcessPaths
 from cir_process import CIRProcess
 from cir_process_paths import CIRProcessPaths
-from parameterized import parameterized
 
 
 class Pars:
@@ -31,6 +28,7 @@ class Pars:
 def test_sample(self):
     sample = self.process.sample(self.n)
     times = self.process.times
+    self.assertEqual(len(times), len(self.grid_times))
     for (t1, t2) in zip(times, self.grid_times):
         self.assertEqual(t1, t2)
     plt.plot(times, sample)
@@ -80,25 +78,31 @@ class TestProcess(unittest.TestCase):
 
 
 class TestPaths(unittest.TestCase):
+
+    def setUp(self) -> None:
+        self.N = 100
+        self.n = 100
+        self.T = 1.0
+        self.times_given = np.linspace(0, 5, 100, endpoint=True)
+        self.grid_times = np.linspace(0, self.T, self.n)
+
     def test_BrownianPaths(self):
-        my_times = np.linspace(0, 1, 100, endpoint=True)
-        BMP = BrownianPaths(N=100, times=my_times, drift=4.0, scale=1.5)
+        BMP = BrownianPaths(N=self.N, times=self.times_given, drift=4.0, scale=1.5)
         BMP.plot()
         BMP.draw()
 
     def test_GBMPaths(self):
-        my_times = np.linspace(0, 1, 250, endpoint=True)
-        GBMP = GBMPaths(N=200, drift=2.0, volatility=0.5, initial=1.0, times=my_times)
+        GBMP = GBMPaths(N=self.N, times=self.times_given, drift=2.0, volatility=0.5, initial=1.0)
         GBMP.plot()
         GBMP.draw()
 
     def test_OUPaths(self):
-        OUP = OUProcessPaths(N=100, n=200, theta=2.5, mu=1.50, sigma=0.6)
+        OUP = OUProcessPaths(N=self.N, n=self.n, theta=2.5, mu=1.50, sigma=0.6)
         OUP.plot()
         OUP.draw()
 
     def test_CIRPaths(self):
-        OUP = CIRProcessPaths(N=200, n=200, theta=2.5, mu=1.50, sigma=0.6)
+        OUP = CIRProcessPaths(N=self.N, n=self.n, theta=2.5, mu=1.50, sigma=0.6)
         OUP.plot()
         OUP.draw()
 
