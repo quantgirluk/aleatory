@@ -12,63 +12,71 @@ from ou_process import OUProcess
 from ou_process_paths import OUProcessPaths
 from cir_process import CIRProcess
 from cir_process_paths import CIRProcessPaths
+from parameterized import parameterized
 
-class TestProcesses(unittest.TestCase):
+
+class Pars:
+
+    def __init__(self, initial, drift, vol, theta, mu, sigma, T):
+        self.initial = initial
+        self.drift = drift
+        self.vol = vol
+        self.theta = theta
+        self.vol = vol
+        self.mu = mu
+        self.sigma = sigma
+        self.T = T
+
+
+def test_sample(self):
+    sample = self.process.sample(self.n)
+    times = self.process.times
+    for (t1, t2) in zip(times, self.grid_times):
+        self.assertEqual(t1, t2)
+    plt.plot(times, sample)
+    plt.show()
+
+
+def test_sample_at(self):
+    sample = self.process.sample_at(self.times_given)
+    times = self.process.times
+    for (t1, t2) in zip(times, self.times_given):
+        self.assertEqual(t1, t2)
+    self.assertEqual(len(times), len(sample))
+    plt.plot(times, sample)
+    plt.show()
+
+
+class TestProcess(unittest.TestCase):
+    def setUp(self):
+        self.n = 100
+        self.T = 1.0
+        self.process = None
+        self.times_given = np.linspace(0, 5, 100, endpoint=True)
+        self.grid_times = np.linspace(0, self.T, self.n)
+
     def test_Gaussian(self):
-        process = Gaussian()
-        n = 100
-        sample = process.sample(n)
-        times = process.times
-        check_times = np.linspace(0, 1, n)
-        for (t1, t2) in zip(times, check_times):
-            self.assertEqual(t1, t2)
-        plt.plot(times, sample)
-        plt.show()
-
-        process = Gaussian()
-        times = np.arange(1, 11, 1)
-        sample = process.sample_at(times)
-        plt.plot(times, sample)
-        plt.show()
+        self.process = Gaussian(T=self.T)
+        test_sample(self)
+        test_sample_at(self)
 
     def test_BrownianMotion(self):
-        my_times = np.linspace(0, 5, 100, endpoint=True)
-        process = BrownianMotion(drift=-1.0, scale=2.0)
-        for k in range(10):
-            sample = process.sample_at(my_times)
-            plt.plot(my_times, sample)
-        plt.show()
-        self.assertEqual(len(my_times), len(process.times))
-        for t, s in zip(my_times, process.times):
-            self.assertEqual(t, s)
+        self.process = BrownianMotion(T=self.T, drift=-1.0, scale=2.0)
+        test_sample(self)
+        test_sample_at(self)
 
     def test_GeometricBrownianMotion(self):
-        my_times = np.linspace(0, 1, 100, endpoint=True)
-        for k in range(20):
-            my_process = GeometricBrownianMotion(drift=2.0, volatility=0.5)
-            sample = my_process.sample_at(my_times)
-            plt.plot(my_times, sample)
-        plt.show()
+        self.process = GeometricBrownianMotion(T=self.T, drift=-2.0, volatility=0.5)
+        test_sample(self)
+        test_sample_at(self)
 
     def test_OUProcess(self):
-        process = OUProcess(T=10.0, theta=0.7, mu=1.50, sigma=0.06)
-        n = 100
-
-        for k in range(200):
-            sample = process.sample(n)
-            times = process.times
-            plt.plot(times, sample)
-        plt.show()
+        self.process = OUProcess(T=self.T, theta=0.7, mu=1.50, sigma=0.06)
+        test_sample(self)
 
     def test_CIRProcess(self):
-        process = CIRProcess(T=1000.0, theta=0.06, mu=0.01, sigma=0.009)
-        n = 1000
-
-        for k in range(2):
-            sample = process.sample(n)
-            times = process.times
-            plt.plot(times, sample)
-        plt.show()
+        self.process = CIRProcess(T=self.T, theta=0.06, mu=0.01, sigma=0.009)
+        test_sample(self)
 
 
 class TestPaths(unittest.TestCase):
@@ -85,14 +93,12 @@ class TestPaths(unittest.TestCase):
         GBMP.draw()
 
     def test_OUPaths(self):
-
         OUP = OUProcessPaths(N=100, n=200, theta=2.5, mu=1.50, sigma=0.6)
         OUP.plot()
         OUP.draw()
 
     def test_CIRPaths(self):
-
-        OUP = CIRProcessPaths(N=100, n=10, theta=2.5, mu=1.50, sigma=0.6)
+        OUP = CIRProcessPaths(N=200, n=200, theta=2.5, mu=1.50, sigma=0.6)
         OUP.plot()
         OUP.draw()
 

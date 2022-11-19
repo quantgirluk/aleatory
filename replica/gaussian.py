@@ -25,7 +25,7 @@ class Gaussian(StochasticProcess):
         check_positive_integer(n)
         self.n = n
         delta_t = 1.0 * self.T / self.n
-        self.times = get_times(self.T, self.n - 1)
+        self.times = get_times(self.T, self.n)
         noise = self.rng.normal(scale=np.sqrt(delta_t), size=self.n)
 
         return noise
@@ -41,6 +41,7 @@ class Gaussian(StochasticProcess):
         increments = times_to_increments(times)
         self.times = times
         noise = np.array([self.rng.normal(scale=np.sqrt(inc)) for inc in increments])
+        noise = np.concatenate(([0], noise))
 
         return noise
 

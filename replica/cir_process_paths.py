@@ -16,9 +16,9 @@ class CIRProcessPaths(StochasticProcessPaths):
         self.n = n
         self.T = T
         self._dt = 1.0 * self.T / self.n
-        self.times = np.arange(0.0, self.T + self._dt, self._dt)
-        process = CIRProcess(theta=self.theta, mu=self.mu, sigma=self.sigma, initial=self.initial, n=self.n, T=self.T)
-        self.paths = [process.sample(n) for k in range(int(N))]
+        self.process = CIRProcess(theta=self.theta, mu=self.mu, sigma=self.sigma, initial=self.initial, n=self.n, T=self.T)
+        self.paths = [self.process.sample(n) for k in range(int(N))]
+        self.times = self.process.times
         self.name = "CIR Process"
 
     def _process_expectation(self):

@@ -4,7 +4,7 @@ import numpy as np
 
 def get_times(end, n):
     """Generate a linspace from 0 to end for n increments."""
-    return np.linspace(0, end, n + 1)
+    return np.linspace(0, end, n)
 
 
 def check_positive_integer(n, name=""):

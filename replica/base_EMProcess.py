@@ -1,7 +1,7 @@
 import numpy as np
 
 from base import StochasticProcess
-from utils import check_positive_integer
+from utils import check_positive_integer, get_times
 
 
 class BaseEulerMaruyamaProcess(StochasticProcess):
@@ -20,12 +20,12 @@ class BaseEulerMaruyamaProcess(StochasticProcess):
 
         self.n = n
         self.dt = 1.0 * self.T / self.n
-        self.times = np.arange(0.0, self.T + self.dt, self.dt)
+        self.times = get_times(self.T, self.n)
         dws = self.rng.normal(scale=np.sqrt(self.dt), size=self.n)
         simulation = [self.initial]
         previous = self.initial
 
-        for (t, dw) in zip(self.times, dws):
+        for (t, dw) in zip(self.times[1:], dws[1:]):
             previous += self.f(previous, t) * self.dt + self.g(previous, t) * dw
             simulation.append(previous)
 

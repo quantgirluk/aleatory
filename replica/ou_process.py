@@ -12,7 +12,7 @@ class OUProcess(BaseEulerMaruyamaProcess):
         self.initial = initial
         self.n = n
         self.dt = 1.0 * self.T / self.n
-        self.times = np.arange(0.0, self.T + self.dt, self.dt)
+        self.times = None
 
         def f(x, _):
             return self.theta * (self.mu - x)

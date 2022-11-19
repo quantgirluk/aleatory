@@ -33,7 +33,7 @@ class BrownianMotion(Gaussian):
         self.n = n
         self.times = get_times(self.T, self.n)
         bm = np.cumsum(self.scale * self._sample_gaussian_noise(n))
-        bm = np.insert(bm, [0], 0)
+       # bm = np.insert(bm, [0], 0)
         if self.drift == 0:
             return bm
         else:
@@ -47,7 +47,7 @@ class BrownianMotion(Gaussian):
         self.times = times
         bm = np.cumsum(self.scale * self._sample_gaussian_noise_at(times))
 
-        if times[0] == 0:
+        if times[0] != 0:
             bm = np.insert(bm, 0, [0])
 
         if self.drift != 0:
