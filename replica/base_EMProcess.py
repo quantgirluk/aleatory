@@ -14,6 +14,7 @@ class BaseEulerMaruyamaProcess(StochasticProcess):
         self.n = None
         self.dt = None
         self.times = None
+        self.name = None
 
     def _sample_em_process(self, n):
         check_positive_integer(n)

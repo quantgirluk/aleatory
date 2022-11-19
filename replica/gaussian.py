@@ -9,6 +9,7 @@ class Gaussian(StochasticProcess):
         super().__init__(T=T, rng=rng)
         self.n = None
         self.times = None
+        self.name = "Gaussian Noise"
 
     def __str__(self):
         return "Gaussian noise generator on interval [0, {T}]".format(T=str(self.T))

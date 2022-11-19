@@ -12,6 +12,7 @@ class GeometricBrownianMotion(StochasticProcess):
         self.volatility = volatility
         self.n = None
         self.times = None
+        self.name = "Geometric Brownian Motion"
 
     def __str__(self):
         return "Geometric Brownian motion with drift {d} and volatility {v} on [0, {T}].".format(

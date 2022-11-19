@@ -10,6 +10,7 @@ class BrownianMotion(Gaussian):
         self.drift = drift
         self.scale = scale
         self.times = None
+        self.name = "Brownian Motion"
 
     @property
     def drift(self):
@@ -33,7 +34,6 @@ class BrownianMotion(Gaussian):
         self.n = n
         self.times = get_times(self.T, self.n)
         bm = np.cumsum(self.scale * self._sample_gaussian_noise(n))
-       # bm = np.insert(bm, [0], 0)
         if self.drift == 0:
             return bm
         else:
@@ -56,7 +56,5 @@ class BrownianMotion(Gaussian):
         return bm
 
     def sample_at(self, times):
-        """
-        """
         temp = self._sample_brownian_motion_at(times)
         return temp

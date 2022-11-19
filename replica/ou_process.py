@@ -1,5 +1,4 @@
 from base_EMProcess import BaseEulerMaruyamaProcess
-import numpy as np
 
 
 class OUProcess(BaseEulerMaruyamaProcess):
@@ -13,6 +12,7 @@ class OUProcess(BaseEulerMaruyamaProcess):
         self.n = n
         self.dt = 1.0 * self.T / self.n
         self.times = None
+        self.name = "Ornstein–Uhlenbeck process"
 
         def f(x, _):
             return self.theta * (self.mu - x)
@@ -22,3 +22,7 @@ class OUProcess(BaseEulerMaruyamaProcess):
 
         self.f = f
         self.g = g
+
+    def __str__(self):
+        return "Orstein-Uhlenbeck process with parameters {speed}, {mean}, and {volatility} on [0, {T}].".format(
+            T=str(self.T), speed=str(self.theta), mean=str(self.mu), volatility=str(self.sigma))

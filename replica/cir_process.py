@@ -12,6 +12,7 @@ class CIRProcess(BaseEulerMaruyamaProcess):
         self.n = n
         self.dt = 1.0 * self.T / self.n
         self.times = np.arange(0.0, self.T + self.dt, self.dt)
+        self.name = "CIR Process"
 
         def f(x, _):
             return self.theta * (self.mu - x)
@@ -21,3 +22,7 @@ class CIRProcess(BaseEulerMaruyamaProcess):
 
         self.f = f
         self.g = g
+
+    def __str__(self):
+        return "Cox–Ingersoll–Ross process with parameters {speed}, {mean}, and {volatility} on [0, {T}].".format(
+            T=str(self.T), speed=str(self.theta), mean=str(self.mu), volatility=str(self.sigma))
