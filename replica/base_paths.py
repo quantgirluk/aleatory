@@ -11,9 +11,9 @@ SAVE = False
 
 
 class StochasticProcessPaths(ABC):
-    def __init__(self, rng=None):
+    def __init__(self, N=1, rng=None):
         self.rng = rng
-        self.N = None
+        self.N = N
         self.times = None
         self.paths = None
         self.name = None
