@@ -23,6 +23,18 @@ class CIRProcess(BaseEulerMaruyamaProcess):
         self.f = f
         self.g = g
 
+    @property
+    def sigma(self):
+        return self._sigma
+
+    @sigma.setter
+    def sigma(self, value):
+        if value <= 0:
+            raise ValueError("sigma has to be positive")
+        if 2 * self.theta * self.mu <= value ** 2:
+            raise ValueError("Condition 2*theta*mu >= sigma**2 must be satisfied")
+        self._sigma = value
+
     def __str__(self):
         return "Cox–Ingersoll–Ross process with parameters {speed}, {mean}, and {volatility} on [0, {T}].".format(
             T=str(self.T), speed=str(self.theta), mean=str(self.mu), volatility=str(self.sigma))
