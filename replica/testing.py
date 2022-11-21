@@ -76,6 +76,12 @@ class TestProcess(unittest.TestCase):
         self.process = CIRProcess(T=self.T, theta=0.06, mu=0.01, sigma=0.009)
         test_sample(self)
 
+    def test_CIRProcess_params(self):
+        with self.assertRaises(ValueError):
+            self.process = CIRProcess(T=self.T, theta=-0.06, mu=0.01, sigma=0.009)
+        with self.assertRaises(ValueError):
+            self.process = CIRProcess(T=self.T, theta=1.0, mu=1.0, sigma=3.0)
+
 
 class TestPaths(unittest.TestCase):
 
@@ -92,9 +98,9 @@ class TestPaths(unittest.TestCase):
         BMP.draw()
 
     def test_GBMPaths(self):
-        GBMP = GBMPaths(N=self.N, times=self.times_given, drift=2.0, volatility=0.5, initial=1.0)
-        GBMP.plot()
-        GBMP.draw()
+        GBM = GBMPaths(N=self.N, times=self.times_given, drift=2.0, volatility=0.5, initial=1.0)
+        GBM.plot()
+        GBM.draw()
 
     def test_OUPaths(self):
         OUP = OUProcessPaths(N=self.N, n=self.n, theta=2.5, mu=1.50, sigma=0.6)

@@ -24,6 +24,16 @@ class CIRProcess(BaseEulerMaruyamaProcess):
         self.g = g
 
     @property
+    def theta(self):
+        return self._theta
+
+    @theta.setter
+    def theta(self, value):
+        if value < 0:
+            raise ValueError("theta must be positive")
+        self._theta = value
+
+    @property
     def sigma(self):
         return self._sigma
 
