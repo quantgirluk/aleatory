@@ -1,18 +1,18 @@
-from brownian_motion import BrownianMotion
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-from scipy.stats import norm
-import numpy as np
-import pandas as pd
 from abc import ABC
 from abc import abstractmethod
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from matplotlib.gridspec import GridSpec
 
 SAVE = False
 
 
 class StochasticProcessPaths(ABC):
-    def __init__(self, N=1, rng=None):
+    def __init__(self, T=1.0, N=1, rng=None):
         self.rng = rng
+        self.T = T
         self.N = N
         self.times = None
         self.paths = None
@@ -48,17 +48,23 @@ class StochasticProcessPaths(ABC):
     def get_marginal(self, t):
         pass
 
+    def _process_expectation(self):
+        pass
+
     def _draw_paths(self):
 
         with plt.style.context(
                 'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-light.mplstyle'):
+
             fig = plt.figure(figsize=(12, 6))
             gs = GridSpec(1, 5, figure=fig)
+
             ax1 = fig.add_subplot(gs[:4])
             ax2 = fig.add_subplot(gs[4:], sharey=ax1)
 
             paths = self.paths
             last_points = [path[-1] for path in paths]
+
             cm = plt.cm.get_cmap('RdYlBu_r')
             n_bins = int(np.sqrt(self.N))
             n, bins, patches = ax2.hist(last_points, n_bins, color='green', orientation='horizontal', density=True)
@@ -70,7 +76,7 @@ class StochasticProcessPaths(ABC):
             my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
             colors = [col[b] for b in my_bins]
 
-            T = self.times[-1]
+            T = self.T
             marginal = self.get_marginal(T)
             x = np.linspace(marginal.ppf(0.001), marginal.ppf(0.999), 100)
             ax2.plot(marginal.pdf(x), x, '--', lw=1.75, alpha=0.6, color='blue', label='$X_T$ pdf')
@@ -84,6 +90,8 @@ class StochasticProcessPaths(ABC):
             fig.suptitle(self.name, size=14)
             ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$', size=12)  # Title
             ax2.set_title('$X_T$', size=12)  # Title
+            ax1.set_xlabel('time')
+            ax1.set_ylabel('value')
             plt.subplots_adjust(wspace=0.025, hspace=0.025)
             ax1.legend()
             ax2.legend()

@@ -8,16 +8,15 @@ from cir_process import CIRProcess
 class CIRProcessPaths(StochasticProcessPaths):
 
     def __init__(self, N, theta=1.0, mu=1.0, sigma=1.0, initial=0.0, n=10, T=1.0, rng=None):
-        super().__init__(rng=rng, N=N)
+        super().__init__(N=N, T=T, rng=rng)
         self.theta = theta
         self.mu = mu
         self.sigma = sigma
         self.initial = initial
         self.n = n
-        self.T = T
         self.process = CIRProcess(theta=self.theta, mu=self.mu, sigma=self.sigma, initial=self.initial, n=self.n,
                                   T=self.T)
-        self.paths = [self.process.sample(n) for k in range(int(N))]
+        self.paths = [self.process.sample(n) for _ in range(int(N))]
         self.times = self.process.times
         self.name = "CIR Process"
 

@@ -50,7 +50,7 @@ class TestProcess(unittest.TestCase):
         self.n = 100
         self.T = 1.0
         self.process = None
-        self.times_given = np.linspace(0, 5, 100, endpoint=True)
+        self.times_given = np.linspace(0, 1, 100, endpoint=True)
         self.grid_times = np.linspace(0, self.T, self.n)
 
     def test_Gaussian(self):
@@ -89,16 +89,16 @@ class TestPaths(unittest.TestCase):
         self.N = 100
         self.n = 100
         self.T = 1.0
-        self.times_given = np.linspace(0, 5, 100, endpoint=True)
+        self.times_given = np.linspace(0, 1.0, 100, endpoint=True)
         self.grid_times = np.linspace(0, self.T, self.n)
 
     def test_BrownianPaths(self):
-        BMP = BrownianPaths(N=self.N, times=self.times_given, drift=4.0, scale=1.5)
+        BMP = BrownianPaths(N=self.N, times=self.times_given, drift=1.0, scale=0.5)
         BMP.plot()
         BMP.draw()
 
     def test_GBMPaths(self):
-        GBM = GBMPaths(N=self.N, times=self.times_given, drift=2.0, volatility=0.5, initial=1.0)
+        GBM = GBMPaths(N=self.N, times=self.times_given, drift=3.0, volatility=0.5, initial=1.0)
         GBM.plot()
         GBM.draw()
 

@@ -3,32 +3,34 @@ from ou_process import OUProcess
 import numpy as np
 from scipy.stats import norm
 
+
 class OUProcessPaths(StochasticProcessPaths):
 
     def __init__(self, N, theta=1.0, mu=1.0, sigma=1.0, initial=0.0, n=10, T=1.0, rng=None):
-        super().__init__(rng=rng)
-        self.N = N
+        super().__init__(T=T, N=N, rng=rng)
         self.theta = theta
         self.mu = mu
         self.sigma = sigma
         self.initial = initial
         self.n = n
-        self.T = T
         self._dt = 1.0 * self.T / self.n
-        self.process = OUProcess(theta=self.theta, mu=self.mu, sigma=self.sigma, initial=self.initial, n=self.n, T=self.T)
-        self.paths = [self.process.sample(n) for k in range(int(N))]
+        self.process = OUProcess(theta=self.theta, mu=self.mu, sigma=self.sigma, initial=self.initial, n=self.n,
+                                 T=self.T)
+        self.paths = [self.process.sample(n) for _ in range(int(N))]
         self.times = self.process.times
-        self.name = "OU Process"
+        self.name = "Ornstein–Uhlenbeck Process"
 
     def _process_expectation(self):
-        return self.initial * np.exp((-1.0)*self.theta * self.times) + self.mu*(np.ones(len(self.times)) - np.exp((-1.0)*self.theta * self.times))
+        return self.initial * np.exp((-1.0) * self.theta * self.times) + self.mu * (
+                    np.ones(len(self.times)) - np.exp((-1.0) * self.theta * self.times))
 
     def process_expectation(self):
         expectations = self._process_expectation()
         return expectations
 
     def _process_variance(self):
-        variances = (self.sigma**2/2*self.theta)*(np.ones(len(self.times))-np.exp(-2.0*self.theta*self.times))
+        variances = (self.sigma ** 2 / 2 * self.theta) * (
+                    np.ones(len(self.times)) - np.exp(-2.0 * self.theta * self.times))
         return variances
 
     def process_variance(self):
@@ -36,8 +38,8 @@ class OUProcessPaths(StochasticProcessPaths):
         return variances
 
     def get_marginal(self, t):
-        mu_x = self.initial * np.exp(-1.0*self.theta * t) + self.mu*(1.0-np.exp(-1.0*self.theta * t))
-        variance_x = (self.sigma**2/(2.0*self.theta))*(1.0-np.exp(-2.0*self.theta*t))
+        mu_x = self.initial * np.exp(-1.0 * self.theta * t) + self.mu * (1.0 - np.exp(-1.0 * self.theta * t))
+        variance_x = (self.sigma ** 2 / (2.0 * self.theta)) * (1.0 - np.exp(-2.0 * self.theta * t))
         sigma_x = np.sqrt(variance_x)
         marginal = norm(loc=mu_x, scale=sigma_x)
 

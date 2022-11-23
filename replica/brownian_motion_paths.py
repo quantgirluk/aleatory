@@ -5,15 +5,14 @@ import numpy as np
 
 
 class BrownianPaths(StochasticProcessPaths):
-    def __init__(self, N, times, drift=0.0, scale=1.0, rng=None):
-        super().__init__(rng=rng)
-        self.N = N
+    def __init__(self, N, times, drift=0.0, scale=1.0, T=1.0, rng=None):
+        super().__init__(T=T, N=N, rng=rng)
         self.times = times
         self.drift = drift
         self.scale = scale
         self.name = "Brownian Motion" if drift == 0.0 else "Brownian Motion with Drift"
-        brownian = BrownianMotion(drift=self.drift, scale=self.scale)
-        self.paths = [brownian.sample_at(times) for _ in range(int(self.N))]
+        self.process = BrownianMotion(T=self.T, drift=self.drift, scale=self.scale)
+        self.paths = [self.process.sample_at(self.times) for _ in range(int(self.N))]
 
     def _process_expectation(self):
         return self.drift * self.times
