@@ -40,6 +40,14 @@ class CIRProcessPaths(StochasticProcessPaths):
         variances = self._process_variance()
         return variances
 
+    def _process_stds(self):
+        stds = np.sqrt(self.process_variance())
+        return stds
+
+    def process_stds(self):
+        stds = self._process_stds()
+        return stds
+
     def get_marginal(self, t):
         nu = 4.0 * self.theta * self.mu / self.sigma ** 2
         ct = 4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-1.0 * self.theta * t)))
@@ -53,5 +61,9 @@ class CIRProcessPaths(StochasticProcessPaths):
         return 1
 
     def draw(self):
-        self._draw_paths()
+        self._draw_paths(style='qq')
+        return 1
+
+    def draw_envelope(self):
+        self._draw_envelope_paths(style='qq')
         return 1

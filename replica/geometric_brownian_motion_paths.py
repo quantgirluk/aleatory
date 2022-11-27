@@ -12,7 +12,7 @@ class GBMPaths(StochasticProcessPaths):
         self.volatility = volatility
         self.initial = initial
         self.process = GeometricBrownianMotion(T=self.T, drift=drift, volatility=volatility)
-        self.paths = [self.process.sample_at(times) for _ in range(int(N))]
+        self.paths = [self.process.sample_at(times, initial=initial) for _ in range(int(N))]
         self.name = "Geometric Brownian Motion"
 
     def _process_expectation(self):
@@ -24,7 +24,7 @@ class GBMPaths(StochasticProcessPaths):
 
     def _process_variance(self):
         variances = (self.initial ** 2) * np.exp(2 * self.drift * self.times) * (
-                    np.exp(self.times * self.volatility ** 2) - 1)
+                np.exp(self.times * self.volatility ** 2) - 1)
         return variances
 
     def process_variance(self):
@@ -43,5 +43,9 @@ class GBMPaths(StochasticProcessPaths):
         return 1
 
     def draw(self):
-        self._draw_paths()
+        self._draw_paths(style='qq')
+        return 1
+
+    def draw_envelope(self):
+        self._draw_envelope_paths(style='qq')
         return 1
