@@ -69,7 +69,7 @@ class TestProcess(unittest.TestCase):
         test_sample_at(self)
 
     def test_OUProcess(self):
-        self.process = OUProcess(T=self.T, theta=0.7, mu=1.50, sigma=0.06)
+        self.process = OUProcess(T=self.T, theta=0.7, mu=1.50, sigma=0.06, initial=4.0)
         test_sample(self)
 
     def test_CIRProcess(self):
@@ -92,25 +92,41 @@ class TestPaths(unittest.TestCase):
         self.times_given = np.linspace(0, 1.0, 100, endpoint=True)
         self.grid_times = np.linspace(0, self.T, self.n)
 
-    def test_BrownianPaths(self):
-        BMP = BrownianPaths(N=self.N, times=self.times_given, drift=1.0, scale=0.5)
+    def test_BrownianMotionPaths(self):
+        BMP = BrownianPaths(N=100, times=self.times_given)
         BMP.plot()
         BMP.draw()
+        BMP.draw_envelope()
+        BMP.draw_envelope_std()
+
+    def test_BrownianPaths(self):
+        BMP = BrownianPaths(N=100, times=self.times_given, drift=2.0, scale=0.5)
+        BMP.plot()
+        BMP.draw()
+        BMP.draw_envelope()
+        BMP.draw_envelope_std()
 
     def test_GBMPaths(self):
-        GBM = GBMPaths(N=self.N, times=self.times_given, drift=3.0, volatility=0.5, initial=1.0)
+        # GBM = GBMPaths(N=self.N, times=self.times_given, drift=-2.0, volatility=0.5, initial=2.0)
+        # GBM.plot()
+        # GBM.draw()
+        # GBM.draw_envelope()
+        GBM = GBMPaths(N=self.N, times=self.times_given, drift=1.0, volatility=0.5, initial=1.5)
         GBM.plot()
         GBM.draw()
+        GBM.draw_envelope()
 
     def test_OUPaths(self):
-        OUP = OUProcessPaths(N=self.N, n=self.n, theta=2.5, mu=1.50, sigma=0.6)
+        OUP = OUProcessPaths(N=self.N, n=self.n, theta=1.5, mu=1.0, sigma=0.6, initial=4.0)
         OUP.plot()
         OUP.draw()
+        OUP.draw_envelope()
 
     def test_CIRPaths(self):
-        OUP = CIRProcessPaths(N=self.N, n=self.n, theta=2.5, mu=1.50, sigma=0.6)
-        OUP.plot()
-        OUP.draw()
+        CIR = CIRProcessPaths(N=self.N, n=self.n, theta=2.5, mu=1.50, sigma=0.6)
+        CIR.plot()
+        CIR.draw()
+        CIR.draw_envelope()
 
 
 if __name__ == '__main__':
