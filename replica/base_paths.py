@@ -10,8 +10,9 @@ SAVE = False
 
 
 class StochasticProcessPaths(ABC):
-    def __init__(self, T=1.0, N=1, rng=None):
+    def __init__(self, T=1.0, N=1, initial=0.0, rng=None):
         self.rng = rng
+        self.initial = initial
         self.T = T
         self.N = N
         self.times = None
@@ -51,10 +52,16 @@ class StochasticProcessPaths(ABC):
     def _process_expectation(self):
         pass
 
-    def _draw_paths(self):
+    def _process_variance(self):
+        pass
 
-        with plt.style.context(
-                'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-light.mplstyle'):
+    def _process_stds(self):
+        pass
+
+    def _draw_paths(self, style=None):
+        with plt.style.context('seaborn-whitegrid'):
+            # with plt.style.context(
+            #         'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-light.mplstyle'):
 
             fig = plt.figure(figsize=(12, 6))
             gs = GridSpec(1, 5, figure=fig)
@@ -78,20 +85,34 @@ class StochasticProcessPaths(ABC):
 
             T = self.T
             marginal = self.get_marginal(T)
-            x = np.linspace(marginal.ppf(0.001), marginal.ppf(0.999), 100)
+            x = np.linspace(marginal.ppf(0.005), marginal.ppf(0.995), 100)
             ax2.plot(marginal.pdf(x), x, '--', lw=1.75, alpha=0.6, color='blue', label='$X_T$ pdf')
             ax2.axhline(y=marginal.mean(), color='black', lw=1.2, label='$E[X_T]$')
             plt.setp(ax2.get_yticklabels(), visible=False)
 
             for i in range(self.N):
                 ax1.plot(self.times, paths[i], '-', lw=1.5, color=cm(colors[i]))
-            ax1.plot(self.times, self._process_expectation(), '-', lw=1.5, color='black', label='$E[X_t]$')
+
+            expectations = self._process_expectation()
+            ax1.plot(self.times, expectations, '-', lw=1.5, color='black', label='$E[X_t]$')
+
+            if style == '3sigma':
+                stds = self._process_stds()
+                upper = expectations + 3.0 * stds
+                lower = expectations - 3.0 * stds
+
+            if style == 'qq':
+                marginals = [self.get_marginal(t) for t in self.times[1:]]
+                upper = [self.initial] + [m.ppf(0.005) for m in marginals]
+                lower = [self.initial] + [m.ppf(0.995) for m in marginals]
+
+            ax1.fill_between(self.times, upper, lower, alpha=0.25, color='grey')
 
             fig.suptitle(self.name, size=14)
             ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$', size=12)  # Title
             ax2.set_title('$X_T$', size=12)  # Title
-            ax1.set_xlabel('time')
-            ax1.set_ylabel('value')
+            ax1.set_xlabel('t')
+            ax1.set_ylabel('X(t)')
             plt.subplots_adjust(wspace=0.025, hspace=0.025)
             ax1.legend()
             ax2.legend()
@@ -99,6 +120,38 @@ class StochasticProcessPaths(ABC):
 
         return 1
 
+    def _draw_envelope_paths(self, style=None):
+        with plt.style.context('seaborn-whitegrid'):
+            paths = self.paths
+            fig = plt.figure(figsize=(48 / 5, 6))
+            for i in range(self.N):
+                plt.plot(self.times, paths[i], '-', lw=1.5)
+            expectations = self._process_expectation()
+            plt.plot(self.times, expectations, '-', lw=1.5, color='black', label='$E[X_t]$')
+
+            if style == '3sigma':
+                stds = self._process_stds()
+                upper = expectations + 3.0 * stds
+                lower = expectations - 3.0 * stds
+
+            if style == 'qq':
+                marginals = [self.get_marginal(t) for t in self.times[1:]]
+                upper = [self.initial] + [m.ppf(0.005) for m in marginals]
+                lower = [self.initial] + [m.ppf(0.995) for m in marginals]
+
+            plt.fill_between(self.times, upper, lower, color='grey', alpha=0.25)
+
+            plt.suptitle(self.name)
+            plt.title('Simulated Paths $X_t, t \in [t_0, T]$')  # Title
+            plt.xlabel('t')
+            plt.ylabel('X(t)')
+            plt.legend()
+            plt.show()
+
     @abstractmethod
     def draw(self):
+        pass
+
+    @abstractmethod
+    def draw_envelope(self):
         pass
