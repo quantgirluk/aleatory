@@ -50,7 +50,7 @@ class CIRProcessPaths(StochasticProcessPaths):
 
     def get_marginal(self, t):
         nu = 4.0 * self.theta * self.mu / self.sigma ** 2
-        ct = 4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-1.0 * self.theta * t)))
+        ct = 4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-4.0 * self.theta)))
         lambda_t = ct * self.initial * np.exp(-1.0 * self.theta * t)
         scale = 1.0 / (4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-1.0 * self.theta * t))))
         marginal = ncx2(nu, lambda_t, scale=scale)
