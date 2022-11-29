@@ -10,6 +10,7 @@ from ou_process import OUProcess
 from ou_process_paths import OUProcessPaths
 from cir_process import CIRProcess
 from cir_process_paths import CIRProcessPaths
+from cev_process import CEV_process
 
 
 class Pars:
@@ -81,6 +82,16 @@ class TestProcess(unittest.TestCase):
             self.process = CIRProcess(T=self.T, theta=-0.06, mu=0.01, sigma=0.009)
         with self.assertRaises(ValueError):
             self.process = CIRProcess(T=self.T, theta=1.0, mu=1.0, sigma=3.0)
+
+    def test_CEVProcess(self):
+        self.process = CEV_process(T=self.T, gamma=1.0, mu=2.0, sigma=1.0)
+        test_sample(self)
+
+    def test_CEVProcess_params(self):
+        with self.assertRaises(ValueError):
+            self.process = CEV_process(T=self.T, gamma=-1.0, mu=2.0, sigma=1.0)
+        with self.assertRaises(ValueError):
+            self.process = CEV_process(T=self.T, gamma=1.0, mu=2.0, sigma=-1.0)
 
 
 class TestPaths(unittest.TestCase):
