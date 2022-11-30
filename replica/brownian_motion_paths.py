@@ -1,10 +1,10 @@
-from base_paths import StochasticProcessPaths
+from base_paths import ExactStochasticProcessPaths
 from brownian_motion import BrownianMotion
 from scipy.stats import norm
 import numpy as np
 
 
-class BrownianPaths(StochasticProcessPaths):
+class BrownianPaths(ExactStochasticProcessPaths):
     def __init__(self, N, times, drift=0.0, scale=1.0, T=1.0, rng=None):
         super().__init__(T=T, N=N, rng=rng)
         self.times = times

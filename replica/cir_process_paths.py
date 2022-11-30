@@ -1,11 +1,11 @@
 import numpy as np
 from scipy.stats import ncx2
 
-from base_paths import StochasticProcessPaths
+from base_paths import ExactStochasticProcessPaths
 from cir_process import CIRProcess
 
 
-class CIRProcessPaths(StochasticProcessPaths):
+class CIRProcessPaths(ExactStochasticProcessPaths):
 
     def __init__(self, N, theta=1.0, mu=1.0, sigma=1.0, initial=0.0, n=10, T=1.0, rng=None):
         super().__init__(N=N, T=T, rng=rng)

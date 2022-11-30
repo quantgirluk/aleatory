@@ -11,6 +11,7 @@ from ou_process_paths import OUProcessPaths
 from cir_process import CIRProcess
 from cir_process_paths import CIRProcessPaths
 from cev_process import CEV_process
+from cev_process_paths import CEVProcessPaths
 
 
 class Pars:
@@ -138,6 +139,12 @@ class TestPaths(unittest.TestCase):
         CIR.plot()
         CIR.draw()
         CIR.draw_envelope()
+
+    def test_CEVPaths(self):
+        CEV = CEVProcessPaths(N=self.N, n=self.n, gamma=0.5, mu=1.50, sigma=0.6, initial=1.0)
+        # CEV = CEVProcessPaths(N=self.N, n=self.n, gamma=1.0, mu=2.0, sigma=1.0, initial=1.0)
+        CEV.plot()
+        CEV.draw()
 
 
 if __name__ == '__main__':

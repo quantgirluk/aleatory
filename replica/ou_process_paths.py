@@ -1,10 +1,10 @@
-from base_paths import StochasticProcessPaths
+from base_paths import ExactStochasticProcessPaths
 from ou_process import OUProcess
 import numpy as np
 from scipy.stats import norm
 
 
-class OUProcessPaths(StochasticProcessPaths):
+class OUProcessPaths(ExactStochasticProcessPaths):
 
     def __init__(self, N, theta=1.0, mu=1.0, sigma=1.0, initial=0.0, n=10, T=1.0, rng=None):
         super().__init__(T=T, N=N, rng=rng)
