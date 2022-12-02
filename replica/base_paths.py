@@ -47,12 +47,14 @@ class KDEStochasticProcessPaths(StochasticProcess):
         plt.show()
         return 1
 
-    def _draw_paths(self, style=None):
+    def _draw_paths(self, expectations):
+
         with plt.style.context('seaborn-whitegrid'):
+            plt.rcParams['figure.dpi'] = 300
             # with plt.style.context(
             #         'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-light.mplstyle'):
 
-            fig = plt.figure(figsize=(12, 6))
+            fig = plt.figure(figsize=(10, 5))
             gs = GridSpec(1, 5, figure=fig)
 
             ax1 = fig.add_subplot(gs[:4])
@@ -75,18 +77,18 @@ class KDEStochasticProcessPaths(StochasticProcess):
             T = self.T
             kde = sm.nonparametric.KDEUnivariate(last_points)
             kde.fit()  # Estimate the densities
-            ax2.plot(kde.density, kde.support, '--',  lw=1.75, alpha=0.6, color='blue', label='$X_T$ KDE', zorder=10)
+            ax2.plot(kde.density, kde.support, '--', lw=1.75, alpha=0.6, color='blue', label='$X_T$  KDE', zorder=10)
             # marginal = self.get_marginal(T)
             # x = np.linspace(marginal.ppf(0.005), marginal.ppf(0.995), 100)
             # ax2.plot(marginal.pdf(x), x, '--', lw=1.75, alpha=0.6, color='blue', label='$X_T$ pdf')
-            # ax2.axhline(y=marginal.mean(), color='black', lw=1.2, label='$E[X_T]$')
+            ax2.axhline(y=np.mean(last_points), color='black', lw=1.2, label=r'$\overline{X_T}$')
             plt.setp(ax2.get_yticklabels(), visible=False)
 
             for i in range(self.N):
                 ax1.plot(self.times, paths[i], '-', lw=1.5, color=cm(colors[i]))
 
             # expectations = self._process_expectation()
-            # ax1.plot(self.times, expectations, '-', lw=1.5, color='black', label='$E[X_t]$')
+            ax1.plot(self.times, expectations, '-', lw=1.5, color='black', label=r'$\overline{X_t}$  (Empirical Means)')
 
             # if style == '3sigma':
             #     stds = self._process_stds()
