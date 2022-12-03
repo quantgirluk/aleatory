@@ -16,6 +16,7 @@ class CEVProcessPaths(KDEStochasticProcessPaths):
         self.process = CEV_process(gamma=self.gamma, mu=self.mu, sigma=self.sigma, initial=self.initial, n=self.n,
                                    T=self.T)
         self.paths = [self.process.sample(n) for _ in range(int(N))]
+        self._marginals = None
         self.times = self.process.times
         self.name = "CEV Process"
 
@@ -25,20 +26,16 @@ class CEVProcessPaths(KDEStochasticProcessPaths):
 
     def estimate_expectations(self):
 
-        marginal_samples= self._get_empirical_marginal_samples()
-        empirical_means = [np.mean(m) for m in marginal_samples]
+        if self._marginals is None:
+            self._marginals = self._get_empirical_marginal_samples()
+
+        empirical_means = [np.mean(m) for m in self._marginals]
         return empirical_means
 
     def estimate_variances(self):
-
-        marginal_samples = self._get_empirical_marginal_samples()
-        empirical_vars = [np.var(m) for m in marginal_samples]
-        return empirical_vars
-
-    def estimate_quantiles(self, q):
-
-        marginal_samples = self._get_empirical_marginal_samples()
-        empirical_vars = [np.quantile(m, q) for m in marginal_samples]
+        if self._marginals is None:
+            self._marginals = self._get_empirical_marginal_samples()
+        empirical_vars = [np.var(m) for m in self._marginals]
         return empirical_vars
 
     def estimate_stds(self):
@@ -46,10 +43,19 @@ class CEVProcessPaths(KDEStochasticProcessPaths):
         stds = [np.sqrt(var) for var in variances]
         return stds
 
+    def estimate_quantiles(self, q):
+        if self._marginals is None:
+            self._marginals = self._get_empirical_marginal_samples()
+        empirical_quantiles = [np.quantile(m, q) for m in self._marginals]
+        return empirical_quantiles
+
     def plot(self):
         self._plot_paths()
         return 1
 
     def draw(self):
-        self._draw_paths(expectations=self.estimate_expectations())
+        expectations = self.estimate_expectations()
+        lower = self.estimate_quantiles(0.005)
+        upper = self.estimate_quantiles(0.995)
+        self._draw_paths(expectations, lower, upper)
         return 1

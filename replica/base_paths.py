@@ -47,7 +47,7 @@ class KDEStochasticProcessPaths(StochasticProcess):
         plt.show()
         return 1
 
-    def _draw_paths(self, expectations):
+    def _draw_paths(self, expectations, lower, upper):
 
         with plt.style.context('seaborn-whitegrid'):
             plt.rcParams['figure.dpi'] = 300
@@ -87,7 +87,7 @@ class KDEStochasticProcessPaths(StochasticProcess):
             for i in range(self.N):
                 ax1.plot(self.times, paths[i], '-', lw=1.5, color=cm(colors[i]))
 
-            # expectations = self._process_expectation()
+            # expectations = self.estimate_expectations()
             ax1.plot(self.times, expectations, '-', lw=1.5, color='black', label=r'$\overline{X_t}$  (Empirical Means)')
 
             # if style == '3sigma':
@@ -100,7 +100,7 @@ class KDEStochasticProcessPaths(StochasticProcess):
             #     upper = [self.initial] + [m.ppf(0.005) for m in marginals]
             #     lower = [self.initial] + [m.ppf(0.995) for m in marginals]
 
-            # ax1.fill_between(self.times, upper, lower, alpha=0.25, color='grey')
+            ax1.fill_between(self.times, upper, lower, alpha=0.25, color='grey')
 
             fig.suptitle(self.name, size=14)
             ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$', size=12)  # Title
