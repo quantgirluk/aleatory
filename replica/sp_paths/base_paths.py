@@ -10,7 +10,7 @@ from matplotlib.gridspec import GridSpec
 SAVE = False
 
 
-class StochasticProcess(ABC):
+class StochasticProcessPaths(ABC):
     def __init__(self, rng=None):
         self.rng = rng
 
@@ -30,7 +30,7 @@ class StochasticProcess(ABC):
             raise TypeError("rng must be of type `numpy.random.Generator`")
 
 
-class KDEStochasticProcessPaths(StochasticProcess):
+class KDEStochasticProcessPaths(StochasticProcessPaths):
     def __init__(self, T=1.0, N=1, initial=0.0, rng=None):
         super().__init__(rng=rng)
         self.initial = initial
@@ -51,8 +51,6 @@ class KDEStochasticProcessPaths(StochasticProcess):
 
         with plt.style.context('seaborn-whitegrid'):
             plt.rcParams['figure.dpi'] = 300
-            # with plt.style.context(
-            #         'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-light.mplstyle'):
 
             fig = plt.figure(figsize=(10, 5))
             gs = GridSpec(1, 5, figure=fig)
@@ -78,27 +76,13 @@ class KDEStochasticProcessPaths(StochasticProcess):
             kde = sm.nonparametric.KDEUnivariate(last_points)
             kde.fit()  # Estimate the densities
             ax2.plot(kde.density, kde.support, '--', lw=1.75, alpha=0.6, color='blue', label='$X_T$  KDE', zorder=10)
-            # marginal = self.get_marginal(T)
-            # x = np.linspace(marginal.ppf(0.005), marginal.ppf(0.995), 100)
-            # ax2.plot(marginal.pdf(x), x, '--', lw=1.75, alpha=0.6, color='blue', label='$X_T$ pdf')
             ax2.axhline(y=np.mean(last_points), color='black', lw=1.2, label=r'$\overline{X_T}$')
             plt.setp(ax2.get_yticklabels(), visible=False)
 
             for i in range(self.N):
                 ax1.plot(self.times, paths[i], '-', lw=1.5, color=cm(colors[i]))
 
-            # expectations = self.estimate_expectations()
             ax1.plot(self.times, expectations, '-', lw=1.5, color='black', label=r'$\overline{X_t}$  (Empirical Means)')
-
-            # if style == '3sigma':
-            #     stds = self._process_stds()
-            #     upper = expectations + 3.0 * stds
-            #     lower = expectations - 3.0 * stds
-            #
-            # if style == 'qq':
-            #     marginals = [self.get_marginal(t) for t in self.times[1:]]
-            #     upper = [self.initial] + [m.ppf(0.005) for m in marginals]
-            #     lower = [self.initial] + [m.ppf(0.995) for m in marginals]
 
             ax1.fill_between(self.times, upper, lower, alpha=0.25, color='grey')
 
@@ -115,7 +99,7 @@ class KDEStochasticProcessPaths(StochasticProcess):
         return 1
 
 
-class ExactStochasticProcessPaths(StochasticProcess):
+class ExactStochasticProcessPaths(StochasticProcessPaths):
     def __init__(self, T=1.0, N=1, initial=0.0, rng=None):
         super().__init__(rng=rng)
         self.initial = initial

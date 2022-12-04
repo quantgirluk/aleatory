@@ -1,7 +1,6 @@
-from base_paths import KDEStochasticProcessPaths
-from cev_process import CEV_process
+from replica.sp_paths.base_paths import KDEStochasticProcessPaths
+from replica.processses.euler_maruyama.cev_process import CEV_process
 import numpy as np
-from scipy import stats
 
 
 class CEVProcessPaths(KDEStochasticProcessPaths):

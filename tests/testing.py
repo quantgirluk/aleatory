@@ -1,17 +1,17 @@
 import unittest
 import matplotlib.pyplot as plt
 import numpy as np
-from brownian_motion import BrownianMotion
-from brownian_motion_paths import BrownianPaths
-from gaussian import Gaussian
-from geometric_brownian_motion import GeometricBrownianMotion
-from geometric_brownian_motion_paths import GBMPaths
-from ou_process import OUProcess
-from ou_process_paths import OUProcessPaths
-from cir_process import CIRProcess
-from cir_process_paths import CIRProcessPaths
-from cev_process import CEV_process
-from cev_process_paths import CEVProcessPaths
+from replica.processses.exact_solution.brownian_motion import BrownianMotion
+from replica.sp_paths.brownian_motion_paths import BrownianPaths
+from replica.processses.exact_solution.gaussian import Gaussian
+from replica.processses.exact_solution.geometric_brownian_motion import GeometricBrownianMotion
+from replica.sp_paths.geometric_brownian_motion_paths import GBMPaths
+from replica.processses.euler_maruyama.ou_process import OUProcess
+from replica.sp_paths.ou_process_paths import OUProcessPaths
+from replica.processses.euler_maruyama.cir_process import CIRProcess
+from replica.sp_paths.cir_process_paths import CIRProcessPaths
+from replica.processses.euler_maruyama.cev_process import CEV_process
+from replica.sp_paths.cev_process_paths import CEVProcessPaths
 
 
 class Pars:
@@ -136,6 +136,7 @@ class TestPaths(unittest.TestCase):
 
     def test_CIRPaths(self):
         CIR = CIRProcessPaths(N=self.N, n=self.n, theta=2.5, mu=1.50, sigma=0.6)
+        # CIR = CIRProcessPaths(N=self.N, n=self.n, theta=0.5, mu=4.50, sigma=0.5, initial=1.0)
         CIR.plot()
         CIR.draw()
         CIR.draw_envelope()

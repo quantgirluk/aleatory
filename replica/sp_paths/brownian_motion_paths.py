@@ -1,5 +1,5 @@
-from base_paths import ExactStochasticProcessPaths
-from brownian_motion import BrownianMotion
+from replica.sp_paths.base_paths import ExactStochasticProcessPaths
+from replica.processses.exact_solution.brownian_motion import BrownianMotion
 from scipy.stats import norm
 import numpy as np
 

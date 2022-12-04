@@ -1,7 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 
-from utils import check_positive_number, check_positive_integer, get_times
+from replica.utils.utils import check_positive_number, check_positive_integer, get_times
 
 import numpy as np
 

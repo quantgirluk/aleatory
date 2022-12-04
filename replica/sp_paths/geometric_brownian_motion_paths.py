@@ -1,5 +1,5 @@
-from geometric_brownian_motion import GeometricBrownianMotion
-from base_paths import ExactStochasticProcessPaths
+from replica.processses.exact_solution.geometric_brownian_motion import GeometricBrownianMotion
+from replica.sp_paths.base_paths import ExactStochasticProcessPaths
 from scipy.stats import lognorm
 import numpy as np
 

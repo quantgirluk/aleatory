@@ -1,5 +1,5 @@
-from gaussian import Gaussian
-from utils import check_positive_number, check_numeric, get_times
+from replica.processses.exact_solution.gaussian import Gaussian
+from replica.utils.utils import check_positive_number, check_numeric, get_times
 import numpy as np
 
 

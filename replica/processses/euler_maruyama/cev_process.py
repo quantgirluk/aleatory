@@ -1,4 +1,4 @@
-from base_EMProcess import BaseEulerMaruyamaProcess
+from replica.processses.euler_maruyama.base_EMProcess import BaseEulerMaruyamaProcess
 import numpy as np
 
 

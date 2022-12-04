@@ -1,7 +1,7 @@
 import numpy as np
-from base import StochasticProcess
-from brownian_motion import BrownianMotion
-from utils import check_numeric, check_positive_integer, check_positive_number, get_times
+from replica.processses.base import StochasticProcess
+from replica.processses.exact_solution.brownian_motion import BrownianMotion
+from replica.utils.utils import check_numeric, check_positive_integer, check_positive_number, get_times
 
 
 class GeometricBrownianMotion(StochasticProcess):
