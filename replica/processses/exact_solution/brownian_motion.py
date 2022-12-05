@@ -1,9 +1,9 @@
-from replica.processses.exact_solution.gaussian import Gaussian
+from replica.processses.exact_solution.gaussian import GaussianIncrements
 from replica.utils.utils import check_positive_number, check_numeric, get_times
 import numpy as np
 
 
-class BrownianMotion(Gaussian):
+class BrownianMotion(GaussianIncrements):
 
     def __init__(self, drift=0.0, scale=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)

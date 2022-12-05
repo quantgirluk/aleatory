@@ -4,7 +4,10 @@ from replica.processses.base import StochasticProcess
 from replica.utils.utils import check_positive_integer, times_to_increments, get_times
 
 
-class Gaussian(StochasticProcess):
+class GaussianIncrements(StochasticProcess):
+    """
+    Gaussian increments
+    """
     def __int__(self, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
         self.n = None
@@ -12,7 +15,7 @@ class Gaussian(StochasticProcess):
         self.name = "Gaussian Noise"
 
     def __str__(self):
-        return "Gaussian noise generator on interval [0, {T}]".format(T=str(self.T))
+        return "Gaussian noise process on interval [0, {T}]".format(T=str(self.T))
 
     def __repr__(self):
         return "GaussianNoise(T={T})".format(T=str(self.T))
@@ -20,7 +23,7 @@ class Gaussian(StochasticProcess):
     def _sample_gaussian_noise(self, n):
         """
         Generates a random sample of size n from N(0, T/n)
-        :param n:
+        :param n: number of increments
         :return:
         """
         check_positive_integer(n)
@@ -33,8 +36,8 @@ class Gaussian(StochasticProcess):
 
     def _sample_gaussian_noise_at(self, times):
         """
-        Generate Gaussian increments at specified times starting  from zero
-        :param times:
+        Generates random Gaussian increments corresponding to the specified times.
+        :param times: given times
         :return:
         """
         if times[0] != 0:
@@ -48,7 +51,7 @@ class Gaussian(StochasticProcess):
 
     def sample(self, n):
         """
-        Generate a Gaussian noise realization with n increments.
+        Generates a random sample of size n from N(0, T/n)
         :param n:
         :return:
         """
@@ -56,7 +59,9 @@ class Gaussian(StochasticProcess):
 
     def sample_at(self, times):
         """
-        GGenerate Gaussian increments at specified times starting  from zero
+        Generates random Gaussian increments corresponding to the specified times
+        $t_1, \cdots, t_m$
+        Note that the first increment always starts with zero.
         :param times:
         :return:
         """

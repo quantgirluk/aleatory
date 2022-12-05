@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from replica.processses.exact_solution.brownian_motion import BrownianMotion
 from replica.sp_paths.brownian_motion_paths import BrownianPaths
-from replica.processses.exact_solution.gaussian import Gaussian
+from replica.processses.exact_solution.gaussian import GaussianIncrements
 from replica.processses.exact_solution.geometric_brownian_motion import GeometricBrownianMotion
 from replica.sp_paths.geometric_brownian_motion_paths import GBMPaths
 from replica.processses.euler_maruyama.ou_process import OUProcess
@@ -56,7 +56,7 @@ class TestProcess(unittest.TestCase):
         self.grid_times = np.linspace(0, self.T, self.n)
 
     def test_Gaussian(self):
-        self.process = Gaussian(T=self.T)
+        self.process = GaussianIncrements(T=self.T)
         test_sample(self)
         test_sample_at(self)
 

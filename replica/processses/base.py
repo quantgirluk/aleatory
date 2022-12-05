@@ -1,9 +1,9 @@
 from abc import ABC
 from abc import abstractmethod
 
-from replica.utils.utils import check_positive_number, check_positive_integer, get_times
-
 import numpy as np
+
+from replica.utils.utils import check_positive_number
 
 
 class BaseProcess(ABC):
@@ -31,12 +31,13 @@ class BaseProcess(ABC):
 
 
 class StochasticProcess(BaseProcess, ABC):
+    """
+    Base class for all one-factor stochastic processes classes.
+    All processes of this type are defined on a finite interval $[0,T]$.
+    """
     def __init__(self, T=1.0, rng=None):
         super().__init__(rng=rng)
         self.T = T
-        self._n = None
-        self.times = None
-        self.name = None
 
     @property
     def T(self):
