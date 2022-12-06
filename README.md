@@ -1,2 +1,0 @@
-# replica
-Stochastic Processes Simulation
