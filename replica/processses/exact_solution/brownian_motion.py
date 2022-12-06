@@ -4,6 +4,16 @@ import numpy as np
 
 
 class BrownianMotion(GaussianIncrements):
+    """
+    Brownian motion B(t) : t >= 0
+    A standard Brownian motion has the following properties:
+    1. Starts at zero, i.e. B(0) = 0
+    2. Independent increments
+    3. B(t) - B(s) follows a Gaussian distribution N(0, t-s)
+    4. Almost surely continuous
+    A more general version of a Brownian motion is defined as
+    W(t) = drift*t + scale*B(t)
+    """
 
     def __init__(self, drift=0.0, scale=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
@@ -40,10 +50,15 @@ class BrownianMotion(GaussianIncrements):
             return self.times * self.drift + bm
 
     def sample(self, n):
+        """
+        Generates a sample from a Brownian motion
+        :param n:
+        :return:
+        """
         return self._sample_brownian_motion(n)
 
     def _sample_brownian_motion_at(self, times):
-        """Generate a Brownian motion at specified times."""
+        """Generate a sample from Brownian motion at specified times."""
         self.times = times
         bm = np.cumsum(self.scale * self._sample_gaussian_noise_at(times))
 
@@ -56,5 +71,10 @@ class BrownianMotion(GaussianIncrements):
         return bm
 
     def sample_at(self, times):
+        """
+        Generates a sample from a Brownian motion at the specified times.
+        :param times:
+        :return:
+        """
         temp = self._sample_brownian_motion_at(times)
         return temp
