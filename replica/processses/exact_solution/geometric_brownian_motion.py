@@ -5,6 +5,11 @@ from replica.utils.utils import check_numeric, check_positive_integer, check_pos
 
 
 class GeometricBrownianMotion(StochasticProcess):
+    """
+    Geometric Brownian motion X(t) : t >= 0
+    dX(t) = X(t)*drift*dt + X(t)*volatility*dW(t)
+    where W(t) is a standard Brownian motion.
+    """
     def __init__(self, drift=0, volatility=1, T=1, rng=None):
         super().__init__(T=T, rng=rng)
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
