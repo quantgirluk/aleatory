@@ -1,5 +1,5 @@
 from replica.sp_paths.base_paths import KDEStochasticProcessPaths
-from replica.processses.euler_maruyama.cev_process import CEV_process
+from replica.processes.euler_maruyama.cev_process import CEV_process
 import numpy as np
 
 

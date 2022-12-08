@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import ncx2
 
 from replica.sp_paths.base_paths import ExactStochasticProcessPaths
-from replica.processses.euler_maruyama.cir_process import CIRProcess
+from replica.processes.euler_maruyama.cir_process import CIRProcess
 
 
 class CIRProcessPaths(ExactStochasticProcessPaths):

@@ -1,10 +1,10 @@
 import numpy as np
-from replica.processses.base import StochasticProcess
-from replica.processses.exact_solution.brownian_motion import BrownianMotion
+from replica.processes.base import StochasticProcess
+from replica.processes.exact_solution.brownian_motion import BrownianMotion
 from replica.utils.utils import check_numeric, check_positive_integer, check_positive_number, get_times
 
 
-class GeometricBrownianMotion(StochasticProcess):
+class BrownianMotion(StochasticProcess):
     """
     Geometric Brownian motion X(t) : t >= 0
     dX(t) = X(t)*drift*dt + X(t)*volatility*dW(t)

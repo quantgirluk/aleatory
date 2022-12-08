@@ -1,16 +1,16 @@
 import unittest
 import matplotlib.pyplot as plt
 import numpy as np
-from replica.processses.exact_solution.brownian_motion import BrownianMotion
+from replica.processes.exact_solution.brownian_motion import BrownianMotion
 from replica.sp_paths.brownian_motion_paths import BrownianPaths
-from replica.processses.exact_solution.gaussian import GaussianIncrements
-from replica.processses.exact_solution.geometric_brownian_motion import GeometricBrownianMotion
+from replica.processes.exact_solution.gaussian import GaussianIncrements
+from replica.processes.exact_solution.geometric_brownian_motion import GeometricBrownianMotion
 from replica.sp_paths.geometric_brownian_motion_paths import GBMPaths
-from replica.processses.euler_maruyama.ou_process import OUProcess
+from replica.processes.euler_maruyama.ou_process import OUProcess
 from replica.sp_paths.ou_process_paths import OUProcessPaths
-from replica.processses.euler_maruyama.cir_process import CIRProcess
+from replica.processes.euler_maruyama.cir_process import CIRProcess
 from replica.sp_paths.cir_process_paths import CIRProcessPaths
-from replica.processses.euler_maruyama.cev_process import CEV_process
+from replica.processes.euler_maruyama.cev_process import CEV_process
 from replica.sp_paths.cev_process_paths import CEVProcessPaths
 
 

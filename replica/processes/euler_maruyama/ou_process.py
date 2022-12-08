@@ -1,4 +1,4 @@
-from replica.processses.euler_maruyama.base_EMProcess import BaseEulerMaruyamaProcess
+from replica.processes.euler_maruyama.base_EMProcess import BaseEulerMaruyamaProcess
 
 
 class OUProcess(BaseEulerMaruyamaProcess):

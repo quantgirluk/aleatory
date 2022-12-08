@@ -1,5 +1,5 @@
 from replica.sp_paths.base_paths import ExactStochasticProcessPaths
-from replica.processses.euler_maruyama.ou_process import OUProcess
+from replica.processes.euler_maruyama.ou_process import OUProcess
 import numpy as np
 from scipy.stats import norm
 

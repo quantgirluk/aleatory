@@ -1,18 +1,23 @@
-from replica.processses.exact_solution.gaussian import GaussianIncrements
+from replica.processes.exact_solution.gaussian import GaussianIncrements
 from replica.utils.utils import check_positive_number, check_numeric, get_times
 import numpy as np
 
 
 class BrownianMotion(GaussianIncrements):
     """
-    Brownian motion B(t) : t >= 0
+    Brownian motion :math:`B(t) : t >= 0`
+
     A standard Brownian motion has the following properties:
-    1. Starts at zero, i.e. B(0) = 0
+
+    1. Starts at zero, i.e. :math:`B(0) = 0`
     2. Independent increments
-    3. B(t) - B(s) follows a Gaussian distribution N(0, t-s)
+    3. :math:`B(t) - B(s)` follows a Gaussian distribution :math:`N(0, t-s)`
     4. Almost surely continuous
+
+
     A more general version of a Brownian motion is defined as
-    W(t) = drift*t + scale*B(t)
+    :math:`W(t) = drift*t + scale*B(t)`
+
     """
 
     def __init__(self, drift=0.0, scale=1.0, T=1.0, rng=None):
