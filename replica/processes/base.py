@@ -1,10 +1,10 @@
 from abc import ABC
 from abc import abstractmethod
-import matplotlib.pyplot as plt
-from replica.utils.utils import plot_paths, draw_paths, check_positive_integer, get_times
+
 import numpy as np
 
 from replica.utils.utils import check_positive_number
+from replica.utils.utils import plot_paths, draw_paths, check_positive_integer, get_times
 
 
 class BaseProcess(ABC):
@@ -25,7 +25,6 @@ class BaseProcess(ABC):
             self._rng = value
         else:
             raise TypeError("rng must be of type `numpy.random.Generator`")
-
 
 
 class StochasticProcess(BaseProcess, ABC):
@@ -130,7 +129,7 @@ class SPExplicit(StochasticProcess):
 
 
 class SPEulerMaruyama(SPExplicit):
-    def __int__(self,  f=None, g=None, initial=0.0, T=1.0, rng=None):
+    def __int__(self, f=None, g=None, initial=0.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
         self.f = f
         self.g = g
@@ -141,7 +140,6 @@ class SPEulerMaruyama(SPExplicit):
         self.name = None
 
     def _sample_em_process(self, n):
-
         check_positive_integer(n)
         self.n = n
         self.dt = 1.0 * self.T / self.n
@@ -158,4 +156,3 @@ class SPEulerMaruyama(SPExplicit):
 
     def sample(self, n):
         return self._sample_em_process(n)
-

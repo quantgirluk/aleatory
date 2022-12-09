@@ -1,22 +1,13 @@
 import unittest
 import matplotlib.pyplot as plt
 import numpy as np
-from replica.processes.exact_solution.brownian_motion_backup import BrownianMotion
-from replica.sp_paths.brownian_motion_paths import BrownianPaths
-from replica.processes.exact_simulation.gaussian import GaussianIncrements
-from replica.processes.exact_solution.geometric_brownian_motion_backup import GeometricBrownianMotion
-from replica.sp_paths.geometric_brownian_motion_paths import GBMPaths
-from replica.processes.euler_maruyama.ou_process import OUProcess
-from replica.sp_paths.ou_process_paths import OUProcessPaths
-from replica.processes.euler_maruyama.cir_process import CIRProcess
-from replica.sp_paths.cir_process_paths import CIRProcessPaths
-
-# from replica.sp_paths.cev_process_paths import CEVProcessPaths
 from replica.processes.exact_simulation.brownian_motion import BrownianMotion
 from replica.processes.exact_simulation.geometric_brownian import GBM
 from replica.processes.euler_maruyama.ou_process import OUProcess
 from replica.processes.euler_maruyama.cir_process import CIRProcess
 from replica.processes.euler_maruyama.cev_process import CEVProcess
+
+
 def test_sample(self):
     sample = self.process.sample(self.n)
     times = self.process.times
@@ -35,7 +26,6 @@ def test_sample_at(self):
     self.assertEqual(len(times), len(sample))
     plt.plot(times, sample)
     plt.show()
-
 
 
 class TestProcesses(unittest.TestCase):
@@ -85,9 +75,8 @@ class TestProcesses(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.process = CIRProcess(T=self.T, theta=1.0, mu=1.0, sigma=3.0)
 
-
     def test_CEV(self):
-        process = CEVProcess (gamma=0.5, mu=1.50, sigma=0.6, initial=1.0)
+        process = CEVProcess(gamma=0.5, mu=1.50, sigma=0.6, initial=1.0)
         process.plot(n=100, N=3)
         process.draw(n=100, N=200)
         process.draw(n=100, N=200, marginal=True)
