@@ -52,6 +52,7 @@ class CEVProcessPaths(KDEStochasticProcessPaths):
         self._plot_paths()
         return 1
 
+
     def draw(self):
         expectations = self.estimate_expectations()
         lower = self.estimate_quantiles(0.005)

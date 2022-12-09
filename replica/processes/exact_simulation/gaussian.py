@@ -10,9 +10,10 @@ class GaussianIncrements(StochasticProcess):
     """
     def __int__(self, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
-        self.n = None
-        self.times = None
         self.name = "Gaussian Noise"
+        self.times = None
+        self.n = None
+        self.paths = None
 
     def __str__(self):
         return "Gaussian noise process on interval [0, {T}]".format(T=str(self.T))

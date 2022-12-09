@@ -12,6 +12,6 @@ discretely sampled continuous-time stochastic processes.
 .. autoclass:: replica.processes.exact_solution.brownian_motion.BrownianMotion
     :members: T, sample, sample_at
 
-.. autoclass:: replica.processes.exact_solution.geometric_brownian_motion.BrownianMotion
+.. autoclass:: replica.processes.exact_solution.geometric_brownian_motion.GeometricBrownianMotion
     :members: T, sample, sample_at
 

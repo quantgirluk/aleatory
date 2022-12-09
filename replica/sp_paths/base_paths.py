@@ -112,7 +112,7 @@ class ExactStochasticProcessPaths(StochasticProcessPaths):
     def _plot_paths(self):
         for p in self.paths:
             plt.plot(self.times, p)
-            plt.title(self.name)
+        plt.title(self.name)
         plt.show()
         return 1
 
