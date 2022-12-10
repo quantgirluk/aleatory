@@ -41,9 +41,8 @@ Documentation
    :maxdepth: 2
 
    general
-   processes
-
-
+   processes_analytical
+   processes_euler_maruyama
 
 
 Indices and tables

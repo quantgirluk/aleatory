@@ -14,7 +14,7 @@ import os
 import sys
 # sys.path.insert(0, os.path.abspath('../..'))..
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'replica')))
-# replica = importlib.import_module("replica")
+replica = importlib.import_module("replica")
 
 
 
@@ -52,7 +52,20 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 # html_theme = 'renku'
-html_theme = 'press'
+# html_theme = 'press'
+#html_theme = 'bizstyle'
+
+html_theme = 'furo'
+
+# import hachibee_sphinx_theme
+# html_theme = 'hachibee'
+# html_theme_path = [hachibee_sphinx_theme.get_html_themes_path()]
+
+# The name of the Pygments (syntax highlighting) style to use.
+#pygments_style = "sphinx"
+#pygments_style = "autumn"
+#pygments_style = "paraiso-dark"
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
