@@ -1,12 +1,39 @@
+"""
+Geometric Brownian Motion
+"""
 import numpy as np
 from scipy.stats import lognorm
 
 from replica.processes.base import SPExplicit
-from replica.processes.exact_simulation.brownian_motion import BrownianMotion
+from replica.processes.analytical.brownian_motion import BrownianMotion
 from replica.utils.utils import check_positive_number, check_numeric, get_times, check_positive_integer
 
 
 class GBM(SPExplicit):
+    """Geometric Brownian Motion
+
+    A Geometric Brownian Motion :math:`\{X(t) : t \geq  0\}` is characterised by the following
+    Stochastic Differential Equation
+
+    .. math::
+
+      dX_t = \mu X_t dt + \sigma X_t dW_t \ \ \ \ (0,T]
+
+    with initial condition :math:`X_0 = x_0\geq0`, where
+
+    - :math:`\mu` is the drift
+    - :math:`\sigma>0` is the volatility
+    - :math:`W_t` is a standard Brownian Motion.
+
+
+    :param float drift: the parameter :math:`\mu` in the above SDE
+    :param float volatility: the parameter :math:`\sigma>0` in the above SDE
+    :param float initial: the initial condition :math:`x_0` in the above SDE
+    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+        for the process
+    :param numpy.random.Generator rng: a custom random number generator
+
+    """
 
     def __init__(self, drift=1.0, volatility=1.0, initial=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng, initial=initial)
@@ -55,30 +82,30 @@ class GBM(SPExplicit):
         check_positive_number(value, "Initial Point")
         self._initial = value
 
-    def _sample_geometric_brownian_motion(self, n, initial=1.0):
+    def _sample_geometric_brownian_motion(self, n):
         """Generate a realization of a geometric Brownian motion."""
         check_positive_integer(n)
-        check_positive_number(initial, "Initial")
+        check_positive_number(self.initial, "Initial")
         self.n = n
         self.times = get_times(self.T, n)
-        return initial * np.exp((self.drift - 0.5 * self.volatility ** 2) * self.times
-                                + self.volatility * self._brownian_motion.sample(n))
+        return self.initial * np.exp((self.drift - 0.5 * self.volatility ** 2) * self.times
+                                     + self.volatility * self._brownian_motion.sample(n))
 
-    def _sample_geometric_brownian_motion_at(self, times, initial=1.0):
+    def _sample_geometric_brownian_motion_at(self, times):
         """Generate a realization of a Geometric Brownian motion."""
         self.times = times
-        return initial * np.exp((self.drift - 0.5 * self.volatility ** 2) * times
-                                + self.volatility * self._brownian_motion.sample_at(times))
+        return self.initial * np.exp((self.drift - 0.5 * self.volatility ** 2) * times
+                                     + self.volatility * self._brownian_motion.sample_at(times))
 
-    def sample(self, n, initial=1):
+    def sample(self, n):
         """Generate a realization.
         """
-        return self._sample_geometric_brownian_motion(n, initial)
+        return self._sample_geometric_brownian_motion(n)
 
-    def sample_at(self, times, initial=1):
+    def sample_at(self, times):
         """Generate a realization using specified times.
         """
-        return self._sample_geometric_brownian_motion_at(times, initial)
+        return self._sample_geometric_brownian_motion_at(times)
 
     def _process_expectation(self):
         return self.initial * np.exp(self.drift * self.times)

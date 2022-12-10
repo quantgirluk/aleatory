@@ -64,6 +64,13 @@ class SPExplicit(StochasticProcess):
         pass
 
     def simulate(self, n, N):
+        """
+        Simulate paths/trajectories from the instanced stochastic process.
+
+        :param n: number of steps in each path
+        :param N: number of paths to simulate
+        :return: list with N paths (each one is an np.array of size n)
+        """
         self.n = n
         self.N = N
         self.paths = [self.sample(n) for _ in range(N)]
@@ -86,12 +93,19 @@ class SPExplicit(StochasticProcess):
         pass
 
     def plot(self, n, N):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process.
+        Simple plot of times versus process values as lines and/or markers.
+
+        :param n: number of steps in each path
+        :param N: number of paths to simulate
+        :return:
+        """
         self.simulate(n, N)
         plot_paths(self.times, self.paths, self.name)
         return 1
 
     def _draw_paths(self, n, N, marginal=False, envelope=False, style=None):
-
         self.simulate(n, N)
         expectations = self._process_expectation()
 
@@ -123,9 +137,28 @@ class SPExplicit(StochasticProcess):
         self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, style='qq')
         return 1
 
-    def draw(self, n, N, marginal=False, envelope=False, style=None):
+    def _draw_3sigmastyle(self, n, N, marginal=False, envelope=False):
 
-        self._draw_paths(n, N, marginal=marginal, envelope=envelope, style=style)
+        self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, style='3sigma')
+        return 1
+
+    def draw(self, n, N, marginal=True, envelope=False):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process.
+        Visualisation shows
+        - times versus process values as lines
+        - the expectation of the process across time
+        - histogram showing the empirical marginal distribution :math:`X_T`
+        - probability density function of the marginal distribution :math:`X_T`
+        - envelope of confidence intervals
+
+        :param n: number of steps in each path
+        :param N: number of paths to simulate
+        :param marginal: bool, default: True
+        :param envelope: bool, default: False
+        :return:
+        """
+        self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope)
 
 
 class SPEulerMaruyama(SPExplicit):

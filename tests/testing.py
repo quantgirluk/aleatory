@@ -1,8 +1,8 @@
 import unittest
 import matplotlib.pyplot as plt
 import numpy as np
-from replica.processes.exact_simulation.brownian_motion import BrownianMotion
-from replica.processes.exact_simulation.geometric_brownian import GBM
+from replica.processes import BrownianMotion
+from replica.processes.analytical.geometric_brownian import GBM
 from replica.processes.euler_maruyama.ou_process import OUProcess
 from replica.processes.euler_maruyama.cir_process import CIRProcess
 from replica.processes.euler_maruyama.cev_process import CEVProcess
@@ -41,9 +41,10 @@ class TestProcesses(unittest.TestCase):
         brownian = BrownianMotion()
         brownian.plot(n=100, N=3)
         brownian.draw(n=100, N=200)
-        brownian.draw(n=100, N=200, marginal=True)
-        brownian.draw(n=100, N=200, marginal=True, envelope=True)
-        brownian.draw(n=100, N=200, envelope=True)
+        brownian.draw(n=100, N=200, envelope=False)
+        brownian.draw(n=100, N=200, marginal=False)
+        brownian.draw(n=100, N=200, marginal=False, envelope=False)
+
 
     def test_GBM(self):
         process = GBM(drift=1.0, volatility=0.5)
