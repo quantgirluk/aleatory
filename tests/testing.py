@@ -1,11 +1,7 @@
 import unittest
 import matplotlib.pyplot as plt
 import numpy as np
-from replica.processes import BrownianMotion
-from replica.processes.analytical.geometric_brownian import GBM
-from replica.processes.euler_maruyama.ou_process import OUProcess
-from replica.processes.euler_maruyama.cir_process import CIRProcess
-from replica.processes.euler_maruyama.cev_process import CEVProcess
+from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
 
 
 def test_sample(self):
@@ -38,29 +34,38 @@ class TestProcesses(unittest.TestCase):
         self.grid_times = np.linspace(0, self.T, self.n)
 
     def test_BM(self):
-        brownian = BrownianMotion()
-        brownian.plot(n=100, N=3)
-        brownian.draw(n=100, N=200)
-        brownian.draw(n=100, N=200, envelope=False)
-        brownian.draw(n=100, N=200, marginal=False)
-        brownian.draw(n=100, N=200, marginal=False, envelope=False)
+        process = BrownianMotion()
+        process.plot(n=100, N=3)
+        process.draw(n=100, N=200)
+        process.draw(n=100, N=200, envelope=True)
+        process.draw(n=100, N=200, marginal=False)
+        process.draw(n=100, N=200, marginal=False, envelope=True)
 
 
     def test_GBM(self):
         process = GBM(drift=1.0, volatility=0.5)
         process.plot(n=100, N=3)
         process.draw(n=100, N=200)
-        process.draw(n=100, N=200, marginal=True)
-        process.draw(n=100, N=200, marginal=True, envelope=True)
         process.draw(n=100, N=200, envelope=True)
+        process.draw(n=100, N=200, marginal=False)
+        process.draw(n=100, N=200, marginal=False, envelope=True)
 
-    def test_OU(self):
-        process = OUProcess(theta=1.5, mu=1.0, sigma=0.6, initial=4.0)
+    def test_Vasicek(self):
+        process = Vasicek(theta=1.5, mu=1.0, sigma=0.6, initial=4.0)
         process.plot(n=100, N=3)
         process.draw(n=100, N=200)
-        process.draw(n=100, N=200, marginal=True)
-        process.draw(n=100, N=200, marginal=True, envelope=True)
         process.draw(n=100, N=200, envelope=True)
+        process.draw(n=100, N=200, marginal=False)
+        process.draw(n=100, N=200, marginal=False, envelope=True)
+
+    def test_OU(self):
+        process = OUProcess(theta=1.5, sigma=0.6, initial=4.0)
+        process.plot(n=100, N=3)
+        process.draw(n=100, N=200)
+        process.draw(n=100, N=200, envelope=True)
+        process.draw(n=100, N=200, marginal=False)
+        process.draw(n=100, N=200, marginal=False, envelope=True)
+
 
     def test_CIR(self):
         process = CIRProcess(T=self.T, theta=0.06, mu=0.01, sigma=0.009)
