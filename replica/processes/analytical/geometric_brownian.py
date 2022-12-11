@@ -10,14 +10,17 @@ from replica.utils.utils import check_positive_number, check_numeric, get_times,
 
 
 class GBM(SPExplicit):
-    """Geometric Brownian Motion
+    r"""Geometric Brownian Motion
 
-    A Geometric Brownian Motion :math:`\{X(t) : t \geq  0\}` is characterised by the following
-    Stochastic Differential Equation
+    .. image:: _static/geometric_brownian_motion_drawn.png
+
+
+    A Geometric Brownian Motion :math:`\{X(t) : t \geq  0\}` is characterised by
+    the following SDE.
 
     .. math::
+        dX_t = \mu X_t dt + \sigma X_t dW_t \ \ \ \ t\in (0,T]
 
-      dX_t = \mu X_t dt + \sigma X_t dW_t \ \ \ \ (0,T]
 
     with initial condition :math:`X_0 = x_0\geq0`, where
 
@@ -25,6 +28,17 @@ class GBM(SPExplicit):
     - :math:`\sigma>0` is the volatility
     - :math:`W_t` is a standard Brownian Motion.
 
+
+    The solution to this equation can be written as
+
+    .. math::
+
+        X_t = x_0\exp\left((\mu + \frac{\sigma^2}{2} )t +\sigma W_t\right)
+
+
+
+
+    and each :math:`X_t` follows a log-normal distribution.
 
     :param float drift: the parameter :math:`\mu` in the above SDE
     :param float volatility: the parameter :math:`\sigma>0` in the above SDE
@@ -135,6 +149,23 @@ class GBM(SPExplicit):
 
         return marginal
 
-    def draw(self, n, N, marginal=False, envelope=False, style=None):
-        self._draw_qqstyle(n=n, N=N, marginal=marginal, envelope=envelope)
-        return 1
+    # def draw(self, n, N, marginal=False, envelope=False):
+    #     """
+    #     Simulates and plots paths/trajectories from the instanced stochastic process.
+    #
+    #     Produces different kind of visualisation illustrating the following elements:
+    #
+    #     - times versus process values as lines
+    #     - the expectation of the process across time
+    #     - histogram showing the empirical marginal distribution :math:`X_T` (optional when ``marginal = True``)
+    #     - probability density function of the marginal distribution :math:`X_T` (optional when ``marginal = True``)
+    #     - envelope of confidence intervals acroos time (optional when ``envelope = True``)
+    #
+    #     :param n: number of steps in each path
+    #     :param N: number of paths to simulate
+    #     :param marginal: bool, default: True
+    #     :param envelope: bool, default: False
+    #     :return:
+    #     """
+    #
+    #     return self._draw_qqstyle(n=n, N=N, marginal=marginal, envelope=envelope)

@@ -1,9 +1,44 @@
+"""
+Vasicek Process
+"""
 from replica.processes.base import SPEulerMaruyama
 import numpy as np
 from scipy.stats import norm
 
 
 class Vasicek(SPEulerMaruyama):
+    r"""
+    Vasicek Process
+
+    .. image:: _static/vasicek_process_drawn.png
+
+
+    A Vasicek process :math:`X = \{X : t \geq  0\}` is characterised by the following
+    Stochastic Differential Equation
+
+    .. math::
+
+      dX_t = \theta(\mu - X_t) dt + \sigma X_t dW_t, \ \ \ \ \forall t\in (0,T],
+
+    with initial condition :math:`X_0 = x_0`, where
+
+    - :math:`\theta` is the speed of reversion
+    - :math:`\mu` is the long term mean value.
+    - :math:`\sigma>0` is the instantaneous volatility
+    - :math:`W_t` is a standard Brownian Motion.
+
+
+    Each :math:`X_t` follows a normal distribution.
+
+
+    :param float theta: the parameter :math:`\theta` in the above SDE
+    :param float mu: the parameter :math:`\mu` in the above SDE
+    :param float sigma: the parameter :math:`\sigma>0` in the above SDE
+    :param float initial: the initial condition :math:`x_0` in the above SDE
+    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+        for the process
+    :param numpy.random.Generator rng: a custom random number generator
+    """
 
     def __init__(self, theta=1.0, mu=0.0, sigma=1.0, initial=0.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)

@@ -8,7 +8,10 @@ from replica.utils.utils import check_positive_number, check_numeric, get_times
 
 
 class BrownianMotion(SPExplicit):
-    """Brownian motion
+    r"""Brownian motion
+
+    .. image:: _static/brownian_motion_drawn.png
+
 
     A standard Brownian motion    :math:`\{W_t : t \geq 0\}` is defined by the following properties:
 
@@ -156,15 +159,13 @@ class BrownianMotion(SPExplicit):
         :param N: number of paths to simulate
         :param marginal: bool, default: True
         :param envelope: bool, default: False
-        :param style: string
+        :param style: string, default: '3sigma'
         :return:
         """
 
         if style == '3sigma':
-            self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope)
+            return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope)
         elif style == 'qq':
-            self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope)
+            return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope)
         else:
             raise ValueError
-
-        return 1

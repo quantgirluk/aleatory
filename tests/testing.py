@@ -2,6 +2,7 @@ import unittest
 import matplotlib.pyplot as plt
 import numpy as np
 from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
+from parameterized import parameterized, parameterized_class
 
 
 def test_sample(self):
@@ -22,73 +23,35 @@ def test_sample_at(self):
     self.assertEqual(len(times), len(sample))
     plt.plot(times, sample)
     plt.show()
+    # def setUp(self) -> None:
+    #     self.N = 100
+    #     self.n = 100
+    #     self.T = 1.0
+    #     self.times_given = np.linspace(0, 1.0, 100, endpoint=True)
+    #     self.grid_times = np.linspace(0, self.T, self.n)
 
 
 class TestProcesses(unittest.TestCase):
+    bm = BrownianMotion()
+    bmd = BrownianMotion(drift=-1.0, scale=0.5)
+    gbm = GBM(drift=1.0, volatility=0.5)
+    vasicek = Vasicek(theta=1.5, mu=1.0, sigma=0.6, initial=4.0)
+    ouprocess = OUProcess(theta=1.5, sigma=0.6, initial=4.0)
+    cirprocess = CIRProcess(theta=0.06, mu=0.01, sigma=0.009)
+    cev = CEVProcess(gamma=0.5, mu=1.50, sigma=0.6, initial=1.0)
 
-    def setUp(self) -> None:
-        self.N = 100
-        self.n = 100
-        self.T = 1.0
-        self.times_given = np.linspace(0, 1.0, 100, endpoint=True)
-        self.grid_times = np.linspace(0, self.T, self.n)
-
-    def test_BM(self):
-        process = BrownianMotion()
-        process.plot(n=100, N=3)
-        process.draw(n=100, N=200)
-        process.draw(n=100, N=200, envelope=True)
-        process.draw(n=100, N=200, marginal=False)
-        process.draw(n=100, N=200, marginal=False, envelope=True)
-
-
-    def test_GBM(self):
-        process = GBM(drift=1.0, volatility=0.5)
-        process.plot(n=100, N=3)
-        process.draw(n=100, N=200)
-        process.draw(n=100, N=200, envelope=True)
-        process.draw(n=100, N=200, marginal=False)
-        process.draw(n=100, N=200, marginal=False, envelope=True)
-
-    def test_Vasicek(self):
-        process = Vasicek(theta=1.5, mu=1.0, sigma=0.6, initial=4.0)
-        process.plot(n=100, N=3)
-        process.draw(n=100, N=200)
-        process.draw(n=100, N=200, envelope=True)
-        process.draw(n=100, N=200, marginal=False)
-        process.draw(n=100, N=200, marginal=False, envelope=True)
-
-    def test_OU(self):
-        process = OUProcess(theta=1.5, sigma=0.6, initial=4.0)
-        process.plot(n=100, N=3)
-        process.draw(n=100, N=200)
-        process.draw(n=100, N=200, envelope=True)
-        process.draw(n=100, N=200, marginal=False)
-        process.draw(n=100, N=200, marginal=False, envelope=True)
-
-
-    def test_CIR(self):
-        process = CIRProcess(T=self.T, theta=0.06, mu=0.01, sigma=0.009)
-        process.plot(n=100, N=3)
-        process.draw(n=100, N=200)
-        process.draw(n=100, N=200, marginal=True)
-        process.draw(n=100, N=200, marginal=True, envelope=True)
-        process.draw(n=100, N=200, envelope=True)
-
-    def test_CIRProcess_params(self):
-        with self.assertRaises(ValueError):
-            self.process = CIRProcess(T=self.T, theta=-0.06, mu=0.01, sigma=0.009)
-        with self.assertRaises(ValueError):
-            self.process = CIRProcess(T=self.T, theta=1.0, mu=1.0, sigma=3.0)
-
-    def test_CEV(self):
-        process = CEVProcess(gamma=0.5, mu=1.50, sigma=0.6, initial=1.0)
-        process.plot(n=100, N=3)
-        process.draw(n=100, N=200)
-        process.draw(n=100, N=200, marginal=True)
-        process.draw(n=100, N=200, marginal=True, envelope=True)
-        process.draw(n=100, N=200, envelope=True)
-
+    @parameterized.expand([
+        [bm], [bmd], [gbm], [vasicek], [ouprocess], [cirprocess], [cev]
+    ])
+    def test_charts(self, process):
+        figure = process.plot(n=100, N=5)
+        name = process.name.replace(" ", "_").lower()
+        figure.savefig(name + '_simple_plot.png', dpi=300)
+        figure = process.draw(n=100, N=200, envelope=False)
+        figure.savefig(name + '_drawn.png', dpi=300)
+        # process.draw(n=100, N=200, envelope=True)
+        # process.draw(n=100, N=200, marginal=False)
+        # process.draw(n=100, N=200, marginal=False, envelope=True)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

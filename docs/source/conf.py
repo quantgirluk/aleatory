@@ -55,6 +55,10 @@ exclude_patterns = []
 # html_theme = 'press'
 #html_theme = 'bizstyle'
 
+# import sphinx_bernard_theme
+# html_theme = 'sphinx_bernard_theme'
+# html_theme_path = [sphinx_bernard_theme.get_html_theme_path()]
+
 html_theme = 'furo'
 
 # import hachibee_sphinx_theme
@@ -71,3 +75,4 @@ html_theme = 'furo'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+

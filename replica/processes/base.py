@@ -102,8 +102,8 @@ class SPExplicit(StochasticProcess):
         :return:
         """
         self.simulate(n, N)
-        plot_paths(self.times, self.paths, self.name)
-        return 1
+        figure = plot_paths(self.times, self.paths, self.name)
+        return figure
 
     def _draw_paths(self, n, N, marginal=False, envelope=False, style=None):
         self.simulate(n, N)
@@ -127,20 +127,20 @@ class SPExplicit(StochasticProcess):
         else:
             marginalT = None
 
-        draw_paths(times=self.times, paths=self.paths, N=N, expectations=expectations, name=self.name,
+        fig = draw_paths(times=self.times, paths=self.paths, N=N, expectations=expectations, name=self.name,
                    marginal=marginal,
                    marginalT=marginalT, envelope=envelope, lower=lower, upper=upper)
-        return 1
+        return fig
 
     def _draw_qqstyle(self, n, N, marginal=False, envelope=False):
 
-        self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, style='qq')
-        return 1
+        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, style='qq')
+        return fig
 
     def _draw_3sigmastyle(self, n, N, marginal=False, envelope=False):
 
-        self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, style='3sigma')
-        return 1
+        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, style='3sigma')
+        return fig
 
     def draw(self, n, N, marginal=True, envelope=False):
         """
@@ -158,7 +158,7 @@ class SPExplicit(StochasticProcess):
         :param envelope: bool, default: False
         :return:
         """
-        self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope)
+        return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope)
 
 
 class SPEulerMaruyama(SPExplicit):

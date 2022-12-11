@@ -9,14 +9,16 @@ def get_times(end, n):
     """Generate a linspace from 0 to end for n increments."""
     return np.linspace(0, end, n)
 
-
 def plot_paths(times, paths, name):
     with plt.style.context('seaborn-whitegrid'):
+        fig, ax = plt.subplots()
         for p in paths:
-            plt.plot(times, p)
-        plt.title(name)
+            ax.plot(times, p)
+        ax.set_title(name)
+        ax.set_xlabel('$t$')
+        ax.set_ylabel('$X(t)$')
         plt.show()
-    return 1
+    return fig
 
 
 def draw_paths(times, paths, N, expectations,  name,
@@ -24,17 +26,15 @@ def draw_paths(times, paths, N, expectations,  name,
                envelope=False, lower=None, upper=None):
 
     if marginal:
-        draw_paths_with_marginal(times=times, paths=paths, N=N,expectations=expectations,
+        return draw_paths_with_marginal(times=times, paths=paths, N=N,expectations=expectations,
                                  name=name, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper)
     else:
-        draw_paths_without_marginal(times=times, paths=paths, N=N,expectations=expectations,
+        return draw_paths_without_marginal(times=times, paths=paths, N=N,expectations=expectations,
                                  name=name, envelope=envelope, lower=lower, upper=upper)
-
-    return 1
 
 def draw_paths_without_marginal(times, paths, N, expectations,  name, envelope=False, lower=None, upper=None):
     with plt.style.context('seaborn-whitegrid'):
-        plt.figure(figsize=(48 / 5, 6))
+        fig = plt.figure(figsize=(48 / 5, 6))
         for i in range(N):
             plt.plot(times, paths[i], '-', lw=1.5)
         plt.plot(times, expectations, '-', lw=1.5, color='black', label='$E[X_t]$')
@@ -47,7 +47,7 @@ def draw_paths_without_marginal(times, paths, N, expectations,  name, envelope=F
         plt.legend()
         plt.show()
 
-        return 1
+        return fig
 
 def draw_paths_with_marginal(times, paths, N, marginalT, expectations, name, envelope=False, lower=None, upper=None):
     with plt.style.context('seaborn-whitegrid'):
@@ -91,7 +91,7 @@ def draw_paths_with_marginal(times, paths, N, marginalT, expectations, name, env
         ax2.legend()
         plt.show()
 
-    return 1
+    return fig
 
 
 def check_positive_integer(n, name=""):

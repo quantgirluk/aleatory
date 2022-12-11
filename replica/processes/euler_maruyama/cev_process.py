@@ -5,10 +5,37 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 
-SAVE = False
-
 
 class CEVProcess(SPEulerMaruyama):
+    r"""
+    CEV or constant elasticity of variance process
+
+    .. image:: _static/cev_process_drawn.png
+
+
+    A CEV process  :math:`X = \{X : t \geq  0\}` is characterised by the following
+    Stochastic Differential Equation
+
+    .. math::
+
+      dX_t = \mu X_t dt + \sigma X_t^{\gamma} dW_t, \ \ \ \ \forall t\in (0,T],
+
+    with initial condition :math:`X_0 = x_0`, where
+
+    - :math:`\mu` is the drift
+    - :math:`\sigma>0` is the scale of the volatility
+    - :math:`\gamma\geq 0` is the elasticity term
+    - :math:`W_t` is a standard Brownian Motion.
+
+
+    :param float mu: the parameter :math:`\mu` in the above SDE
+    :param float sigma: the parameter :math:`\sigma>0` in the above SDE
+    :param float gamma: the parameter :math:`\gamma` in the above SDE
+    :param float initial: the initial condition :math:`x_0` in the above SDE
+    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+        for the process
+    :param numpy.random.Generator rng: a custom random number generator
+    """
 
     def __init__(self, gamma=1.0, mu=1.0, sigma=1.0, initial=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
@@ -160,12 +187,12 @@ class CEVProcess(SPEulerMaruyama):
             ax2.legend()
             plt.show()
 
-        return 1
+        return fig
 
     def draw(self, n, N, marginal=False, envelope=False, style=None):
         self.simulate(n, N)
         expectations = self.estimate_expectations()
         lower = self.estimate_quantiles(0.005)
         upper = self.estimate_quantiles(0.995)
-        self._draw_paths_kde(expectations, lower, upper)
-        return 1
+        fig = self._draw_paths_kde(expectations, lower, upper)
+        return fig
