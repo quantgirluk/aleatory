@@ -138,9 +138,9 @@ class CEVProcess(SPEulerMaruyama):
         stds = self._process_stds()
         return stds
 
-    def _draw_paths_kde(self, expectations, lower, upper):
+    def _draw_paths_kde(self, expectations, envelope=False, lower=None, upper=None):
 
-        with plt.style.context('seaborn-whitegrid'):
+        with plt.style.context("seaborn-v0_8-whitegrid"):
             plt.rcParams['figure.dpi'] = 300
 
             fig = plt.figure(figsize=(10, 5))
@@ -152,7 +152,7 @@ class CEVProcess(SPEulerMaruyama):
             paths = self.paths
             last_points = [path[-1] for path in paths]
 
-            cm = plt.cm.get_cmap('RdYlBu_r')
+            cm = plt.colormaps['RdYlBu_r']
             n_bins = int(np.sqrt(self.N))
             n, bins, patches = ax2.hist(last_points, n_bins, color='green', orientation='horizontal', density=True)
             bin_centers = 0.5 * (bins[:-1] + bins[1:])
@@ -175,7 +175,8 @@ class CEVProcess(SPEulerMaruyama):
 
             ax1.plot(self.times, expectations, '-', lw=1.5, color='black', label=r'$\overline{X_t}$  (Empirical Means)')
 
-            ax1.fill_between(self.times, upper, lower, alpha=0.25, color='grey')
+            if envelope:
+                ax1.fill_between(self.times, upper, lower, alpha=0.25, color='grey')
 
             fig.suptitle(self.name, size=14)
             ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$', size=12)  # Title
@@ -189,10 +190,14 @@ class CEVProcess(SPEulerMaruyama):
 
         return fig
 
-    def draw(self, n, N, marginal=False, envelope=False, style=None):
+    def draw(self, n, N, marginal=True, envelope=False, style=None):
         self.simulate(n, N)
         expectations = self.estimate_expectations()
-        lower = self.estimate_quantiles(0.005)
-        upper = self.estimate_quantiles(0.995)
-        fig = self._draw_paths_kde(expectations, lower, upper)
+
+        if envelope:
+            lower = self.estimate_quantiles(0.005)
+            upper = self.estimate_quantiles(0.995)
+            fig = self._draw_paths_kde(expectations=expectations, envelope=envelope, lower=lower, upper=upper)
+        else:
+            fig = self._draw_paths_kde(expectations=expectations, envelope=envelope)
         return fig
