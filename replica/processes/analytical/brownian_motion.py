@@ -143,7 +143,7 @@ class BrownianMotion(SPExplicit):
         marginal = norm(loc=self.drift * t, scale=self.scale * np.sqrt(t))
         return marginal
 
-    def draw(self, n, N, marginal=True, envelope=False, style='3sigma'):
+    def draw(self, n, N, marginal=True, envelope=False, type='3sigma', style="seaborn-v0_8-whitegrid", **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
 
@@ -155,17 +155,19 @@ class BrownianMotion(SPExplicit):
         - probability density function of the marginal distribution :math:`X_T` (optional when ``marginal = True``)
         - envelope of confidence intervals acroos time (optional when ``envelope = True``)
 
+
         :param n: number of steps in each path
         :param N: number of paths to simulate
         :param marginal: bool, default: True
         :param envelope: bool, default: False
-        :param style: string, default: '3sigma'
+        :param type: string, default: '3sigma'
+        :param style:
         :return:
         """
 
-        if style == '3sigma':
-            return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope)
-        elif style == 'qq':
-            return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope)
+        if type == '3sigma':
+            return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope, style=style, **fig_kw)
+        elif type == 'qq':
+            return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, style=style, **fig_kw)
         else:
             raise ValueError

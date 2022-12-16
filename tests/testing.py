@@ -41,7 +41,10 @@ class TestProcesses(unittest.TestCase):
     cev = CEVProcess(gamma=0.5, mu=1.50, sigma=0.6, initial=1.0)
 
     @parameterized.expand([
-        [bm], [bmd], [gbm], [vasicek], [ouprocess], [cirprocess], [cev]
+        [bm],
+        # [bmd], [gbm],
+        # [vasicek], [ouprocess], [cirprocess],
+        [cev]
     ])
     def test_charts(self, process):
         figure = process.plot(n=100, N=5)

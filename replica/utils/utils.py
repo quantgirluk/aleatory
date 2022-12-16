@@ -9,9 +9,10 @@ def get_times(end, n):
     """Generate a linspace from 0 to end for n increments."""
     return np.linspace(0, end, n)
 
-def plot_paths(times, paths, name):
-    with plt.style.context("seaborn-v0_8-whitegrid"):
-        fig, ax = plt.subplots(figsize=(48 / 5, 6))
+
+def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", **fig_kw):
+    with plt.style.context(style):
+        fig, ax = plt.subplots(**fig_kw)
         for p in paths:
             ax.plot(times, p)
         ax.set_title(name)
@@ -21,20 +22,23 @@ def plot_paths(times, paths, name):
     return fig
 
 
-def draw_paths(times, paths, N, expectations,  name,
-               marginal =False, marginalT=None,
-               envelope=False, lower=None, upper=None):
-
+def draw_paths(times, paths, N, expectations, name,
+               marginal=False, marginalT=None,
+               envelope=False, lower=None, upper=None, **fig_kw):
     if marginal:
-        return draw_paths_with_marginal(times=times, paths=paths, N=N,expectations=expectations,
-                                 name=name, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper)
+        return draw_paths_with_marginal(times=times, paths=paths, N=N, expectations=expectations,
+                                        name=name, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,
+                                        **fig_kw)
     else:
-        return draw_paths_without_marginal(times=times, paths=paths, N=N,expectations=expectations,
-                                 name=name, envelope=envelope, lower=lower, upper=upper)
+        return draw_paths_without_marginal(times=times, paths=paths, N=N, expectations=expectations,
+                                           name=name, envelope=envelope, lower=lower, upper=upper,
+                                           **fig_kw)
 
-def draw_paths_without_marginal(times, paths, N, expectations,  name, envelope=False, lower=None, upper=None):
-    with plt.style.context('seaborn-v0_8-whitegrid'):
-        fig = plt.figure(figsize=(48 / 5, 6))
+
+def draw_paths_without_marginal(times, paths, N, expectations, name, envelope=False, lower=None, upper=None,
+                                style="seaborn-v0_8-whitegrid", **fig_kw):
+    with plt.style.context(style):
+        fig = plt.figure(**fig_kw)
         for i in range(N):
             plt.plot(times, paths[i], '-', lw=1.5)
         plt.plot(times, expectations, '-', lw=1.5, color='black', label='$E[X_t]$')
@@ -49,16 +53,17 @@ def draw_paths_without_marginal(times, paths, N, expectations,  name, envelope=F
 
         return fig
 
-def draw_paths_with_marginal(times, paths, N, marginalT, expectations, name, envelope=False, lower=None, upper=None):
-    with plt.style.context('seaborn-v0_8-whitegrid'):
-        fig = plt.figure(figsize=(12, 6))
+
+def draw_paths_with_marginal(times, paths, N, marginalT, expectations, name, envelope=False, lower=None, upper=None,
+                             style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', **fig_kw):
+    with plt.style.context(style):
+        fig = plt.figure(**fig_kw)
         gs = GridSpec(1, 5, figure=fig)
         ax1 = fig.add_subplot(gs[:4])
         ax2 = fig.add_subplot(gs[4:], sharey=ax1)
 
         last_points = [path[-1] for path in paths]
-        # cm = plt.cm.get_cmap('RdYlBu_r')
-        cm = plt.colormaps['RdYlBu_r']
+        cm = plt.colormaps[colormap]
         n_bins = int(np.sqrt(N))
 
         n, bins, patches = ax2.hist(last_points, n_bins, color='green', orientation='horizontal', density=True)
