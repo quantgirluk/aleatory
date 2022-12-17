@@ -105,7 +105,7 @@ class SPExplicit(StochasticProcess):
         figure = plot_paths(self.times, self.paths, self.name, style=style, **fig_kw)
         return figure
 
-    def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, style="seaborn-v0_8-whitegrid", **fig_kw):
+    def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, **fig_kw):
         self.simulate(n, N)
         expectations = self._process_expectation()
 
@@ -129,24 +129,21 @@ class SPExplicit(StochasticProcess):
 
         fig = draw_paths(times=self.times, paths=self.paths, N=N, expectations=expectations, name=self.name,
                          marginal=marginal, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,
-                         style=style, **fig_kw)
+                         **fig_kw)
         return fig
 
-    def _draw_qqstyle(self, n, N, marginal=False, envelope=False, style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r',
+    def _draw_qqstyle(self, n, N, marginal=False, envelope=False,
                       **fig_kw):
 
-        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='qq',
-                               style=style, colormap=colormap, **fig_kw)
+        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='qq', **fig_kw)
         return fig
 
-    def _draw_3sigmastyle(self, n, N, marginal=False, envelope=False, style="seaborn-v0_8-whitegrid",
-                          colormap='RdYlBu_r', **fig_kw):
+    def _draw_3sigmastyle(self, n, N, marginal=False, envelope=False, **fig_kw):
 
-        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='3sigma',
-                               style=style, colormap=colormap, **fig_kw)
+        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='3sigma', **fig_kw)
         return fig
 
-    def draw(self, n, N, marginal=True, envelope=False, style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', **fig_kw):
+    def draw(self, n, N, marginal=True, envelope=False, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Visualisation shows
@@ -164,7 +161,7 @@ class SPExplicit(StochasticProcess):
         :param colormap:
         :return:
         """
-        return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, style=style, colormap=colormap, **fig_kw)
+        return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, **fig_kw)
 
 
 class SPEulerMaruyama(SPExplicit):

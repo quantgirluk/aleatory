@@ -138,13 +138,12 @@ class CEVProcess(SPEulerMaruyama):
         return stds
 
     def _draw_paths_kde(self, expectations, envelope=False, lower=None, upper=None,
-                        style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', ):
+                        style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', figsize=(9.6, 7.2), **fig_kw):
 
         with plt.style.context(style):
-            plt.rcParams['figure.dpi'] = 300
 
-            fig = plt.figure(figsize=(10, 5))
-            gs = GridSpec(1, 5, figure=fig)
+            fig = plt.figure(figsize=figsize, **fig_kw)
+            gs = GridSpec(1, 5)
 
             ax1 = fig.add_subplot(gs[:4])
             ax2 = fig.add_subplot(gs[4:], sharey=ax1)
@@ -154,7 +153,7 @@ class CEVProcess(SPEulerMaruyama):
 
             cm = plt.colormaps[colormap]
             n_bins = int(np.sqrt(self.N))
-            n, bins, patches = ax2.hist(last_points, n_bins, color='green', orientation='horizontal', density=True)
+            n, bins, patches = ax2.hist(last_points, n_bins, orientation='horizontal', density=True)
             bin_centers = 0.5 * (bins[:-1] + bins[1:])
             col = bin_centers - min(bin_centers)  # scale values to interval [0,1]
             col /= max(col)
@@ -190,15 +189,14 @@ class CEVProcess(SPEulerMaruyama):
 
         return fig
 
-    def draw(self, n, N, marginal=True, envelope=False, style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', **fig_kw):
+    def draw(self, n, N, marginal=True, envelope=False, **fig_kw):
         self.simulate(n, N)
         expectations = self.estimate_expectations()
 
         if envelope:
             lower = self.estimate_quantiles(0.005)
             upper = self.estimate_quantiles(0.995)
-            fig = self._draw_paths_kde(expectations=expectations, envelope=envelope, lower=lower, upper=upper,
-                                       style=style, colormap=colormap)
+            fig = self._draw_paths_kde(expectations=expectations, envelope=envelope, lower=lower, upper=upper, **fig_kw)
         else:
-            fig = self._draw_paths_kde(expectations=expectations, envelope=envelope, style=style, colormap=colormap)
+            fig = self._draw_paths_kde(expectations=expectations, **fig_kw)
         return fig
