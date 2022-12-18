@@ -42,8 +42,8 @@ class TestProcesses(unittest.TestCase):
 
     @parameterized.expand([
         [bm],
-        # [bmd], [gbm],
-        # [vasicek], [ouprocess], [cirprocess],
+        [bmd], [gbm],
+        [vasicek], [ouprocess], [cirprocess],
         [cev]
     ])
     def test_charts(self, process):

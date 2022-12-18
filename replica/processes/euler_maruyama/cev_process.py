@@ -138,11 +138,11 @@ class CEVProcess(SPEulerMaruyama):
         return stds
 
     def _draw_paths_kde(self, expectations, envelope=False, lower=None, upper=None,
-                        style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', figsize=(9.6, 7.2), **fig_kw):
+                        style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', figsize=(9.6, 7.2), dpi=200, **fig_kw):
 
         with plt.style.context(style):
 
-            fig = plt.figure(figsize=figsize, **fig_kw)
+            fig = plt.figure(figsize=figsize, dpi=dpi, **fig_kw)
             gs = GridSpec(1, 5)
 
             ax1 = fig.add_subplot(gs[:4])

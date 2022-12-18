@@ -7,11 +7,11 @@ from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProces
 #
 # from replica.processes import BrownianMotion
 
-# process = BrownianMotion(drift=2.0, scale=1.5)
+process = BrownianMotion(drift=2.0, scale=1.5)
 # process = OUProcess(theta=1.5, sigma=0.9, initial=4.0)
 # process = Vasicek(theta=2.0, mu=0.04, sigma=0.2, initial=0.08)
 # process = Vasicek(theta=2.0, mu=0.5, sigma=4.0, initial=5.0)
-process= CEVProcess(gamma=0.5, mu=1.50, sigma=0.8, initial=1.0)
+# process= CEVProcess(gamma=1.0, mu=1.50, sigma=0.8, initial=1.0)
 
 # process.plot(n=100, N=10)
 # process.plot(n=100, N=10, style='ggplot')
@@ -33,7 +33,7 @@ process= CEVProcess(gamma=0.5, mu=1.50, sigma=0.8, initial=1.0)
 # process.draw(n=100, N=100, style='ggplot', colormap="BrBG", dpi=200)
 
 pitaya = 'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-dark.mplstyle'
-process.draw(n=100, N=100, style=pitaya, dpi=200)
+process.draw(n=100, N=100, style=pitaya, colormap="spring", dpi=200)
 process.draw(n=100, N=100, style=pitaya, colormap="PiYG", dpi=200)
 process.draw(n=100, N=100,  dpi=200)
 process.draw(n=100, N=100,  colormap="Spectral", dpi=200)
