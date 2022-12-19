@@ -51,10 +51,12 @@ class CEVProcess(SPEulerMaruyama):
         self._marginals = None
 
         def f(x, _):
-            return self.mu * x
+            return self.mu - 0.5 * (self.sigma ** 2) * np.exp(2.0 * (self.gamma - 1.0) * x)
+            # return self.mu * x
 
         def g(x, _):
-            return self.sigma * (x ** self.gamma)
+            return self.sigma * np.exp((self.gamma - 1.0) * x)
+            # return self.sigma * (x ** self.gamma)
 
         self.f = f
         self.g = g
@@ -200,3 +202,6 @@ class CEVProcess(SPEulerMaruyama):
         else:
             fig = self._draw_paths_kde(expectations=expectations, **fig_kw)
         return fig
+
+    def sample(self, n):
+        return self._sample_em_process(n, log=True)

@@ -36,22 +36,24 @@ class CIRProcess(SPEulerMaruyama):
     :param numpy.random.Generator rng: a custom random number generator
 
     """
-    def __init__(self, theta=1.0, mu=1.0, sigma=1.0, initial=0.0, T=1.0, rng=None):
-        super().__init__(T=T, rng=rng)
+
+    def __init__(self, theta=1.0, mu=1.0, sigma=1.0, initial=1.0, T=1.0, rng=None):
+        super().__init__(T=T, rng=rng, initial=initial)
         self.theta = theta
         self.mu = mu
         self.sigma = sigma
-        self.initial = initial
         self.n = 1.0
         self.dt = 1.0 * self.T / self.n
         self.times = np.arange(0.0, self.T + self.dt, self.dt)
         self.name = "CIR Process"
 
         def f(x, _):
-            return self.theta * (self.mu - x)
+            # return self.theta * (self.mu - x)
+            return np.exp(-x) * (self.theta * (self.mu - np.exp(x)) - 0.5 * self.sigma ** 2)
 
         def g(x, _):
-            return self.sigma * np.sqrt(x)
+            # return self.sigma * np.sqrt(x)
+            return self.sigma * np.exp(-0.5 * x)
 
         self.f = f
         self.g = g
@@ -112,9 +114,20 @@ class CIRProcess(SPEulerMaruyama):
 
     def get_marginal(self, t):
         nu = 4.0 * self.theta * self.mu / self.sigma ** 2
-        ct = 4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-4.0 * self.theta)))
+        ct = 4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-1.0 * self.theta)))
         lambda_t = ct * self.initial * np.exp(-1.0 * self.theta * t)
         scale = 1.0 / (4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-1.0 * self.theta * t))))
         marginal = ncx2(nu, lambda_t, scale=scale)
+
+        # c = 2 * self.theta / ((1.0 - np.exp(-1.0*self.theta * t)) * self.sigma ** 2)
+        # q = 2 * self.theta * self.mu / self.sigma ** 2 - 1
+        # u = c * self.initial * np.exp(-self.theta * t)
+        # df = 2 * q + 2  # parameter K
+        # nc = u * 2  # parameter lambda
+        # scale = 1 / (2 * c)
+        # marginal = ncx2(df, nc, scale=scale)
+
         return marginal
 
+    def sample(self, n):
+        return self._sample_em_process(n, log=True)
