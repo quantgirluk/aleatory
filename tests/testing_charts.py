@@ -1,6 +1,5 @@
 from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
 
-
 # process = Vasicek(theta=2.0, mu=0.04, sigma=0.2, initial=0.08)
 # process.plot(n=200, N=3)
 # process.draw(n=100, N=100, envelope=False)
@@ -49,8 +48,6 @@ from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProces
 
 SAVE = False
 
-
-
 #
 # process = BrownianMotion()
 # name = process.name.replace(" ", "_").lower()
@@ -88,7 +85,6 @@ SAVE = False
 #     figure.savefig(name + '_quickstart_08.png', dpi=300)
 
 
-
 bm = BrownianMotion()
 bmd = BrownianMotion(drift=-1.0, scale=0.5)
 gbm = GBM()
@@ -97,8 +93,9 @@ ouprocess = OUProcess()
 cirprocess = CIRProcess()
 cev = CEVProcess()
 
-
-for process in [bm, bmd, gbm, vasicek, ouprocess, cirprocess, cev]:
+for process in [bm, bmd, gbm, vasicek, ouprocess,
+                cirprocess, cev
+                ]:
     figure = process.plot(n=100, N=5)
     name = process.name.replace(" ", "_").lower()
     if SAVE:

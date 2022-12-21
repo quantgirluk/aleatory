@@ -37,7 +37,7 @@ class CIRProcess(SPEulerMaruyama):
 
     """
 
-    def __init__(self, theta=1.0, mu=1.0, sigma=1.0, initial=1.0, T=1.0, rng=None):
+    def __init__(self, theta=1.0, mu=2.0, sigma=0.5, initial=5.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng, initial=initial)
         self.theta = theta
         self.mu = mu
@@ -113,11 +113,15 @@ class CIRProcess(SPEulerMaruyama):
         return stds
 
     def get_marginal(self, t):
-        nu = 4.0 * self.theta * self.mu / self.sigma ** 2
-        ct = 4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-1.0 * self.theta)))
-        lambda_t = ct * self.initial * np.exp(-1.0 * self.theta * t)
-        scale = 1.0 / (4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-1.0 * self.theta * t))))
-        marginal = ncx2(nu, lambda_t, scale=scale)
+        a = self.theta
+        b = self.mu
+        sigma = self.sigma
+
+        c = 2.0 * a / ((1.0 - np.exp(-1.0 * a * t)) * sigma ** 2)
+        df = 4.0 * a * b / sigma ** 2
+        nc = 2.0 * c * self.initial * np.exp(-1.0 * a * t)
+        scale = 1.0 / (2 * c)
+        marginal = ncx2(df, nc, scale=scale)
 
         return marginal
 

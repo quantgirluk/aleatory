@@ -36,7 +36,7 @@ class OUProcess(Vasicek):
 
     """
 
-    def __init__(self, theta=1.0, sigma=1.0, initial=0.0, T=1.0, rng=None):
+    def __init__(self, theta=1.0, sigma=0.5, initial=1.0, T=1.0, rng=None):
         super().__init__(theta=theta, mu=0.0, sigma=sigma, initial=initial, T=T, rng=rng)
         self.n = 1.0
         self.dt = 1.0 * self.T / self.n

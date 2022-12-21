@@ -49,7 +49,7 @@ class GBM(SPExplicit):
 
     """
 
-    def __init__(self, drift=1.0, volatility=1.0, initial=1.0, T=1.0, rng=None):
+    def __init__(self, drift=1.0, volatility=0.5, initial=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng, initial=initial)
         self.drift = drift
         self.volatility = volatility

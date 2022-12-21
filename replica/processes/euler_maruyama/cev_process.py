@@ -40,7 +40,7 @@ class CEVProcess(SPEulerMaruyama):
     :param numpy.random.Generator rng: a custom random number generator
     """
 
-    def __init__(self, gamma=1.0, mu=1.0, sigma=1.0, initial=1.0, T=1.0, rng=None):
+    def __init__(self, gamma=1.5, mu=0.5, sigma=0.1, initial=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
         self.gamma = gamma
         self.mu = mu
