@@ -46,63 +46,76 @@ from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProces
 # process.draw(n=100, N=100, style='dark_background', dpi=200)
 # process.plot(n=100, N=10, figsize=(5, 3))
 
-SAVE = False
+SAVE = True
+FIGURES = False
+QS = False
+CIR_convergenge = True
 
-#
-# process = BrownianMotion()
-# name = process.name.replace(" ", "_").lower()
-# figure = process.plot(n=100, N=10)
-#
-# if SAVE:
-#     figure.savefig(name + '_quickstart_01.png', dpi=300)
-#
-# figure = process.draw(n=100, N=200)
-# if SAVE:
-#     figure.savefig(name + '_quickstart_02.png', dpi=300)
-#
-# figure = process.draw(n=100, N=200, envelope=True)
-# if SAVE:
-#     figure.savefig(name + '_quickstart_03.png', dpi=300)
-#
-# figure = process.draw(n=100, N=200, marginal=False)
-# if SAVE:
-#     figure.savefig(name + '_quickstart_04.png', dpi=300)
-#
-# figure = process.draw(n=100, N=200, marginal=False, envelope=True)
-# if SAVE:
-#     figure.savefig(name + '_quickstart_05.png', dpi=300)
-#
-# figure = process.plot(n=100, N=200,  style='ggplot')
-# if SAVE:
-#     figure.savefig(name + '_quickstart_06.png', dpi=300)
-#
-# figure = process.draw(n=100, N=200, style='Solarize_Light2')
-# if SAVE:
-#     figure.savefig(name + '_quickstart_07.png', dpi=300)
-#
-# figure = process.draw(n=100, N=200, colormap="cool",)
-# if SAVE:
-#     figure.savefig(name + '_quickstart_08.png', dpi=300)
+if CIR_convergenge:
+    process = CIRProcess()
+    process.draw(n=100, N=200,)
+    process = CIRProcess(T=10)
+    process.draw(n=100, N=200)
 
 
-bm = BrownianMotion()
-bmd = BrownianMotion(drift=-1.0, scale=0.5)
-gbm = GBM()
-vasicek = Vasicek()
-ouprocess = OUProcess()
-cirprocess = CIRProcess()
-cev = CEVProcess()
 
-for process in [bm, bmd, gbm, vasicek, ouprocess,
-                cirprocess, cev
-                ]:
-    figure = process.plot(n=100, N=5)
+
+if FIGURES:
+
+    bm = BrownianMotion()
+    bmd = BrownianMotion(drift=-1.0, scale=0.5)
+    gbm = GBM()
+    vasicek = Vasicek()
+    ouprocess = OUProcess()
+    cirprocess = CIRProcess()
+    cev = CEVProcess()
+
+    for process in [bm, bmd, gbm, vasicek, ouprocess,cirprocess, cev]:
+        figure = process.plot(n=100, N=5)
+        name = process.name.replace(" ", "_").lower()
+        save_paths = '../docs/source/_static/'
+        if SAVE:
+            figure.savefig(save_paths + name + '_simple_plot.png', dpi=300)
+        figure = process.draw(n=100, N=200, envelope=False)
+        if SAVE:
+            figure.savefig(save_paths + name + '_drawn.png', dpi=300)
+        # process.draw(n=100, N=200, envelope=True)
+        # process.draw(n=100, N=200, marginal=False)
+        # process.draw(n=100, N=200, marginal=False, envelope=True)
+
+if QS:
+
+    process = BrownianMotion()
     name = process.name.replace(" ", "_").lower()
+    figure = process.plot(n=100, N=10)
+
     if SAVE:
-        figure.savefig(name + '_simple_plot.png', dpi=300)
-    figure = process.draw(n=100, N=200, envelope=False)
+        figure.savefig(save_paths + name + '_quickstart_01.png', dpi=300)
+
+    figure = process.draw(n=100, N=200)
     if SAVE:
-        figure.savefig(name + '_drawn.png', dpi=300)
-    process.draw(n=100, N=200, envelope=True)
-    process.draw(n=100, N=200, marginal=False)
-    process.draw(n=100, N=200, marginal=False, envelope=True)
+        figure.savefig(save_paths + name + '_quickstart_02.png', dpi=300)
+
+    figure = process.draw(n=100, N=200, envelope=True)
+    if SAVE:
+        figure.savefig(save_paths + name + '_quickstart_03.png', dpi=300)
+
+    figure = process.draw(n=100, N=200, marginal=False)
+    if SAVE:
+        figure.savefig(save_paths + name + '_quickstart_04.png', dpi=300)
+
+    figure = process.draw(n=100, N=200, marginal=False, envelope=True)
+    if SAVE:
+        figure.savefig(save_paths + name + '_quickstart_05.png', dpi=300)
+
+    figure = process.plot(n=100, N=200, style='ggplot')
+    if SAVE:
+        figure.savefig(save_paths + name + '_quickstart_06.png', dpi=300)
+
+    figure = process.draw(n=100, N=200, style='Solarize_Light2')
+    if SAVE:
+        figure.savefig(save_paths + name + '_quickstart_07.png', dpi=300)
+
+    figure = process.draw(n=100, N=200, colormap="cool", )
+    if SAVE:
+        figure.savefig(save_paths + name + '_quickstart_08.png', dpi=300)

@@ -40,7 +40,7 @@ class Vasicek(SPEulerMaruyama):
     :param numpy.random.Generator rng: a custom random number generator
     """
 
-    def __init__(self, theta=1.0, mu=2.0, sigma=0.5, initial=5.0, T=1.0, rng=None):
+    def __init__(self, theta=1.0, mu=3.0, sigma=0.5, initial=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
         self.theta = theta
         self.mu = mu

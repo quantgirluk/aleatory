@@ -127,7 +127,7 @@ class SPExplicit(StochasticProcess):
             figsize = (12, 6)
         else:
             marginalT = None
-            figsize = (9, 6)
+            figsize = (9.5, 6)
 
         fig = draw_paths(times=self.times, paths=self.paths, N=N, expectations=expectations, name=self.name,
                          marginal=marginal, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,

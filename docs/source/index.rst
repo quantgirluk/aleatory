@@ -7,23 +7,21 @@ replica
 =======
 
 **Replica** (/ˈrep.lɪ.kə/) is a Python library for simulating and visualising stochastic processes
-defined by Stochastic Differential Equations (SDEs).
-
-This package introduces objects representing continuous-time
+defined by Stochastic Differential Equations (SDEs). It introduces objects representing continuous-time
 stochastic processes :math:`X = \{X_t : t\geq 0\}`, and provides
 functionality to:
 
-- generating realizations/trajectories of each process over discrete time sets
-- creating visualisations to illustrate the processes properties and behaviour
+- generate realizations/trajectories of each process over discrete time sets
+- create visualisations to illustrate the processes properties and behaviour
 
-Currently supported processes are as follows:
+Currently, `replica` supports the following processes:
 
- - Brownian Motion
- - Geometric Brownian Motion
- - Ornstein–Uhlenbeck
- - Vasicek
- - Cox–Ingersoll–Ross
- - Constant Elasticity
+- Brownian Motion
+- Geometric Brownian Motion
+- Ornstein–Uhlenbeck
+- Vasicek
+- Cox–Ingersoll–Ross
+- Constant Elasticity
 
 
 Installation
@@ -67,5 +65,4 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`

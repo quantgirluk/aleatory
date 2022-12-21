@@ -10,7 +10,7 @@ def get_times(end, n):
     return np.linspace(0, end, n)
 
 
-def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", figsize=(9, 6), dpi=200, **fig_kw):
+def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", figsize=(9.5, 6), dpi=200, **fig_kw):
     with plt.style.context(style):
         fig, ax = plt.subplots(figsize=figsize, dpi=dpi, **fig_kw)
         for p in paths:

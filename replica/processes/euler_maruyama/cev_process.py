@@ -143,7 +143,7 @@ class CEVProcess(SPEulerMaruyama):
         return stds
 
     def _draw_paths_kde(self, expectations, envelope=False, lower=None, upper=None,
-                        style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', figsize=(9.6, 7.2), dpi=200, **fig_kw):
+                        style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', figsize=(12, 6), dpi=200, **fig_kw):
 
         with plt.style.context(style):
 
