@@ -3,10 +3,7 @@ Constant Elasticity Variance Process
 """
 from replica.processes.base import SPEulerMaruyama
 import numpy as np
-import statsmodels.api as sm
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
+from replica.utils.utils import draw_paths
 
 
 class CEVProcess(SPEulerMaruyama):
@@ -142,55 +139,6 @@ class CEVProcess(SPEulerMaruyama):
         stds = self._process_stds()
         return stds
 
-    def _draw_paths_kde(self, expectations, envelope=False, lower=None, upper=None,
-                        style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', figsize=(12, 6), dpi=200, **fig_kw):
-
-        with plt.style.context(style):
-
-            fig = plt.figure(figsize=figsize, dpi=dpi, **fig_kw)
-            gs = GridSpec(1, 5)
-
-            ax1 = fig.add_subplot(gs[:4])
-            ax2 = fig.add_subplot(gs[4:], sharey=ax1)
-
-            paths = self.paths
-            last_points = [path[-1] for path in paths]
-
-            cm = plt.colormaps[colormap]
-            n_bins = int(np.sqrt(self.N))
-            n, bins, patches = ax2.hist(last_points, n_bins, orientation='horizontal', density=True)
-            bin_centers = 0.5 * (bins[:-1] + bins[1:])
-            col = bin_centers - min(bin_centers)  # scale values to interval [0,1]
-            col /= max(col)
-            for c, p in zip(col, patches):
-                plt.setp(p, 'facecolor', cm(c))
-            my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
-            colors = [col[b] for b in my_bins]
-
-            kde = sm.nonparametric.KDEUnivariate(last_points)
-            kde.fit()  # Estimate the densities
-            ax2.plot(kde.density, kde.support, '--', lw=1.75, alpha=0.6, label='$X_T$  KDE', zorder=10)
-            ax2.axhline(y=np.mean(last_points), linestyle='--', lw=1.75, label=r'$\overline{X_T}$')
-            plt.setp(ax2.get_yticklabels(), visible=False)
-
-            for i in range(self.N):
-                ax1.plot(self.times, paths[i], '-', lw=1.0, color=cm(colors[i]))
-            ax1.plot(self.times, expectations, '--', lw=1.75, label=r'$\overline{X_t}$  (Empirical Means)')
-            if envelope:
-                ax1.fill_between(self.times, upper, lower, alpha=0.25, color='grey')
-
-            fig.suptitle(self.name, size=14)
-            ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$', size=12)  # Title
-            ax2.set_title('$X_T$', size=12)  # Title
-            ax1.set_xlabel('t')
-            ax1.set_ylabel('X(t)')
-            plt.subplots_adjust(wspace=0.025, hspace=0.025)
-            ax1.legend()
-            ax2.legend()
-            plt.show()
-
-        return fig
-
     def draw(self, n, N, marginal=True, envelope=False, **fig_kw):
         self.simulate(n, N)
         expectations = self.estimate_expectations()
@@ -198,9 +146,20 @@ class CEVProcess(SPEulerMaruyama):
         if envelope:
             lower = self.estimate_quantiles(0.005)
             upper = self.estimate_quantiles(0.995)
-            fig = self._draw_paths_kde(expectations=expectations, envelope=envelope, lower=lower, upper=upper, **fig_kw)
         else:
-            fig = self._draw_paths_kde(expectations=expectations, **fig_kw)
+            lower = None
+            upper = None
+
+        if marginal:
+            figsize = (12, 6)
+            fig = draw_paths(times=self.times, paths=self.paths, N=N, KDE=True, name=self.name, marginal=marginal,
+                             expectations=expectations, envelope=envelope, lower=lower, upper=upper, figsize=figsize,
+                             **fig_kw)
+        else:
+            figsize = (9.5, 6)
+            fig = draw_paths(times=self.times, paths=self.paths, N=N, name=self.name,
+                             expectations=expectations, marginal=marginal, figsize=figsize, **fig_kw)
+
         return fig
 
     def sample(self, n):

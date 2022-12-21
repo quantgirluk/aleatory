@@ -69,7 +69,7 @@ class SPExplicit(StochasticProcess):
 
         :param n: number of steps in each path
         :param N: number of paths to simulate
-        :return: list with N paths (each one is an np.array of size n)
+        :return: list with N paths (each one is a np.array of size n)
         """
         self.n = n
         self.N = N

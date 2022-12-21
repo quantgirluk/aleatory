@@ -46,10 +46,11 @@ from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProces
 # process.draw(n=100, N=100, style='dark_background', dpi=200)
 # process.plot(n=100, N=10, figsize=(5, 3))
 
-SAVE = True
-FIGURES = False
-QS = False
+SAVE = False
+FIGURES = True
+QS = True
 CIR_convergenge = True
+
 
 if CIR_convergenge:
     process = CIRProcess()
@@ -70,7 +71,9 @@ if FIGURES:
     cirprocess = CIRProcess()
     cev = CEVProcess()
 
-    for process in [bm, bmd, gbm, vasicek, ouprocess,cirprocess, cev]:
+    for process in [bm,
+                    # bmd, gbm, vasicek, ouprocess,cirprocess,
+                    cev]:
         figure = process.plot(n=100, N=5)
         name = process.name.replace(" ", "_").lower()
         save_paths = '../docs/source/_static/'
@@ -79,7 +82,7 @@ if FIGURES:
         figure = process.draw(n=100, N=200, envelope=False)
         if SAVE:
             figure.savefig(save_paths + name + '_drawn.png', dpi=300)
-        # process.draw(n=100, N=200, envelope=True)
+        process.draw(n=100, N=200, envelope=True)
         # process.draw(n=100, N=200, marginal=False)
         # process.draw(n=100, N=200, marginal=False, envelope=True)
 
