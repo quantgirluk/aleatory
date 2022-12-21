@@ -148,24 +148,3 @@ class GBM(SPExplicit):
         marginal = lognorm(s=sigma_x, scale=np.exp(mu_x))
 
         return marginal
-
-    # def draw(self, n, N, marginal=False, envelope=False):
-    #     """
-    #     Simulates and plots paths/trajectories from the instanced stochastic process.
-    #
-    #     Produces different kind of visualisation illustrating the following elements:
-    #
-    #     - times versus process values as lines
-    #     - the expectation of the process across time
-    #     - histogram showing the empirical marginal distribution :math:`X_T` (optional when ``marginal = True``)
-    #     - probability density function of the marginal distribution :math:`X_T` (optional when ``marginal = True``)
-    #     - envelope of confidence intervals acroos time (optional when ``envelope = True``)
-    #
-    #     :param n: number of steps in each path
-    #     :param N: number of paths to simulate
-    #     :param marginal: bool, default: True
-    #     :param envelope: bool, default: False
-    #     :return:
-    #     """
-    #
-    #     return self._draw_qqstyle(n=n, N=N, marginal=marginal, envelope=envelope)

@@ -1,3 +1,6 @@
+"""
+Constant Elasticity Variance Process
+"""
 from replica.processes.base import SPEulerMaruyama
 import numpy as np
 import statsmodels.api as sm
@@ -164,18 +167,15 @@ class CEVProcess(SPEulerMaruyama):
             my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
             colors = [col[b] for b in my_bins]
 
-            T = self.T
             kde = sm.nonparametric.KDEUnivariate(last_points)
             kde.fit()  # Estimate the densities
-            ax2.plot(kde.density, kde.support, '--', lw=1.75, alpha=0.6, color='blue', label='$X_T$  KDE', zorder=10)
-            ax2.axhline(y=np.mean(last_points), color='black', lw=1.2, label=r'$\overline{X_T}$')
+            ax2.plot(kde.density, kde.support, '--', lw=1.75, alpha=0.6, label='$X_T$  KDE', zorder=10)
+            ax2.axhline(y=np.mean(last_points), linestyle='--', lw=1.75, label=r'$\overline{X_T}$')
             plt.setp(ax2.get_yticklabels(), visible=False)
 
             for i in range(self.N):
-                ax1.plot(self.times, paths[i], '-', lw=1.5, color=cm(colors[i]))
-
-            ax1.plot(self.times, expectations, '-', lw=1.5, color='black', label=r'$\overline{X_t}$  (Empirical Means)')
-
+                ax1.plot(self.times, paths[i], '-', lw=1.0, color=cm(colors[i]))
+            ax1.plot(self.times, expectations, '--', lw=1.75, label=r'$\overline{X_t}$  (Empirical Means)')
             if envelope:
                 ax1.fill_between(self.times, upper, lower, alpha=0.25, color='grey')
 

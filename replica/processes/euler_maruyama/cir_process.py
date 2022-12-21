@@ -119,14 +119,6 @@ class CIRProcess(SPEulerMaruyama):
         scale = 1.0 / (4.0 * self.theta / ((self.sigma ** 2) * (1.0 - np.exp(-1.0 * self.theta * t))))
         marginal = ncx2(nu, lambda_t, scale=scale)
 
-        # c = 2 * self.theta / ((1.0 - np.exp(-1.0*self.theta * t)) * self.sigma ** 2)
-        # q = 2 * self.theta * self.mu / self.sigma ** 2 - 1
-        # u = c * self.initial * np.exp(-self.theta * t)
-        # df = 2 * q + 2  # parameter K
-        # nc = u * 2  # parameter lambda
-        # scale = 1 / (2 * c)
-        # marginal = ncx2(df, nc, scale=scale)
-
         return marginal
 
     def sample(self, n):

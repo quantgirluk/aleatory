@@ -10,7 +10,7 @@ def get_times(end, n):
     return np.linspace(0, end, n)
 
 
-def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", figsize=(10, 7), dpi=200, **fig_kw):
+def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", figsize=(9, 6), dpi=200, **fig_kw):
     with plt.style.context(style):
         fig, ax = plt.subplots(figsize=figsize, dpi=dpi, **fig_kw)
         for p in paths:
@@ -23,10 +23,10 @@ def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", figsize=(10, 
 
 
 def draw_paths(times, paths, N, expectations, name, marginal=False, marginalT=None, envelope=False, lower=None,
-               upper=None, style="seaborn-v0_8-whitegrid", colormap='RdYlBu_r', figsize=(12, 6), dpi=200, **fig_kw):
+               upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", dpi=200, **fig_kw):
     with plt.style.context(style):
         if marginal:
-            fig = plt.figure(figsize=figsize, dpi=dpi, **fig_kw)
+            fig = plt.figure(dpi=dpi, **fig_kw)
             gs = GridSpec(1, 5)
             ax1 = fig.add_subplot(gs[:4])
             ax2 = fig.add_subplot(gs[4:], sharey=ax1)
@@ -54,15 +54,13 @@ def draw_paths(times, paths, N, expectations, name, marginal=False, marginalT=No
 
             for i in range(N):
                 ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
-
             ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
             if envelope:
                 ax1.fill_between(times, upper, lower, alpha=0.25, color='grey')
-
             plt.subplots_adjust(wspace=0.025, hspace=0.025)
 
         else:
-            fig, ax1 = plt.subplots(figsize=figsize, dpi=dpi, **fig_kw)
+            fig, ax1 = plt.subplots(dpi=dpi, **fig_kw)
             for i in range(N):
                 ax1.plot(times, paths[i], '-', lw=1.0)
             ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')

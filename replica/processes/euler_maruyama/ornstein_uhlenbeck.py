@@ -1,3 +1,6 @@
+"""
+Ornstein-Uhlenbeck Process
+"""
 from replica.processes.euler_maruyama.vasicek import Vasicek
 
 

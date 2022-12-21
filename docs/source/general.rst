@@ -1,44 +1,23 @@
-General Usage
-=============
+Quick-Start Guide
+=================
 
 
-Stochastic Processes
---------------------
+To start using ``replica``, import the stochastic processes you want and create an
+instance with the required parameters. For example, we create an instance of a standard
+Brownian motion as follows.
 
-This package introduces objects representing a number of continuous-time
-stochastic processes :math:`X = \{X_t : t\geq 0\}`, and provides
-functionality to:
-
-- generate realizations/trajectories of each process over discrete time sets
-- create visualisations to illustrate the processes properties and behaviour
-
-All currently supported processes can be divided in two categories according to the
-method that is used to generate their paths:
-
-- Analytical
-    - Brownian Motion
-    - Geometric Brownian Motion
-- Euler-Maruyama
-    - Ornstein–Uhlenbeck
-    - Vasicek
-    - Cox–Ingersoll–Ross
-    - Constant Elasticity
-
-Quick-start guide
------------------
-
-To start using ``replica``, import the stochastic process you want and create an
-instance with the required parameters.
-
-.. note::
-    All processes instances  will be defined on an finite interval :math:`[0,T]`. Hence, the end point
-    :math:`T` is a required argument to create an instance of a process. In all cases :math:`T=1` by default.
 
 .. code-block:: python
 
     from replica.processes import BrownianMotion
 
     brownian = BrownianMotion()
+
+
+.. note::
+    All processes instances  will be defined on a finite interval :math:`[0,T]`. Hence, the end point
+    :math:`T` is a required argument to create an instance of a process. In all cases :math:`T=1,` by default.
+
 
 
 The simulate() method
@@ -51,6 +30,9 @@ The ``simulate`` methods require two parameters:
 
 and will return a list with ``N`` paths generated from the specified process.
 
+For example,
+we can simulate 10 paths, each one with 100 steps, from a standard Brownian motion as follows.
+
 .. code-block:: python
 
     from replica.processes import BrownianMotion
@@ -61,7 +43,7 @@ and will return a list with ``N`` paths generated from the specified process.
 
 
 .. note::
-    Each path contains
+    Each path is a ``numpy array`` which contains
     ``n`` points/steps corresponding to the values of the process at evenly spaced times over the
     interval :math:`[0,T],` i.e.,
 
@@ -90,21 +72,21 @@ Similarly to the ``simulate`` methods, the ``plot`` methods require two paramete
 .. image:: _static/brownian_motion_quickstart_01.png
 
 
-Parameters can be accessed as attributes of the instance.
 
 The draw() method
 ~~~~~~~~~~~~~~~~~
 Every process class has a ``draw`` method which generates a more interesting
 visualisation of the simulated trajectories/paths.
-The ``draw`` methods require two parameters:
+
+The ``draw`` method also require two parameters:
 
 - ``n`` for the number of steps in each path
 - ``N`` for the number of paths
 
 In addition, there are two optional boolean parameters
 
-- ``marginal`` which is defaulted ``True``
-- ``envelope`` which is defaulted ``False``
+- ``marginal`` which enables/disables a subplot showing the marginal distribution of $X_T$. This parameters is defaulted to ``True``.
+- ``envelope`` which enables/disables a the ability to show envelopes made of confidence intervals. This is defaulted to `False``.
 
 This allows us to produce four different charts.
 
@@ -150,4 +132,51 @@ This allows us to produce four different charts.
 
 .. image:: _static/brownian_motion_quickstart_05.png
 
-Parameters can be accessed as attributes of the instance.
+
+
+Charts Customisation
+~~~~~~~~~~~~~~~~~~~~
+
+Both ``plot`` and ``draw`` methods allow chart customisation via a ``style``
+parameter which leverages the style sheet feature.
+
+The default style for all charts is ``"seaborn-v0_8-whitegrid"``. Visit the matplotlib `Style
+sheet reference <https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html>`_
+for more details and examples of the different styles.
+
+
+.. code-block:: python
+
+    from replica.processes import BrownianMotion
+    brownian = BrownianMotion()
+    brownian.plot(n=100, N=200, style='ggplot')
+
+
+.. image:: _static/brownian_motion_quickstart_06.png
+
+
+.. code-block:: python
+
+    from replica.processes import BrownianMotion
+    brownian = BrownianMotion()
+    brownian.draw(n=100, N=100, style='Solarize_Light2')
+
+
+.. image:: _static/brownian_motion_quickstart_07.png
+
+
+Finally, the method ``draw`` also offers the ability to customise the color map
+which is used. This is done via the parameter ``colormap``
+
+The default color map is ``"RdYlBu_r"``. Visit the matplotlib tutorial `Choosing Colormaps in Matplotlib  <https://matplotlib.org/stable/tutorials/colors/colormaps.html>`_
+for more details and examples of the different color maps that you can use.
+
+.. code-block:: python
+
+    from replica.processes import BrownianMotion
+    brownian = BrownianMotion()
+    brownian.draw(n=100, N=100, colormap="cool")
+
+
+.. image:: _static/brownian_motion_quickstart_08.png
+

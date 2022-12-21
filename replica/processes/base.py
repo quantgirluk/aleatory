@@ -92,7 +92,7 @@ class SPExplicit(StochasticProcess):
     def _process_stds(self):
         pass
 
-    def plot(self, n, N, style="seaborn-v0_8-whitegrid", **fig_kw):
+    def plot(self, n, N, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Simple plot of times versus process values as lines and/or markers.
@@ -102,7 +102,7 @@ class SPExplicit(StochasticProcess):
         :return:
         """
         self.simulate(n, N)
-        figure = plot_paths(self.times, self.paths, self.name, style=style, **fig_kw)
+        figure = plot_paths(self.times, self.paths, self.name, **fig_kw)
         return figure
 
     def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, **fig_kw):
@@ -124,12 +124,14 @@ class SPExplicit(StochasticProcess):
 
         if marginal:
             marginalT = self.get_marginal(self.T)
+            figsize = (12, 6)
         else:
             marginalT = None
+            figsize = (9, 6)
 
         fig = draw_paths(times=self.times, paths=self.paths, N=N, expectations=expectations, name=self.name,
                          marginal=marginal, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,
-                         **fig_kw)
+                         figsize=figsize, **fig_kw)
         return fig
 
     def _draw_qqstyle(self, n, N, marginal=False, envelope=False,
@@ -157,8 +159,6 @@ class SPExplicit(StochasticProcess):
         :param N: number of paths to simulate
         :param marginal: bool, default: True
         :param envelope: bool, default: False
-        :param style:
-        :param colormap:
         :return:
         """
         return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, **fig_kw)
