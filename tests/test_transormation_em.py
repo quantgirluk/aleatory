@@ -1,9 +1,8 @@
 from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
 
 
-
-# process = CIRProcess(theta=1.0, mu=2.0, sigma=0.25)
-process= CEVProcess(gamma=0.5, mu=0.50, sigma=0.1, initial=1.0)
+cir = CIRProcess(theta=1.0, mu=2.0, sigma=0.25)
+cev = CEVProcess(gamma=1.5, mu=0.50, sigma=0.1, initial=1.0)
 
 
 pitaya = 'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-dark.mplstyle'
