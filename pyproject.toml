@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "replica"
+version = "0.0.1"
+authors = [{ name = "Dialid Santiago", email = "d.santiago@outlook.com" }, ]
+description = "Stochastic Processes Simulation and Visualisation"
+readme = "README.rst"
+requires-python = ">=3.7"
+classifiers = ["Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Visualization"]
+
+[project.urls]
+"Homepage" = "https://github.com/quantgirluk/replica"
+"Bug Tracker" = "https://github.com/quantgirluk/replica/issues"
+
+dependencies = ["numpy>=1.23.5",
+                "scipy>=1.9.3",
+                "matplotlib>=3.6.2",
+                "statsmodels>=0.13.5"]
