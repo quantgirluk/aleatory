@@ -1,33 +1,47 @@
-Replica
+replica
 =======
 
 **Replica** (/ˈrep.lɪ.kə/) is a Python library for simulating and visualising stochastic processes
-defined by Stochastic Differential Equations (SDEs).
+defined by Stochastic Differential Equations (SDEs). It introduces objects representing continuous-time
+stochastic processes :math:`X = \{X_t : t\geq 0\}`, and provides
+functionality to:
 
+- generate realizations/trajectories of each process over discrete time sets
+- create visualisations to illustrate the processes properties and behaviour
+
+.. image:: _static/vasicek_process_drawn.png
+
+
+Currently, `replica` supports the following processes:
+
+- Brownian Motion
+- Geometric Brownian Motion
+- Ornstein–Uhlenbeck
+- Vasicek
+- Cox–Ingersoll–Ross
+- Constant Elasticity
+
+
+Installation
+------------
+
+Stochastic is available on `pypi <https://pypi.python.org/pypi>`_ and can be
+installed using ``pip``:
+
+.. code-block:: bash
+
+   pip install replica
 
 Dependencies
-~~~~~~~~~~~~
+------------
 
-Replica relies heavily on the following Python libraries
+Replica relies heavily on
 
-- ``numpy`` and ``scipy`` for array calculations as well as random number generation
-- ``matplotlib`` for visualisation
+- ``numpy``  ``scipy`` for random number generation, as well as support for a number of one-dimensional distributions.
 
-Processes
----------
+- ``matplotlib`` for creating visualisations
 
-This library offers a number of stochastic process objects available for generating realizations from their
-corresponding SDEs.
-In addition, for each stochastic process there is a path object which allows the creation of charts to illustrate the
-trajectories of such process.
+Compatibility
+-------------
 
-* Exact processes
-    * Brownian Motion
-    * Brownian Motion with Drift
-    * Geometric Brownian Motion
-
-* Euler-Maruyama processes
-    * Ornstein Uhlenbeck
-    * Vasicek
-    *  Constant Elasticity Variance
-    * Cox Ingersoll Ross
+Stochastic is tested on Python versions 3.7, and 3.8.
