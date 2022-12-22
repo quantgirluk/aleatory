@@ -9,7 +9,7 @@ functionality to:
 - generate realizations/trajectories of each process over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
 
-.. image:: https://raw.githubusercontent.com/quantgirluk/replica/main/docs/source/_static/vasicek_process_drawn.png?token=GHSAT0AAAAAAB4OATWY5FHNAX2PEWGW2OHKY5EIMAA
+.. image:: https://github.com/quantgirluk/replica/blob/35c817b2fe1e76286551bd645439bc5b32e67720/docs/source/_static/vasicek_process_drawn.png
 
 
 Currently, `replica` supports the following processes:
