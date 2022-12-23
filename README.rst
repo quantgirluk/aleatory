@@ -1,7 +1,7 @@
-replica
+aleatory
 =======
 
-**Replica** (/ˈrep.lɪ.kə/) is a Python library for simulating and visualising stochastic processes
+**Aleatory** (/ˈeɪliətəri/) is a Python library for simulating and visualising stochastic processes
 defined by Stochastic Differential Equations (SDEs). It introduces objects representing continuous-time
 stochastic processes :math:`X = \{X_t : t\geq 0\}`, and provides
 functionality to:
@@ -30,7 +30,7 @@ installed using ``pip``:
 
 .. code-block:: bash
 
-   pip install replica
+   pip install aleatory
 
 Dependencies
 ------------
