@@ -1,7 +1,7 @@
 import unittest
 import matplotlib.pyplot as plt
 import numpy as np
-from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
+from aleatory.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
 from parameterized import parameterized, parameterized_class
 
 

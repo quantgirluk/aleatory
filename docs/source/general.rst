@@ -2,14 +2,14 @@ Quick-Start Guide
 =================
 
 
-To start using ``replica``, import the stochastic processes you want and create an
+To start using ``aleatory``, import the stochastic processes you want and create an
 instance with the required parameters. For example, we create an instance of a standard
 Brownian motion as follows.
 
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
 
     brownian = BrownianMotion()
 
@@ -35,7 +35,7 @@ we can simulate 10 paths, each one with 100 steps, from a standard Brownian moti
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
 
     brownian = BrownianMotion()
     paths = brownian.simulate(n=100, N=10)
@@ -63,7 +63,7 @@ Similarly to the ``simulate`` methods, the ``plot`` methods require two paramete
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
 
     brownian = BrownianMotion()
     brownian.plot(n=100, N=10)
@@ -92,7 +92,7 @@ This allows us to produce four different charts.
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
 
     brownian = BrownianMotion()
     brownian.draw(n=100, N=200)
@@ -103,7 +103,7 @@ This allows us to produce four different charts.
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
 
     brownian = BrownianMotion()
     brownian.draw(n=100, N=200, envelope=True)
@@ -114,7 +114,7 @@ This allows us to produce four different charts.
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
 
     brownian = BrownianMotion()
     brownian.draw(n=100, N=200, marginal=False)
@@ -125,7 +125,7 @@ This allows us to produce four different charts.
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
     brownian = BrownianMotion()
     brownian.draw(n=100, N=200, marginal=False, envelope=True)
 
@@ -147,7 +147,7 @@ for more details and examples of the different styles.
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
     brownian = BrownianMotion()
     brownian.plot(n=100, N=200, style='ggplot')
 
@@ -157,7 +157,7 @@ for more details and examples of the different styles.
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
     brownian = BrownianMotion()
     brownian.draw(n=100, N=100, style='Solarize_Light2')
 
@@ -173,7 +173,7 @@ for more details and examples of the different color maps that you can use.
 
 .. code-block:: python
 
-    from replica.processes import BrownianMotion
+    from aleatory.processes import BrownianMotion
     brownian = BrownianMotion()
     brownian.draw(n=100, N=100, colormap="cool")
 

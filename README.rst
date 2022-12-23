@@ -9,10 +9,9 @@ functionality to:
 - generate realizations/trajectories of each process over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
 
-.. image:: https://github.com/quantgirluk/replica/blob/35c817b2fe1e76286551bd645439bc5b32e67720/docs/source/_static/vasicek_process_drawn.png
+.. image:: docs/source/_static/vasicek_process_drawn.png
 
-
-Currently, `replica` supports the following processes:
+Currently, `aleatory` supports the following processes:
 
 - Brownian Motion
 - Geometric Brownian Motion
@@ -35,7 +34,7 @@ installed using ``pip``:
 Dependencies
 ------------
 
-Replica relies heavily on
+Aleatory relies heavily on
 
 - ``numpy``  ``scipy`` for random number generation, as well as support for a number of one-dimensional distributions.
 
@@ -44,4 +43,4 @@ Replica relies heavily on
 Compatibility
 -------------
 
-Stochastic is tested on Python versions 3.7, and 3.8.
+Aleatory is tested on Python versions 3.7, 3.8, and 3.9

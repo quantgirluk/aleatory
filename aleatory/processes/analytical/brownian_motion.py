@@ -2,9 +2,9 @@
 import numpy as np
 from scipy.stats import norm
 
-from replica.processes.base import SPExplicit
-from replica.processes.analytical.gaussian import GaussianIncrements
-from replica.utils.utils import check_positive_number, check_numeric, get_times
+from aleatory.processes.base import SPExplicit
+from aleatory.processes.analytical.gaussian import GaussianIncrements
+from aleatory.utils.utils import check_positive_number, check_numeric, get_times
 
 
 class BrownianMotion(SPExplicit):

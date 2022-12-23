@@ -4,9 +4,9 @@ Geometric Brownian Motion
 import numpy as np
 from scipy.stats import lognorm
 
-from replica.processes.base import SPExplicit
-from replica.processes.analytical.brownian_motion import BrownianMotion
-from replica.utils.utils import check_positive_number, check_numeric, get_times, check_positive_integer
+from aleatory.processes.base import SPExplicit
+from aleatory.processes.analytical.brownian_motion import BrownianMotion
+from aleatory.utils.utils import check_positive_number, check_numeric, get_times, check_positive_integer
 
 
 class GBM(SPExplicit):

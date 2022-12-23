@@ -1,12 +1,12 @@
-.. replica documentation master file, created by
+.. aleatory documentation master file, created by
    sphinx-quickstart on Thu Dec  8 09:52:55 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-replica
+aleatory
 =======
 
-**Replica** (/ˈrep.lɪ.kə/) is a Python library for simulating and visualising stochastic processes
+**Aleatory** (/ˈeɪliətəri/) is a Python library for simulating and visualising stochastic processes
 defined by Stochastic Differential Equations (SDEs). It introduces objects representing continuous-time
 stochastic processes :math:`X = \{X_t : t\geq 0\}`, and provides
 functionality to:
@@ -14,7 +14,7 @@ functionality to:
 - generate realizations/trajectories of each process over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
 
-Currently, `replica` supports the following processes:
+Currently, `aleatory` supports the following processes:
 
 - Brownian Motion
 - Geometric Brownian Motion
@@ -32,12 +32,12 @@ installed using ``pip``:
 
 .. code-block:: bash
 
-   pip install replica
+   pip install aleatory
 
 Dependencies
 ------------
 
-Replica relies heavily on
+Aleatory relies heavily on
 
 - ``numpy``  ``scipy`` for random number generation, as well as support for a number of one-dimensional distributions.
 
@@ -46,7 +46,7 @@ Replica relies heavily on
 Compatibility
 -------------
 
-Stochastic is tested on Python versions 3.7, and 3.8.
+Aleatory is tested on Python versions 3.7, and 3.8.
 
 
 Documentation

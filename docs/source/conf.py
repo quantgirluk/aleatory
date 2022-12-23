@@ -13,14 +13,14 @@ import importlib
 import os
 import sys
 # sys.path.insert(0, os.path.abspath('../..'))..
-sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'replica')))
-replica = importlib.import_module("replica")
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'aleatory')))
+aleatory = importlib.import_module("aleatory")
 
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'replica'
+project = 'aleatory'
 copyright = '2022, Dialid Santiago'
 author = 'Dialid Santiago'
 

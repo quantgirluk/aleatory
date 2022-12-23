@@ -1,4 +1,4 @@
-from replica.processes import CIRProcess, CEVProcess
+from aleatory.processes import CIRProcess, CEVProcess
 
 pitaya = 'https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-dark.mplstyle'
 

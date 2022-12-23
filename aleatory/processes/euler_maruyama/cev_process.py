@@ -1,9 +1,9 @@
 """
 Constant Elasticity Variance Process
 """
-from replica.processes.base import SPEulerMaruyama
+from aleatory.processes.base import SPEulerMaruyama
 import numpy as np
-from replica.utils.utils import draw_paths
+from aleatory.utils.utils import draw_paths
 
 
 class CEVProcess(SPEulerMaruyama):

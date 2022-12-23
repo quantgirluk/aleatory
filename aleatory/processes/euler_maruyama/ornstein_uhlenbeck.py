@@ -1,7 +1,7 @@
 """
 Ornstein-Uhlenbeck Process
 """
-from replica.processes.euler_maruyama.vasicek import Vasicek
+from aleatory.processes.euler_maruyama.vasicek import Vasicek
 
 
 class OUProcess(Vasicek):

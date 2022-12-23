@@ -1,4 +1,4 @@
-from replica.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
+from aleatory.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
 import numpy as np
 
 SAVE = False

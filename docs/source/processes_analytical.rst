@@ -2,17 +2,17 @@ Analytical Processes
 --------------------
 
 
-The :py:mod:`replica.processes` module provides classes for continuous-time stochastic processes which can be expressed in
+The :py:mod:`aleatory.processes` module provides classes for continuous-time stochastic processes which can be expressed in
 analytical form.
 
 
-* :py:class:`replica.processes.BrownianMotion`
-* :py:class:`replica.processes.GBM`
+* :py:class:`aleatory.processes.BrownianMotion`
+* :py:class:`aleatory.processes.GBM`
 
 
-.. autoclass:: replica.processes.BrownianMotion
+.. autoclass:: aleatory.processes.BrownianMotion
     :members: T, sample, sample_at, simulate, plot, draw
 
-.. autoclass:: replica.processes.GBM
+.. autoclass:: aleatory.processes.GBM
     :members: T, sample, sample_at, simulate, plot, draw
 

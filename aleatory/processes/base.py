@@ -3,8 +3,8 @@ from abc import abstractmethod
 
 import numpy as np
 
-from replica.utils.utils import check_positive_number
-from replica.utils.utils import plot_paths, draw_paths, check_positive_integer, get_times
+from aleatory.utils.utils import check_positive_number
+from aleatory.utils.utils import plot_paths, draw_paths, check_positive_integer, get_times
 
 
 class BaseProcess(ABC):

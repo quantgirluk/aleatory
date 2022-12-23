@@ -1,7 +1,7 @@
 import numpy as np
 
-from replica.processes.base import StochasticProcess
-from replica.utils.utils import check_positive_integer, times_to_increments, get_times
+from aleatory.processes.base import StochasticProcess
+from aleatory.utils.utils import check_positive_integer, times_to_increments, get_times
 
 
 class GaussianIncrements(StochasticProcess):

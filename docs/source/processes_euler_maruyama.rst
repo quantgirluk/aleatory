@@ -1,24 +1,24 @@
 EM Processes
 -------------
 
-The :py:mod:`replica.processes` module also provides functionality for continuous-time stochastic processes which
+The :py:mod:`aleatory.processes` module also provides functionality for continuous-time stochastic processes which
 cannot be expressed in analytical form. These processes are simulated via the
 `Euler-Maruyama <https://en.wikipedia.org/wiki/Euler–Maruyama_method>`_ method.
 
-* :py:class:`replica.processes.OUProcess`
-* :py:class:`replica.processes.Vasicek`
-* :py:class:`replica.processes.CIRProcess`
-* :py:class:`replica.processes.CEVProcess`
+* :py:class:`aleatory.processes.OUProcess`
+* :py:class:`aleatory.processes.Vasicek`
+* :py:class:`aleatory.processes.CIRProcess`
+* :py:class:`aleatory.processes.CEVProcess`
 
 
-.. autoclass:: replica.processes.OUProcess
+.. autoclass:: aleatory.processes.OUProcess
     :members: T, sample, simulate, plot, draw
 
-.. autoclass:: replica.processes.Vasicek
+.. autoclass:: aleatory.processes.Vasicek
     :members: T, sample, simulate, plot, draw
 
-.. autoclass:: replica.processes.CIRProcess
+.. autoclass:: aleatory.processes.CIRProcess
     :members: T, sample, simulate, plot, draw
 
-.. autoclass:: replica.processes.CEVProcess
+.. autoclass:: aleatory.processes.CEVProcess
     :members: T, sample, simulate, plot, draw

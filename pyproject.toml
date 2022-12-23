@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "replica"
+name = "aleatory"
 version = "0.0.1"
 authors = [{ name = "Dialid Santiago", email = "d.santiago@outlook.com" }, ]
 description = "Stochastic Processes Simulation and Visualisation"
@@ -21,6 +21,6 @@ classifiers = ["Programming Language :: Python :: 3",
     "Topic :: Scientific/Engineering :: Visualization"]
 
 [project.urls]
-"Homepage" = "https://github.com/quantgirluk/replica"
-"Bug Tracker" = "https://github.com/quantgirluk/replica/issues"
+"Homepage" = "https://github.com/quantgirluk/aleatory"
+"Bug Tracker" = "https://github.com/quantgirluk/aleatory/issues"
 
