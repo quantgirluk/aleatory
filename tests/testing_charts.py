@@ -76,3 +76,9 @@ def test_quick_start():
     figure = process.draw(n=100, N=200, colormap="cool", )
     if SAVE:
         figure.savefig(SAVE_PATH + name + '_quickstart_08.png', dpi=300)
+
+
+test_cir_convergence()
+test_rng()
+test_figures()
+test_quick_start()
