@@ -47,11 +47,8 @@ class TestProcesses(unittest.TestCase):
         [cev]
     ])
     def test_charts(self, process):
-        figure = process.plot(n=100, N=5)
-        name = process.name.replace(" ", "_").lower()
-        figure.savefig(name + '_simple_plot.png', dpi=300)
-        figure = process.draw(n=100, N=200, envelope=False)
-        figure.savefig(name + '_drawn.png', dpi=300)
+        process.plot(n=100, N=5)
+        process.draw(n=100, N=200, envelope=False)
         # process.draw(n=100, N=200, envelope=True)
         # process.draw(n=100, N=200, marginal=False)
         # process.draw(n=100, N=200, marginal=False, envelope=True)
