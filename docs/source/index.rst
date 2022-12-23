@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 aleatory
-=======
+========
 
 **Aleatory** (/ˈeɪliətəri/) is a Python library for simulating and visualising stochastic processes
 defined by Stochastic Differential Equations (SDEs). It introduces objects representing continuous-time
