@@ -9,7 +9,8 @@ functionality to:
 - generate realizations/trajectories of each process over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
 
-.. image:: docs/source/_static/vasicek_process_drawn.png
+.. image:: https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png
+
 
 Currently, `aleatory` supports the following processes:
 
