@@ -35,7 +35,8 @@ release = '0.1'
 # ones.
 extensions = ["sphinx.ext.autodoc",
               "sphinx.ext.mathjax",
-              "sphinx.ext.viewcode"
+              "sphinx.ext.viewcode",
+              "myst_parser"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -77,3 +78,8 @@ html_theme = 'furo'
 html_static_path = ['_static']
 html_css_files = ['css/custom.css',]
 
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
+}
