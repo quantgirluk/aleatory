@@ -3,10 +3,12 @@
 
 [![Documentation Status](https://readthedocs.org/projects/aleatory/badge/?version=latest)](https://aleatory.readthedocs.io/en/latest/?badge=latest) [![PyPI version fury.io](https://badge.fury.io/py/aleatory.svg)](https://pypi.org/project/aleatory/)
 
+
 - Homepage: https://github.com/quantgirluk/aleatory
 - Pip Repository: [aleatory](https://pypi.org/project/aleatory/)
 
----
+
+
 ## Overview
 
 The **_aleatory_** (/ˈeɪliətəri/) Python library provides functionality for simulating and visualising
