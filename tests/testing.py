@@ -1,5 +1,6 @@
 import unittest
 import matplotlib.pyplot as plt
+import pytest
 import numpy as np
 from aleatory.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
 from parameterized import parameterized, parameterized_class
@@ -53,6 +54,7 @@ class TestProcesses(unittest.TestCase):
         # process.draw(n=100, N=200, envelope=True)
         # process.draw(n=100, N=200, marginal=False)
         # process.draw(n=100, N=200, marginal=False, envelope=True)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
