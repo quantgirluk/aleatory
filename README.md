@@ -8,7 +8,7 @@
 
 The **_aleatory_** (/ˈeɪliətəri/) Python library provides functionality for simulating and visualising
 stochastic processes. More precisely, it introduces objects representing a number of continuous-time
-stochastic processes $X = \left{X_t : t\geq 0\right}$ and provides methods to:
+stochastic processes $X = (X_t : t\geq 0)$ and provides methods to:
 
 - generate realizations/trajectories from each process —over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
