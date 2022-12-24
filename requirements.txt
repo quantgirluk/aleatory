@@ -1,1 +1,6 @@
-bluepy
+pandas>=1.5.2
+numpy>=1.23.5
+scipy>=1.9.3
+matplotlib>=3.6.2
+statsmodels>=0.13.5
+parameterized>=0.8.1
