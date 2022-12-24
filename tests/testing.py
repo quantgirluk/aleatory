@@ -49,6 +49,7 @@ class TestProcesses(unittest.TestCase):
     def test_charts(self, process):
         process.plot(n=100, N=5)
         process.draw(n=100, N=200, envelope=False)
+        plt.close('all')
         # process.draw(n=100, N=200, envelope=True)
         # process.draw(n=100, N=200, marginal=False)
         # process.draw(n=100, N=200, marginal=False, envelope=True)
