@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aleatory"
-version = "0.0.1"
+version = "0.0.3"
 authors = [{ name = "Dialid Santiago", email = "d.santiago@outlook.com" }, ]
 description = "Stochastic Processes Simulation and Visualisation"
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.7"
 dependencies = ["pandas>=1.5.2",
                 "numpy>=1.23.5",
