@@ -151,14 +151,12 @@ class CEVProcess(SPEulerMaruyama):
             upper = None
 
         if marginal:
-            figsize = (12, 6)
             fig = draw_paths(times=self.times, paths=self.paths, N=N, KDE=True, name=self.name, marginal=marginal,
-                             expectations=expectations, envelope=envelope, lower=lower, upper=upper, figsize=figsize,
+                             expectations=expectations, envelope=envelope, lower=lower, upper=upper,
                              **fig_kw)
         else:
-            figsize = (9.5, 6)
             fig = draw_paths(times=self.times, paths=self.paths, N=N, name=self.name,
-                             expectations=expectations, marginal=marginal, figsize=figsize, **fig_kw)
+                             expectations=expectations, marginal=marginal, **fig_kw)
 
         return fig
 
