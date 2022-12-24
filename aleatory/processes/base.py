@@ -124,14 +124,12 @@ class SPExplicit(StochasticProcess):
 
         if marginal:
             marginalT = self.get_marginal(self.T)
-            figsize = (12, 6)
         else:
             marginalT = None
-            figsize = (9.5, 6)
 
         fig = draw_paths(times=self.times, paths=self.paths, N=N, expectations=expectations, name=self.name,
                          marginal=marginal, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,
-                         figsize=figsize, **fig_kw)
+                         **fig_kw)
         return fig
 
     def _draw_qqstyle(self, n, N, marginal=False, envelope=False,

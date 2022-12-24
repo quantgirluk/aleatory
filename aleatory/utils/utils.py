@@ -46,9 +46,9 @@ def times_to_increments(times):
     return check_increments(times)
 
 
-def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", figsize=(9.5, 6), dpi=200, **fig_kw):
+def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", **fig_kw):
     with plt.style.context(style):
-        fig, ax = plt.subplots(figsize=figsize, dpi=dpi, **fig_kw)
+        fig, ax = plt.subplots(**fig_kw)
         for p in paths:
             ax.plot(times, p)
         ax.set_title(name)
@@ -59,10 +59,10 @@ def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", figsize=(9.5,
 
 
 def draw_paths(times, paths, N, expectations, name, KDE=False, marginal=False, marginalT=None, envelope=False,
-               lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", dpi=200, **fig_kw):
+               lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", **fig_kw):
     with plt.style.context(style):
         if marginal:
-            fig = plt.figure(dpi=dpi, **fig_kw)
+            fig = plt.figure(**fig_kw)
             gs = GridSpec(1, 5)
             ax1 = fig.add_subplot(gs[:4])
             ax2 = fig.add_subplot(gs[4:], sharey=ax1)
@@ -91,7 +91,7 @@ def draw_paths(times, paths, N, expectations, name, KDE=False, marginal=False, m
                 ax2.axhline(y=marginaldist.mean(), linestyle='--', lw=1.75, label='$E[X_T]$')
 
             plt.setp(ax2.get_yticklabels(), visible=False)
-            ax2.set_title('$X_T$', size=12)
+            ax2.set_title('$X_T$')
             ax2.legend()
 
             for i in range(N):
@@ -102,15 +102,15 @@ def draw_paths(times, paths, N, expectations, name, KDE=False, marginal=False, m
             plt.subplots_adjust(wspace=0.025, hspace=0.025)
 
         else:
-            fig, ax1 = plt.subplots(dpi=dpi, **fig_kw)
+            fig, ax1 = plt.subplots(**fig_kw)
             for i in range(N):
                 ax1.plot(times, paths[i], '-', lw=1.0)
             ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
             if envelope:
                 ax1.fill_between(times, upper, lower, color='grey', alpha=0.25)
 
-        fig.suptitle(name, size=14)
-        ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$', size=12)  # Title
+        fig.suptitle(name)
+        ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$')  # Title
         ax1.set_xlabel('t')
         ax1.set_ylabel('X(t)')
         ax1.legend()
