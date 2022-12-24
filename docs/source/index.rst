@@ -14,6 +14,9 @@ functionality to:
 - generate realizations/trajectories of each process over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
 
+.. image:: https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png
+
+
 Currently, `aleatory` supports the following processes:
 
 - Brownian Motion
@@ -27,8 +30,8 @@ Currently, `aleatory` supports the following processes:
 Installation
 ------------
 
-Stochastic is available on `pypi <https://pypi.python.org/pypi>`_ and can be
-installed using ``pip``:
+Aleatory is available on `pypi <https://pypi.python.org/pypi>`_ and can be
+installed as follows
 
 .. code-block:: bash
 
@@ -46,7 +49,7 @@ Aleatory relies heavily on
 Compatibility
 -------------
 
-Aleatory is tested on Python versions 3.7, and 3.8.
+Aleatory is tested on Python versions 3.7, 3.8, and 3.9.
 
 
 Documentation
