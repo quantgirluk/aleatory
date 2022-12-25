@@ -6,6 +6,21 @@
 aleatory
 ========
 
+|build| |rtd| |pypi| |pyversions|
+
+.. |build| image:: https://github.com/quantgirluk/aleatory/actions/workflows/python-package.yml/badge.svg
+    :target: https://github.com/quantgirluk/aleatory/actions
+
+.. |rtd| image:: https://img.shields.io/readthedocs/aleatory.svg
+    :target: http://aleatory.readthedocs.io/en/latest/
+
+.. |pypi| image:: https://img.shields.io/pypi/v/aleatory.svg
+    :target: https://pypi.python.org/pypi/aleatory
+
+.. |pyversions| image:: https://img.shields.io/pypi/pyversions/aleatory.svg
+    :target: https://pypi.python.org/pypi/aleatory
+
+
 **Aleatory** (/ˈeɪliətəri/) is a Python library for simulating and visualising stochastic processes
 defined by Stochastic Differential Equations (SDEs). It introduces objects representing continuous-time
 stochastic processes :math:`X = \{X_t : t\geq 0\}`, and provides
@@ -49,7 +64,7 @@ Aleatory relies heavily on
 Compatibility
 -------------
 
-Aleatory is tested on Python versions 3.7, 3.8, and 3.9.
+Aleatory is tested on Python versions 3.8, 3.9, and 3.10.
 
 
 Documentation
