@@ -118,18 +118,22 @@ class BrownianMotion(SPExplicit):
         """
         return self._sample_brownian_motion_at(times)
 
-    def _process_expectation(self):
-        return self.drift * self.times
+    def _process_expectation(self, times=None):
+        if times is None:
+            times = self.times
+        return self.drift * times
 
-    def process_expectation(self):
-        expectations = self._process_expectation()
+    def marginal_expectation(self, times=None):
+        expectations = self._process_expectation(times=times)
         return expectations
 
-    def _process_variance(self):
-        return (self.scale ** 2) * self.times
+    def _process_variance(self, times=None):
+        if times is None:
+            times = self.times
+        return (self.scale ** 2) * times
 
-    def process_variance(self):
-        variances = self._process_variance()
+    def marginal_variance(self, times):
+        variances = self._process_variance(times=times)
         return variances
 
     def _process_stds(self):

@@ -84,28 +84,32 @@ class CIRProcess(SPEulerMaruyama):
         return "Cox–Ingersoll–Ross process with parameters {speed}, {mean}, and {volatility} on [0, {T}].".format(
             T=str(self.T), speed=str(self.theta), mean=str(self.mu), volatility=str(self.sigma))
 
-    def _process_expectation(self):
-        expectations = self.initial * np.exp((-1.0) * self.theta * self.times) + self.mu * (
-                np.ones(len(self.times)) - np.exp((-1.0) * self.theta * self.times))
+    def _process_expectation(self, times=None):
+        if times is None:
+            times = self.times
+        expectations = self.initial * np.exp((-1.0) * self.theta * times) + self.mu * (
+                np.ones(len(times)) - np.exp((-1.0) * self.theta * times))
         return expectations
 
-    def process_expectation(self):
-        expectations = self._process_expectation()
+    def marginal_expectation(self, times=None):
+        expectations = self._process_expectation(times=times)
         return expectations
 
-    def _process_variance(self):
+    def _process_variance(self, times=None):
+        if times is None:
+            times = self.times
         variances = (self.initial * self.sigma ** 2 / self.theta) * (
-                np.exp(-1.0 * self.theta * self.times) - np.exp(-2.0 * self.theta * self.times)) + (
+                np.exp(-1.0 * self.theta * times) - np.exp(-2.0 * self.theta * times)) + (
                             self.mu * self.sigma ** 2 / 2 * self.theta) * (
-                            (np.ones(len(self.times)) - np.exp(-1.0 * self.theta * self.times)) ** 2)
+                            (np.ones(len(times)) - np.exp(-1.0 * self.theta * times)) ** 2)
         return variances
 
-    def process_variance(self):
-        variances = self._process_variance()
+    def marginal_variance(self, times=None):
+        variances = self._process_variance(times=times)
         return variances
 
     def _process_stds(self):
-        stds = np.sqrt(self.process_variance())
+        stds = np.sqrt(self._process_variance())
         return stds
 
     def process_stds(self):

@@ -44,5 +44,5 @@ class OUProcess(Vasicek):
         self.name = "Ornstein–Uhlenbeck process"
 
     def __str__(self):
-        return "Ornstein–Uhlenbeckprocess with parameters {speed}, and {volatility} on [0, {T}].".format(
+        return "Ornstein–Uhlenbeck process with parameters {speed}, and {volatility} on [0, {T}].".format(
             T=str(self.T), speed=str(self.theta), volatility=str(self.sigma))

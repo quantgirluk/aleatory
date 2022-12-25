@@ -121,24 +121,28 @@ class GBM(SPExplicit):
         """
         return self._sample_geometric_brownian_motion_at(times)
 
-    def _process_expectation(self):
-        return self.initial * np.exp(self.drift * self.times)
+    def _process_expectation(self, times=None):
+        if times is None:
+            times = self.times
+        return self.initial * np.exp(self.drift * times)
 
-    def process_expectation(self):
-        expectations = self._process_expectation()
+    def marginal_expectation(self, times=None):
+        expectations = self._process_expectation(times=times)
         return expectations
 
-    def _process_variance(self):
-        variances = (self.initial ** 2) * np.exp(2 * self.drift * self.times) * (
-                np.exp(self.times * self.volatility ** 2) - 1)
+    def _process_variance(self, times=None):
+        if times is None:
+            times = self.times
+        variances = (self.initial ** 2) * np.exp(2 * self.drift * times) * (
+                np.exp(times * self.volatility ** 2) - 1)
         return variances
 
-    def process_variance(self):
-        variances = self._process_variance()
+    def marginal_variance(self, times=None):
+        variances = self._process_variance(times=times)
         return variances
 
     def _process_stds(self):
-        variances = self.process_variance()
+        variances = self.marginal_variance()
         stds = np.sqrt(variances)
         return stds
 
