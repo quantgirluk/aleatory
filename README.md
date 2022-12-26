@@ -20,7 +20,7 @@ stochastic processes $X = (X_t : t\geq 0)$ and provides methods to:
 
 <figure>
   <p><img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png"
-    width="500" height="230">
+    width="900" height="450">
 </figure>
 
 Currently, `aleatory` supports the following processes:
@@ -77,7 +77,7 @@ generates a chart like this:
 
 <figure>
   <p><img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/brownian_motion_quickstart_08.png"
-    width="600" height="230">
+    width="900" height="450">
 </figure>
 
 
