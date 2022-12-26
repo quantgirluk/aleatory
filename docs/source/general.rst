@@ -10,7 +10,6 @@ Brownian motion as follows.
 .. code-block:: python
 
     from aleatory.processes import BrownianMotion
-
     brownian = BrownianMotion()
 
 
@@ -85,7 +84,7 @@ The ``draw`` method also require two parameters:
 
 In addition, there are two optional boolean parameters
 
-- ``marginal`` which enables/disables a subplot showing the marginal distribution of $X_T$. This parameters is defaulted to ``True``.
+- ``marginal`` which enables/disables a subplot showing the marginal distribution of :math:`X_T`. This parameters is defaulted to ``True``.
 - ``envelope`` which enables/disables a the ability to show envelopes made of confidence intervals. This is defaulted to `False``.
 
 This allows us to produce four different charts.
@@ -126,6 +125,7 @@ This allows us to produce four different charts.
 .. code-block:: python
 
     from aleatory.processes import BrownianMotion
+
     brownian = BrownianMotion()
     brownian.draw(n=100, N=200, marginal=False, envelope=True)
 
@@ -148,6 +148,7 @@ for more details and examples of the different styles.
 .. code-block:: python
 
     from aleatory.processes import BrownianMotion
+
     brownian = BrownianMotion()
     brownian.plot(n=100, N=200, style='ggplot')
 
@@ -158,6 +159,7 @@ for more details and examples of the different styles.
 .. code-block:: python
 
     from aleatory.processes import BrownianMotion
+
     brownian = BrownianMotion()
     brownian.draw(n=100, N=100, style='Solarize_Light2')
 
@@ -174,6 +176,7 @@ for more details and examples of the different color maps that you can use.
 .. code-block:: python
 
     from aleatory.processes import BrownianMotion
+
     brownian = BrownianMotion()
     brownian.draw(n=100, N=100, colormap="cool")
 
