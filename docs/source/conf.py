@@ -12,11 +12,10 @@ import importlib
 #
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'aleatory')))
 aleatory = importlib.import_module("aleatory")
-
-
 
 # -- Project information -----------------------------------------------------
 
@@ -25,8 +24,7 @@ copyright = '2022, Dialid Santiago'
 author = 'Dialid Santiago'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
-
+release = '0.1.0'
 
 # -- General configuration ---------------------------------------------------
 
@@ -37,7 +35,7 @@ extensions = ["sphinx.ext.autodoc",
               "sphinx.ext.mathjax",
               "sphinx.ext.viewcode",
               "myst_parser"
-]
+              ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -47,14 +45,13 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 # html_theme = 'renku'
 # html_theme = 'press'
-#html_theme = 'bizstyle'
+# html_theme = 'bizstyle'
 
 # import sphinx_bernard_theme
 # html_theme = 'sphinx_bernard_theme'
@@ -67,16 +64,16 @@ html_theme = 'furo'
 # html_theme_path = [hachibee_sphinx_theme.get_html_themes_path()]
 
 # The name of the Pygments (syntax highlighting) style to use.
-#pygments_style = "sphinx"
-#pygments_style = "autumn"
-#pygments_style = "paraiso-dark"
+# pygments_style = "sphinx"
+# pygments_style = "autumn"
+# pygments_style = "paraiso-dark"
 
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-html_css_files = ['css/custom.css',]
+html_css_files = ['css/custom.css', ]
 
 source_suffix = {
     '.rst': 'restructuredtext',
