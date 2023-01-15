@@ -82,3 +82,15 @@ generates a chart like this:
 
 
 For more example visit the [Quick-Start Guide](https://aleatory.readthedocs.io/en/latest/general.html).
+
+## Thanks for Visiting! ✨
+
+Connect with me via:
+
+- 🦜 [Twitter](https://twitter.com/Quant_Girl)
+- 👩🏽‍💼 [Linkedin](https://www.linkedin.com/in/dialidsantiago/)
+- 📸 [Instagram](https://www.instagram.com/quant_girl/)
+- 👾[Personal Website](https://quantgirl.blog)
+
+
+⭐️ **If you like this projet, please give it a star!** ⭐️
