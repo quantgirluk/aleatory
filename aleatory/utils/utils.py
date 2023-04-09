@@ -32,6 +32,15 @@ def check_positive_number(value, name=""):
         raise ValueError(f"{name} value must be positive.")
 
 
+def check_in_zero_one(value, name=""):
+    """
+    Ensure that the values is in (0,1)
+    """
+    check_numeric(value, name)
+    if value <= 0 or value >= 1:
+        raise ValueError(f"{name} value must be in (0,1).")
+
+
 def check_increments(times):
     increments = np.diff(times)
     if np.any([t < 0 for t in times]):
