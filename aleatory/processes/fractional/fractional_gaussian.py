@@ -8,13 +8,13 @@ class FractionalGaussianIncrements(StochasticProcess):
     """
     Fractional Gaussian increments
     """
-    def __init__(self, hurst=0.5, T=1.0, paths=1, rng=None):
+    def __init__(self, hurst=0.5, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
         self.hurst = hurst
         self.name = "Gaussian Noise"
         self.times = None
         self.n = None
-        self.paths = paths
+        self.paths = None
         self.expectation = None
         self.covariance_matrix = None
 
@@ -36,7 +36,7 @@ class FractionalGaussianIncrements(StochasticProcess):
                 cov_matrix[j-1, i-1] = cov
         return cov_matrix
 
-    def _sample_fractional_gaussian_increments(self, n):
+    def _sample_fractional_gaussian_increments(self, n, paths):
         """
         Generates a random sample of size n from N(0, T/n)
         :param n: number of increments
@@ -44,6 +44,7 @@ class FractionalGaussianIncrements(StochasticProcess):
         """
         check_positive_integer(n)
         self.n = n
+        self.paths = paths
         delta_t = 1.0 * self.T / self.n
         self.times = get_times(self.T, self.n)
         self.expectation = np.zeros(n-1)
@@ -55,8 +56,8 @@ class FractionalGaussianIncrements(StochasticProcess):
         return noise
 
 
-fgi = FractionalGaussianIncrements(hurst=0.5,T=1.0, paths=2)
-sample = fgi._sample_fractional_gaussian_increments(n=4)
+fgi = FractionalGaussianIncrements(hurst=0.5,T=1.0)
+sample = fgi._sample_fractional_gaussian_increments(n=6, paths=1)
 print(fgi.covariance_matrix)
 print(fgi.times)
 print(sample)
