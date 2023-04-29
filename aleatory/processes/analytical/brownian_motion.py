@@ -157,7 +157,7 @@ class BrownianMotion(SPExplicit):
         - the expectation of the process across time
         - histogram showing the empirical marginal distribution :math:`X_T` (optional when ``marginal = True``)
         - probability density function of the marginal distribution :math:`X_T` (optional when ``marginal = True``)
-        - envelope of confidence intervals acroos time (optional when ``envelope = True``)
+        - envelope of confidence intervals across time (optional when ``envelope = True``)
 
 
         :param n: number of steps in each path
@@ -165,6 +165,7 @@ class BrownianMotion(SPExplicit):
         :param marginal: bool, default: True
         :param envelope: bool, default: False
         :param type: string, default: '3sigma'
+        :param title: string to customise plot title
         :return:
         """
 

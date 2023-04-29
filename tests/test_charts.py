@@ -50,11 +50,10 @@ def test_figures_examples():
         process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=100)  # figure_with_title
 
         name = process.name.replace(" ", "_").lower()
-        figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=100)
         if SAVE:
+            figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=100)
             figure.savefig(SAVE_PATH + name + '_simple_plot.png')
-        figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=100)
-        if SAVE:
+            figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=100)
             figure.savefig(SAVE_PATH + name + '_drawn.png')
 
         process.draw(n=100, N=200, figsize=(12, 6), dpi=100)

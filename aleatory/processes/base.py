@@ -103,7 +103,10 @@ class SPExplicit(StochasticProcess):
         :return:
         """
         self.simulate(n, N)
-        figure = plot_paths(self.times, self.paths, self.name, title=title, **fig_kw)
+        if title:
+            figure = plot_paths(self.times, self.paths, title=title, **fig_kw)
+        else:
+            figure = plot_paths(self.times, self.paths, title=self.name, **fig_kw)
         return figure
 
     def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, title=None, **fig_kw):
@@ -128,9 +131,9 @@ class SPExplicit(StochasticProcess):
         else:
             marginalT = None
 
-        fig = draw_paths(times=self.times, paths=self.paths, N=N, expectations=expectations, name=self.name,
+        chart_title = title if title else self.name
+        fig = draw_paths(times=self.times, paths=self.paths, N=N, title=chart_title, expectations=expectations,
                          marginal=marginal, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,
-                         title=title,
                          **fig_kw)
         return fig
 
