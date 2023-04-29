@@ -8,7 +8,7 @@ version = "0.1.0"
 authors = [{ name = "Dialid Santiago", email = "d.santiago@outlook.com" }, ]
 description = "Stochastic Processes Simulation and Visualisation"
 readme = "README.md"
-requires-python = ">=3.8,<3.11"
+requires-python = ">=3.8"
 dependencies = ["pandas>=1.5.2",
                 "numpy>=1.23.5",
                 "scipy>=1.9.3",
