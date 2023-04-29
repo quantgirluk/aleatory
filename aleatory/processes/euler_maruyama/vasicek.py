@@ -68,9 +68,9 @@ class Vasicek(SPEulerMaruyama):
         if times is None:
             times = self.times
         return self.initial * np.exp((-1.0) * self.theta * times) + self.mu * (
-                np.ones(len(times)) - np.exp((-1.0) * self.theta * self.times))
+                np.ones(len(times)) - np.exp((-1.0) * self.theta * times))
 
-    def process_expectation(self, times=None):
+    def marginal_expectation(self, times=None):
         expectations = self._process_expectation(times=times)
         return expectations
 
