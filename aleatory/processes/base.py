@@ -92,20 +92,21 @@ class SPExplicit(StochasticProcess):
     def _process_stds(self):
         pass
 
-    def plot(self, n, N, **fig_kw):
+    def plot(self, n, N, title=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Simple plot of times versus process values as lines and/or markers.
 
         :param n: number of steps in each path
         :param N: number of paths to simulate
+        :param title: string to customise plot title
         :return:
         """
         self.simulate(n, N)
-        figure = plot_paths(self.times, self.paths, self.name, **fig_kw)
+        figure = plot_paths(self.times, self.paths, self.name, title=title, **fig_kw)
         return figure
 
-    def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, **fig_kw):
+    def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, title=None, **fig_kw):
         self.simulate(n, N)
         expectations = self._process_expectation()
 
@@ -129,21 +130,22 @@ class SPExplicit(StochasticProcess):
 
         fig = draw_paths(times=self.times, paths=self.paths, N=N, expectations=expectations, name=self.name,
                          marginal=marginal, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,
+                         title=title,
                          **fig_kw)
         return fig
 
-    def _draw_qqstyle(self, n, N, marginal=False, envelope=False,
+    def _draw_qqstyle(self, n, N, marginal=False, envelope=False, title=None,
                       **fig_kw):
 
-        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='qq', **fig_kw)
+        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='qq', title=title, **fig_kw)
         return fig
 
-    def _draw_3sigmastyle(self, n, N, marginal=False, envelope=False, **fig_kw):
+    def _draw_3sigmastyle(self, n, N, marginal=False, envelope=False, title=None, **fig_kw):
 
-        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='3sigma', **fig_kw)
+        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='3sigma', title=title, **fig_kw)
         return fig
 
-    def draw(self, n, N, marginal=True, envelope=False, **fig_kw):
+    def draw(self, n, N, marginal=True, envelope=False, title=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Visualisation shows
@@ -159,7 +161,7 @@ class SPExplicit(StochasticProcess):
         :param envelope: bool, default: False
         :return:
         """
-        return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, **fig_kw)
+        return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
 
 
 class SPEulerMaruyama(SPExplicit):

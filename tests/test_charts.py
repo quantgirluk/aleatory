@@ -46,6 +46,9 @@ def test_figures_examples():
 
     for process in [bm, bmd, gbm, vasicek, ouprocess, cirprocess, cev]:
 
+        process.plot(n=100, N=5, figsize=(9.5, 6), dpi=100)
+        process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=100)  # figure_with_title
+
         name = process.name.replace(" ", "_").lower()
         figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=100)
         if SAVE:
@@ -53,9 +56,17 @@ def test_figures_examples():
         figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=100)
         if SAVE:
             figure.savefig(SAVE_PATH + name + '_drawn.png')
+
+        process.draw(n=100, N=200, figsize=(12, 6), dpi=100)
         process.draw(n=100, N=200, envelope=True, figsize=(12, 6), dpi=100)
         process.draw(n=100, N=200, marginal=False, figsize=(9.5, 6), dpi=100)
         process.draw(n=100, N=200, marginal=False, envelope=True, figsize=(9.5, 6), dpi=100)
+
+        process.draw(n=100, N=200, figsize=(12, 6), dpi=100, title='My favourite figure')
+        process.draw(n=100, N=200, envelope=True, figsize=(12, 6), dpi=100, title='My favourite figure')
+        process.draw(n=100, N=200, marginal=False, figsize=(9.5, 6), dpi=100, title='My favourite figure')
+        process.draw(n=100, N=200, marginal=False, envelope=True, figsize=(9.5, 6), dpi=100,
+                     title='My favourite figure')
 
 
 def test_quick_start():

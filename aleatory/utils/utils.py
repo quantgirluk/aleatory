@@ -46,19 +46,22 @@ def times_to_increments(times):
     return check_increments(times)
 
 
-def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", **fig_kw):
+def plot_paths(times, paths, name, style="seaborn-v0_8-whitegrid", title=None, **fig_kw):
     with plt.style.context(style):
         fig, ax = plt.subplots(**fig_kw)
         for p in paths:
             ax.plot(times, p)
-        ax.set_title(name)
+        if title:
+            ax.set_title(title)
+        else:
+            ax.set_title(name)
         ax.set_xlabel('$t$')
         ax.set_ylabel('$X(t)$')
         plt.show()
     return fig
 
 
-def draw_paths(times, paths, N, expectations, name, KDE=False, marginal=False, marginalT=None, envelope=False,
+def draw_paths(times, paths, N, expectations, name, title=None, KDE=False, marginal=False, marginalT=None, envelope=False,
                lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", **fig_kw):
     with plt.style.context(style):
         if marginal:
@@ -109,7 +112,11 @@ def draw_paths(times, paths, N, expectations, name, KDE=False, marginal=False, m
             if envelope:
                 ax1.fill_between(times, upper, lower, color='grey', alpha=0.25)
 
-        fig.suptitle(name)
+        if title:
+            fig.suptitle(title)
+        else:
+            fig.suptitle(name)
+
         ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$')  # Title
         ax1.set_xlabel('t')
         ax1.set_ylabel('X(t)')
