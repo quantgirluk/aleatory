@@ -98,9 +98,9 @@ class CIRProcess(SPEulerMaruyama):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        variances = (self.initial * self.sigma ** 2 / self.theta) * (
+        variances = (self.sigma ** 2 / self.theta) * self.initial * (
                 np.exp(-1.0 * self.theta * times) - np.exp(-2.0 * self.theta * times)) + (
-                            self.mu * self.sigma ** 2 / 2 * self.theta) * (
+                            self.mu * self.sigma ** 2 / (2 * self.theta)) * (
                             (np.ones(len(times)) - np.exp(-1.0 * self.theta * times)) ** 2)
         return variances
 
