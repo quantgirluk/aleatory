@@ -104,6 +104,41 @@ class CIRProcess(SPEulerMaruyama):
                             (np.ones(len(times)) - np.exp(-1.0 * self.theta * times)) ** 2)
         return variances
 
+    def _process_degrees_of_freedom(self):
+        df = 4.0 * self.theta * self.mu / (self.sigma ** 2)
+
+        return df
+
+    def marginal_df(self):
+
+        return self._process_degrees_of_freedom()
+
+    def _process_nc_parameter(self, times=None):
+        if times is None:
+            times = self.times
+        c = 2.0 * self.theta / ((1.0 - np.exp(-1.0 * self.theta * times)) * self.sigma ** 2)
+        ncs = 2.0 * c * self.initial * np.exp(-1.0 * self.theta * times)
+
+        return ncs
+
+    def marginal_nc_parameter(self, times=None):
+        ncs = self._process_nc_parameter(times=times)
+
+        return ncs
+
+    def _process_scales(self, times=None):
+        if times is None:
+            times = self.times
+        c = 2.0 * self.theta / ((1.0 - np.exp(-1.0 * self.theta * times)) * self.sigma ** 2)
+        scales = 1.0 / (2.0 * c)
+
+        return scales
+
+    def marginal_scale(self, times=None):
+        scales = self._process_scales(times=times)
+
+        return scales
+
     def marginal_variance(self, times=None):
         variances = self._process_variance(times=times)
         return variances
