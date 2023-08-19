@@ -111,8 +111,8 @@ def draw_paths(times, paths, N, expectations, title=None, KDE=False, marginal=Fa
 
         fig.suptitle(title)
         ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$')  # Title
-        ax1.set_xlabel('t')
-        ax1.set_ylabel('X(t)')
+        ax1.set_xlabel('$t$')
+        ax1.set_ylabel('$X(t)$')
         ax1.legend()
         plt.show()
 
