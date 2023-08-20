@@ -1,4 +1,4 @@
-from aleatory.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess
+from aleatory.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess, BESProcess, BESQProcess
 import numpy as np
 
 SAVE = False
@@ -43,28 +43,36 @@ def test_figures_examples():
     ouprocess = OUProcess()
     cirprocess = CIRProcess()
     cev = CEVProcess()
+    bes = BESProcess(dim=10)
+    besq = BESQProcess(dim=10)
 
-    for process in [bm, bmd, gbm, vasicek, ouprocess, cirprocess, cev]:
+    processes = [bm, bmd, gbm, vasicek, ouprocess, cirprocess, cev, bes, besq]
 
-        process.plot(n=100, N=5, figsize=(9.5, 6), dpi=100)
-        process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=100)  # figure_with_title
+    # import matplotlib.pyplot as plt
+    # style = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    # with plt.style.context(style):
+
+    for process in processes:
+
+        process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
+        process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=200)  # figure_with_title
 
         name = process.name.replace(" ", "_").lower()
         if SAVE:
-            figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=100)
+            figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
             figure.savefig(SAVE_PATH + name + '_simple_plot.png')
-            figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=100)
+            figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=200)
             figure.savefig(SAVE_PATH + name + '_drawn.png')
 
-        process.draw(n=100, N=200, figsize=(12, 6), dpi=100)
-        process.draw(n=100, N=200, envelope=True, figsize=(12, 6), dpi=100)
-        process.draw(n=100, N=200, marginal=False, figsize=(9.5, 6), dpi=100)
-        process.draw(n=100, N=200, marginal=False, envelope=True, figsize=(9.5, 6), dpi=100)
+        process.draw(n=100, N=200, figsize=(12, 6), dpi=200)
+        process.draw(n=100, N=200, envelope=True, figsize=(12, 6), dpi=200)
+        process.draw(n=100, N=200, marginal=False, figsize=(9.5, 6), dpi=200)
+        process.draw(n=100, N=200, marginal=False, envelope=True, figsize=(9.5, 6), dpi=200)
 
-        process.draw(n=100, N=200, figsize=(12, 6), dpi=100, title='My favourite figure')
-        process.draw(n=100, N=200, envelope=True, figsize=(12, 6), dpi=100, title='My favourite figure')
-        process.draw(n=100, N=200, marginal=False, figsize=(9.5, 6), dpi=100, title='My favourite figure')
-        process.draw(n=100, N=200, marginal=False, envelope=True, figsize=(9.5, 6), dpi=100,
+        process.draw(n=100, N=200, figsize=(12, 6), dpi=200, title='My favourite figure')
+        process.draw(n=100, N=200, envelope=True, figsize=(12, 6), dpi=200, title='My favourite figure')
+        process.draw(n=100, N=200, marginal=False, figsize=(9.5, 6), dpi=200, title='My favourite figure')
+        process.draw(n=100, N=200, marginal=False, envelope=True, figsize=(9.5, 6), dpi=200,
                      title='My favourite figure')
 
 
