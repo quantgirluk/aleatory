@@ -16,3 +16,10 @@ analytical form.
 .. autoclass:: aleatory.processes.GBM
     :members: T, sample, sample_at, simulate, plot, draw
 
+.. autoclass:: aleatory.processes.BESProcess
+    :memmbers: T, sample, simulate, plot, draw
+
+.. autoclass:: aleatory.processes.BESQProcess
+    :memmbers: T, sample, simulate, plot, draw
+
+
