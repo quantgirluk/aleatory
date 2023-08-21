@@ -8,6 +8,8 @@ analytical form.
 
 * :py:class:`aleatory.processes.BrownianMotion`
 * :py:class:`aleatory.processes.GBM`
+* :py:class:`aleatory.processes.BESProcess`
+* :py:class:`aleatory.processes.BESQProcess`
 
 
 .. autoclass:: aleatory.processes.BrownianMotion
