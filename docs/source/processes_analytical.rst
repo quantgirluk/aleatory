@@ -19,9 +19,9 @@ analytical form.
     :members: T, sample, sample_at, simulate, plot, draw
 
 .. autoclass:: aleatory.processes.BESProcess
-    :memmbers: T, sample, simulate, plot, draw
+    :members: T, sample, simulate, plot, draw
 
 .. autoclass:: aleatory.processes.BESQProcess
-    :memmbers: T, sample, simulate, plot, draw
+    :members: T, sample, simulate, plot, draw
 
 
