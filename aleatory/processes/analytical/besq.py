@@ -12,7 +12,7 @@ from aleatory.utils.utils import get_times, check_positive_integer
 class BESQProcess(SPExplicit):
     r"""Squared Bessel process
 
-    .. image:: _static/geometric_brownian_motion_drawn.png
+    .. image:: _static/besq_process_drawn.png
 
 
     A squared Bessel process :math:`BESQ^{n}_0` for :math:`n` integer is a continuous stochastic process

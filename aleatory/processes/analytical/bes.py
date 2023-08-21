@@ -15,7 +15,7 @@ from aleatory.utils.utils import get_times, check_positive_integer
 class BESProcess(SPExplicit):
     r"""Bessel process
 
-    .. image:: _static/geometric_brownian_motion_drawn.png
+    .. image:: _static/bes_process_drawn.png
 
 
     A Bessel process :math:`BESProcess^{n}_x` for :math:`n` integer is a continuous stochastic process
@@ -40,6 +40,7 @@ class BESProcess(SPExplicit):
     :param float dim: the dimension of the process :math:`n`
     :param float T: the right hand endpoint of the time interval :math:`[0,T]`
         for the process
+    :param numpy.random.Generator rng: a custom random number generator
     :param numpy.random.Generator rng: a custom random number generator
 
     """
