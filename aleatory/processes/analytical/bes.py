@@ -18,7 +18,7 @@ class BESProcess(SPExplicit):
     .. image:: _static/bes_process_drawn.png
 
 
-    A Bessel process :math:`BESProcess^{n}_x` for :math:`n` integer is a continuous stochastic process
+    A Bessel process :math:`BES^{n}_x` for :math:`n` integer is a continuous stochastic process
     :math:`\{X(t) : t \geq  0\}` is characterised as the Euclidian norm of an :math:`n`-dimensional
     Brownian motion. That is,
 
@@ -31,16 +31,15 @@ class BESProcess(SPExplicit):
         dX_t = \frac{(n-1)}{2}  \frac{dt}{X_t} + dW_t \ \ \ \ t\in (0,T]
 
 
-    with initial condition :math:`X_0 = x_0\geq0`,  where
+    with initial condition :math:`X_0 = 0`,  where
 
     - :math:`n` is an integer
-    - :math:`W_t` is a standard Brownian Motion.
+    - :math:`W_t` is a standard one-dimensional Brownian Motion.
 
 
     :param float dim: the dimension of the process :math:`n`
     :param float T: the right hand endpoint of the time interval :math:`[0,T]`
         for the process
-    :param numpy.random.Generator rng: a custom random number generator
     :param numpy.random.Generator rng: a custom random number generator
 
     """
