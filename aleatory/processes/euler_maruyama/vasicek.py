@@ -18,7 +18,7 @@ class Vasicek(SPEulerMaruyama):
 
     .. math::
 
-      dX_t = \theta(\mu - X_t) dt + \sigma X_t dW_t, \ \ \ \ \forall t\in (0,T],
+      dX_t = \theta(\mu - X_t) dt + \sigma dW_t, \ \ \ \ \forall t\in (0,T],
 
     with initial condition :math:`X_0 = x_0`, where
 
