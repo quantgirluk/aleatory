@@ -4,12 +4,31 @@ Bessel Process BES
 import math
 
 import numpy as np
-from scipy.stats import chi
+from scipy.stats import chi, ncx2
 from scipy.special import gamma
 
 from aleatory.processes.base import SPExplicit
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
-from aleatory.utils.utils import get_times, check_positive_integer
+from aleatory.utils.utils import get_times, check_positive_integer, check_numeric
+from multiprocessing import Queue, Process, Pool, cpu_count
+from functools import partial
+
+
+def _sample_bessel_global(T, initial, dim, n):
+    check_positive_integer(n)
+
+    # self.n = n
+    # self.times = get_times(self.T, n)
+    t_size = T / n
+
+    path = [initial]
+    x = initial
+    for t in range(n - 1):
+        sample = ncx2(df=dim, nc=x / t_size).rvs(1)[0]
+        path.append(sample)
+        x = sample
+
+    return path
 
 
 class BESProcess(SPExplicit):
@@ -44,8 +63,8 @@ class BESProcess(SPExplicit):
 
     """
 
-    def __init__(self, dim=1.0, T=1.0, rng=None):
-        super().__init__(T=T, rng=rng, initial=0.0)
+    def __init__(self, dim=1.0, initial=0.0, T=1.0, rng=None):
+        super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
         self.name = f'$BES^{{{self.dim}}}_0$'
@@ -81,6 +100,45 @@ class BESProcess(SPExplicit):
         brownian_samples = [self._brownian_motion.sample(n) for _ in range(self.dim)]
         norm = np.array([np.linalg.norm(coord) for coord in zip(*brownian_samples)])
         return norm
+
+
+
+    # def _sample_bessel_alpha_non_integer(self, n):
+    #     check_positive_integer(n)
+    #
+    #     self.n = n
+    #     self.times = get_times(self.T, n)
+    #     t_size = self.T / n
+    #
+    #     path = [self.initial]
+    #     x = self.initial
+    #     for t in range(n - 1):
+    #         sample = ncx2(df=self.dim, nc=x / t_size).rvs(1)[0]
+    #         path.append(sample)
+    #         x = sample
+    #
+    #     return path
+
+    def simulate2(self, n, N):
+
+        self.n = n
+        self.times = get_times(self.T, n)
+
+        pool = Pool()
+        initial = self.initial
+        dim = self.dim
+        T = self.T
+        func = partial(_sample_bessel_global, T, initial, dim)
+        results = pool.map(func, [n] * N)
+        pool.close()
+        pool.join()
+        return results
+
+    def simulate3(self, n, N):
+        self.n = n
+        self.times = get_times(self.T, n)
+        results = [_sample_bessel_global(self.T, self.initial, self.dim, n) for _ in range(N)]
+        return results
 
     def sample(self, n):
         return self._sample_bessel_alpha_integer(n)
