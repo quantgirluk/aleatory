@@ -1,9 +1,11 @@
 from numbers import Number
-import numpy as np
+
 import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
+import numpy as np
 import pandas as pd
 import statsmodels.api as sm
+from matplotlib.gridspec import GridSpec
+from scipy.stats import ncx2
 
 
 def get_times(end, n):
@@ -117,3 +119,16 @@ def draw_paths(times, paths, N, expectations, title=None, KDE=False, marginal=Fa
         plt.show()
 
     return fig
+
+
+def sample_besselq_global(T, initial, dim, n):
+    t_size = T / n
+    path = np.zeros(n)
+    path[0] = initial
+    x = initial
+    for t in range(n - 1):
+        sample = ncx2(df=dim, nc=x / t_size, scale=t_size).rvs(1)[0]
+        path[t + 1] = sample
+        x = sample
+
+    return path
