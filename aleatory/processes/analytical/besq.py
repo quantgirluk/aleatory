@@ -43,7 +43,7 @@ class BESQProcess(SPExplicit):
     - :math:`W_t` is a standard Brownian Motion.
 
 
-    :param int dim: the dimension of the process :math:`n`
+    :param float dim: the dimension of the process :math:`n`
     :param float T: the right hand endpoint of the time interval :math:`[0,T]`
         for the process
     :param numpy.random.Generator rng: a custom random number generator
