@@ -162,6 +162,7 @@ class SPExplicit(StochasticProcess):
         :param N: number of paths to simulate
         :param marginal: bool, default: True
         :param envelope: bool, default: False
+        :param title: string optional default to None
         :return:
         """
         return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
