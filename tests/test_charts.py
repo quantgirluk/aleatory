@@ -44,9 +44,11 @@ def test_figures_examples():
     cirprocess = CIRProcess()
     cev = CEVProcess()
     bes = BESProcess(dim=10)
+    bes_float = BESProcess(dim=4.5)
     besq = BESQProcess(dim=10)
+    besq_float = BESQProcess(dim=3.5)
 
-    processes = [bm, bmd, gbm, vasicek, ouprocess, cirprocess, cev, bes, besq]
+    processes = [ bes_float, besq_float]
 
     # import matplotlib.pyplot as plt
     # style = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
@@ -54,18 +56,21 @@ def test_figures_examples():
 
     for process in processes:
 
-        process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
-        # process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=200)  # figure_with_title
-
-        name = process.name.replace(" ", "_").lower()
-        if SAVE:
-            figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
-            figure.savefig(SAVE_PATH + name + '_simple_plot.png')
-            figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=200)
-            figure.savefig(SAVE_PATH + name + '_drawn.png')
+        # process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
+        # # process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=200)  # figure_with_title
+        #
+        # name = process.name.replace(" ", "_").lower()
+        # if SAVE:
+        #     figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
+        #     figure.savefig(SAVE_PATH + name + '_simple_plot.png')
+        #     figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=200)
+        #     figure.savefig(SAVE_PATH + name + '_drawn.png')
 
         # process.draw(n=100, N=200, figsize=(12, 6), dpi=200)
-        process.draw(n=100, N=200, envelope=True, figsize=(12, 6), dpi=200)
+        # process.draw(n=100, N=200, envelope=True, figsize=(12, 6), )
+        process.draw(n=100, N=1, envelope=False, figsize=(12, 6),)
+        # process.draw(n=100, N=2, envelope=False, figsize=(12, 6), )
+        process.draw(n=100, N=3, envelope=False, figsize=(12, 6),)
         # process.draw(n=100, N=200, marginal=False, figsize=(9.5, 6), dpi=200)
         # process.draw(n=100, N=200, marginal=False, envelope=True, figsize=(9.5, 6), dpi=200)
         #

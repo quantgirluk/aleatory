@@ -73,9 +73,10 @@ def draw_paths(times, paths, N, expectations, title=None, KDE=False, marginal=Fa
             cm = plt.colormaps[colormap]
             n_bins = int(np.sqrt(N))
             n, bins, patches = ax2.hist(last_points, n_bins, orientation='horizontal', density=True)
-            bin_centers = 0.5 * (bins[:-1] + bins[1:])
-            col = bin_centers - min(bin_centers)  # scale values to interval [0,1]
-            col /= max(col)
+            # bin_centers = 0.5 * (bins[:-1] + bins[1:])
+            # col = bin_centers - min(bin_centers)  # scale values to interval [0,1]
+            # col /= max(col)
+            col = np.linspace(0, 1, n_bins, endpoint=True)
             for c, p in zip(col, patches):
                 plt.setp(p, 'facecolor', cm(c))
             my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
