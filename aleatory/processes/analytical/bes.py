@@ -2,14 +2,22 @@
 Bessel Process BES
 """
 import math
+from functools import partial
+from multiprocessing import Pool
 
 import numpy as np
-from scipy.stats import chi
 from scipy.special import gamma
+from scipy.stats import chi
 
-from aleatory.processes.base import SPExplicit
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
-from aleatory.utils.utils import get_times, check_positive_integer
+from aleatory.processes.base import SPExplicit
+from aleatory.utils.utils import get_times, check_positive_integer, sample_besselq_global
+
+
+def _sample_bessel_global(T, initial, dim, n):
+    path = np.sqrt(sample_besselq_global(T=T, initial=initial, dim=dim, n=n))
+
+    return path
 
 
 class BESProcess(SPExplicit):
@@ -44,8 +52,8 @@ class BESProcess(SPExplicit):
 
     """
 
-    def __init__(self, dim=1.0, T=1.0, rng=None):
-        super().__init__(T=T, rng=rng, initial=0.0)
+    def __init__(self, dim=1.0, initial=0.0, T=1.0, rng=None):
+        super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
         self.name = f'$BES^{{{self.dim}}}_0$'
@@ -69,8 +77,8 @@ class BESProcess(SPExplicit):
     def dim(self, value):
         if value < 0:
             raise TypeError("Dimension must be positive")
-        if not isinstance(value, int):
-            raise TypeError("Current implementation is restricted to integer dimension.")
+        # if not isinstance(value, int):
+        #     raise TypeError("Current implementation is restricted to integer dimension.")
         self._dim = value
 
     def _sample_bessel_alpha_integer(self, n):
@@ -83,7 +91,41 @@ class BESProcess(SPExplicit):
         return norm
 
     def sample(self, n):
-        return self._sample_bessel_alpha_integer(n)
+
+        if isinstance(self.dim, int):
+            return self._sample_bessel_alpha_integer(n)
+        else:
+            return _sample_bessel_global(self.T, self.initial, self.dim, n)
+
+    def simulate(self, n, N):
+        """
+        Simulate paths/trajectories from the instanced stochastic process.
+
+        :param n: number of steps in each path
+        :param N: number of paths to simulate
+        :return: list with N paths (each one is a numpy array of size n)
+        """
+        self.n = n
+        self.N = N
+        self.times = get_times(self.T, n)
+
+        if isinstance(self.dim, int):
+
+            self.paths = [self.sample(n) for _ in range(N)]
+            return self.paths
+
+        else:
+            pool = Pool()
+            initial = self.initial
+            dim = self.dim
+            T = self.T
+            func = partial(_sample_bessel_global, T, initial, dim)
+            results = pool.map(func, [n] * N)
+            pool.close()
+            pool.join()
+
+            self.paths = results
+            return self.paths
 
     def get_marginal(self, t):
         marginal = chi(df=self.dim, scale=(math.sqrt(t)))
