@@ -33,11 +33,12 @@ def test_non_integer_besq(dim=4.5):
     p.plot(n=100, N=5)
 
 
-def test_initial_points(initial=2.0, dim=4.5):
+def test_initial_points(initial=5.0, dim=4.5):
     p = BESProcess(dim=dim, initial=initial)
-    # p = BESQProcess(dim=dim, initial=initial)
-    p.draw(n=100, N=100, envelope=False)
-    # p.draw(n=100, N=100, envelope=True)
+    # p = BESQProcess(dim=dim, initial=initial, T=10)
+    p.draw(n=100, N=100, envelope=False, orientation='vertical')
+    p.draw(n=100, N=100, envelope=False, orientation='horizontal')
+    p.draw(n=100, N=100, envelope=True)
     # p.draw(n=100, N=100, envelope=False, marginal=False)
 
 

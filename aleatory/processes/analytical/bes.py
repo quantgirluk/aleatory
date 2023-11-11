@@ -11,12 +11,13 @@ from scipy.stats import chi, ncx2
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.processes.base import SPExplicit
-from aleatory.utils.utils import get_times, check_positive_integer, sample_besselq_global
+
+from aleatory.utils.utils import plot_paths, draw_paths, check_positive_integer, get_times, sample_besselq_global, \
+    draw_paths_bessel
 
 
 def _sample_bessel_global(T, initial, dim, n):
-
-    path = np.sqrt(sample_besselq_global(T=T, initial=initial**2, dim=dim, n=n))
+    path = np.sqrt(sample_besselq_global(T=T, initial=initial ** 2, dim=dim, n=n))
 
     return path
 
@@ -129,16 +130,16 @@ class BESProcess(SPExplicit):
             return self.paths
 
     def get_marginal(self, t):
-        marginal = ncx2(df=self.dim, nc=self.initial**2/t, scale=t)
+        marginal = ncx2(df=self.dim, nc=self.initial ** 2 / t, scale=t)
         return marginal
 
     def _process_expectation(self, times=None):
         if times is None:
             times = self.times
 
-        alpha = (self.dim/2.0) -1.0
-        nc = (self.initial**2) / times
-        expectations = np.sqrt(times)*math.sqrt(math.pi/2.0)*eval_genlaguerre(0.5, alpha, (-1.0/2.0)*nc)
+        alpha = (self.dim / 2.0) - 1.0
+        nc = (self.initial ** 2) / times
+        expectations = np.sqrt(times) * math.sqrt(math.pi / 2.0) * eval_genlaguerre(0.5, alpha, (-1.0 / 2.0) * nc)
         # expectations = self.initial + np.sqrt(times) * np.sqrt(2) * gamma((self.dim + 1) / 2) / gamma(self.dim / 2)
         return expectations
 
@@ -151,7 +152,7 @@ class BESProcess(SPExplicit):
             times = self.times
         expectations = self._process_expectation(times)
         # nc = (self.initial**2) / times
-        variances = self.dim * times + self.initial**2 - expectations ** 2
+        variances = self.dim * times + self.initial ** 2 - expectations ** 2
         # variances = self.dim +  - expectations**2
         # variances = times * (self.dim - 2. * (gamma((self.dim + 1) / 2) / gamma(self.dim / 2)) ** 2)
 
@@ -164,3 +165,45 @@ class BESProcess(SPExplicit):
     def process_stds(self):
         stds = self._process_stds()
         return stds
+
+    def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, title=None, **fig_kw):
+        self.simulate(n, N)
+        expectations = self._process_expectation()
+
+        if envelope:
+            marginals = [self.get_marginal(t) for t in self.times[1:]]
+            upper = [self.initial] + [np.sqrt(m.ppf(0.005)) for m in marginals]
+            lower = [self.initial] + [np.sqrt(m.ppf(0.995)) for m in marginals]
+        else:
+            upper = None
+            lower = None
+
+        if marginal:
+            marginalT = self.get_marginal(self.T)
+        else:
+            marginalT = None
+
+        chart_title = title if title else self.name
+        fig = draw_paths_bessel(times=self.times, paths=self.paths, N=N, title=chart_title, expectations=expectations,
+                                marginal=marginal, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,
+                                **fig_kw)
+        return fig
+
+    def draw(self, n, N, marginal=True, envelope=False, title=None, **fig_kw):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process.
+        Visualisation shows
+        - times versus process values as lines
+        - the expectation of the process across time
+        - histogram showing the empirical marginal distribution :math:`X_T`
+        - probability density function of the marginal distribution :math:`X_T`
+        - envelope of confidence intervals
+
+        :param n: number of steps in each path
+        :param N: number of paths to simulate
+        :param marginal: bool, default: True
+        :param envelope: bool, default: False
+        :param title: string optional default to None
+        :return:
+        """
+        return self._draw_paths(n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
