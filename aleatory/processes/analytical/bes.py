@@ -151,11 +151,7 @@ class BESProcess(SPExplicit):
         if times is None:
             times = self.times
         expectations = self._process_expectation(times)
-        # nc = (self.initial**2) / times
         variances = self.dim * times + self.initial ** 2 - expectations ** 2
-        # variances = self.dim +  - expectations**2
-        # variances = times * (self.dim - 2. * (gamma((self.dim + 1) / 2) / gamma(self.dim / 2)) ** 2)
-
         return variances
 
     def _process_stds(self):
