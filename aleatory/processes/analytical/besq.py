@@ -5,7 +5,7 @@ from functools import partial
 from multiprocessing import Pool
 
 import numpy as np
-from scipy.stats import chi2
+from scipy.stats import chi2, ncx2
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.processes.base import SPExplicit
@@ -50,11 +50,11 @@ class BESQProcess(SPExplicit):
 
     """
 
-    def __init__(self, dim=1.0, T=1.0, rng=None):
-        super().__init__(T=T, rng=rng, initial=0.0)
+    def __init__(self, dim=1.0, T=1.0, initial=0.0, rng=None):
+        super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
-        self.name = f'$BESQ^{{{self.dim}}}_0$'
+        self.name = f'$BESQ^{{{self.dim}}}_{{{self.initial}}}$'
         self.n = None
         self.times = None
 
@@ -90,7 +90,7 @@ class BESQProcess(SPExplicit):
 
     def sample(self, n):
 
-        if isinstance(self.dim, int):
+        if isinstance(self.dim, int) and self.initial == 0:
             return self._sample_besselq_alpha_integer(n)
         else:
             return _sample_besselq_global(self.T, self.initial, self.dim, n)
@@ -107,7 +107,7 @@ class BESQProcess(SPExplicit):
         self.N = N
         self.times = get_times(self.T, n)
 
-        if isinstance(self.dim, int):
+        if isinstance(self.dim, int) and self.initial == 0:
 
             self.paths = [self.sample(n) for _ in range(N)]
             return self.paths
@@ -126,13 +126,15 @@ class BESQProcess(SPExplicit):
             return self.paths
 
     def get_marginal(self, t):
-        marginal = chi2(df=self.dim, scale=t)
+
+        marginal = ncx2(df=self.dim, nc=self.initial/t, scale=t)
+        # ncx2(df=dim, nc=x / t_size, scale=t_size).rvs(1)[0]
         return marginal
 
     def _process_expectation(self, times=None):
         if times is None:
             times = self.times
-        expectations = self.dim * times
+        expectations = self.initial + self.dim * np.array(times)
         return expectations
 
     def marginal_expectation(self, times=None):

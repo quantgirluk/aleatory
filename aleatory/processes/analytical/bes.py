@@ -6,8 +6,8 @@ from functools import partial
 from multiprocessing import Pool
 
 import numpy as np
-from scipy.special import gamma
-from scipy.stats import chi
+from scipy.special import gamma, eval_genlaguerre
+from scipy.stats import chi, ncx2
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.processes.base import SPExplicit
@@ -15,7 +15,8 @@ from aleatory.utils.utils import get_times, check_positive_integer, sample_besse
 
 
 def _sample_bessel_global(T, initial, dim, n):
-    path = np.sqrt(sample_besselq_global(T=T, initial=initial, dim=dim, n=n))
+
+    path = np.sqrt(sample_besselq_global(T=T, initial=initial**2, dim=dim, n=n))
 
     return path
 
@@ -56,7 +57,7 @@ class BESProcess(SPExplicit):
         super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
-        self.name = f'$BES^{{{self.dim}}}_0$'
+        self.name = f'$BES^{{{self.dim}}}_{{{self.initial}}}$'
         self.n = None
         self.times = None
 
@@ -92,7 +93,7 @@ class BESProcess(SPExplicit):
 
     def sample(self, n):
 
-        if isinstance(self.dim, int):
+        if isinstance(self.dim, int) and self.initial == 0:
             return self._sample_bessel_alpha_integer(n)
         else:
             return _sample_bessel_global(self.T, self.initial, self.dim, n)
@@ -109,7 +110,7 @@ class BESProcess(SPExplicit):
         self.N = N
         self.times = get_times(self.T, n)
 
-        if isinstance(self.dim, int):
+        if isinstance(self.dim, int) and self.initial == 0:
 
             self.paths = [self.sample(n) for _ in range(N)]
             return self.paths
@@ -128,13 +129,17 @@ class BESProcess(SPExplicit):
             return self.paths
 
     def get_marginal(self, t):
-        marginal = chi(df=self.dim, scale=(math.sqrt(t)))
+        marginal = ncx2(df=self.dim, nc=self.initial**2/t, scale=t)
         return marginal
 
     def _process_expectation(self, times=None):
         if times is None:
             times = self.times
-        expectations = np.sqrt(times) * np.sqrt(2) * gamma((self.dim + 1) / 2) / gamma(self.dim / 2)
+
+        alpha = (self.dim/2.0) -1.0
+        nc = (self.initial**2) / times
+        expectations = np.sqrt(times)*math.sqrt(math.pi/2.0)*eval_genlaguerre(0.5, alpha, (-1.0/2.0)*nc)
+        # expectations = self.initial + np.sqrt(times) * np.sqrt(2) * gamma((self.dim + 1) / 2) / gamma(self.dim / 2)
         return expectations
 
     def marginal_expectation(self, times=None):
@@ -144,7 +149,11 @@ class BESProcess(SPExplicit):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        variances = times * (self.dim - 2. * (gamma((self.dim + 1) / 2) / gamma(self.dim / 2)) ** 2)
+        expectations = self._process_expectation(times)
+        # nc = (self.initial**2) / times
+        variances = self.dim * times + self.initial**2 - expectations ** 2
+        # variances = self.dim +  - expectations**2
+        # variances = times * (self.dim - 2. * (gamma((self.dim + 1) / 2) / gamma(self.dim / 2)) ** 2)
 
         return variances
 
