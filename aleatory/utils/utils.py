@@ -39,7 +39,7 @@ def check_positive_number(value, name=""):
 def check_increments(times):
     increments = np.diff(times)
     if np.any([t < 0 for t in times]):
-        raise ValueError("Times must be nonnegative.")
+        raise ValueError("Times must be non-negative.")
     if np.any([t <= 0 for t in increments]):
         raise ValueError("Times must be strictly increasing.")
     return increments
@@ -147,7 +147,7 @@ def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, ma
             fig = plt.figure(**fig_kw)
             gs = GridSpec(1, 7)
             ax1 = fig.add_subplot(gs[:4])
-            ax2 = fig.add_subplot(gs[4:])  # sharey=ax1)
+            ax2 = fig.add_subplot(gs[4:])
 
             last_points = [path[-1] for path in paths]
             cm = plt.colormaps[colormap]
