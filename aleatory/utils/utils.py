@@ -7,7 +7,6 @@ import statsmodels.api as sm
 from matplotlib.gridspec import GridSpec
 from scipy.stats import ncx2
 import math
-import scipy.special as sp
 
 
 def get_times(end, n):
