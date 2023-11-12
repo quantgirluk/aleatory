@@ -246,7 +246,9 @@ def draw_paths_bessel(times, paths, N, expectations, title=None, marginal=False,
             ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
             if envelope:
                 ax1.fill_between(times, upper, lower, alpha=0.25, color='grey')
-            plt.subplots_adjust(wspace=0.025, hspace=0.025)
+
+            if orientation == 'horizontal':
+                plt.subplots_adjust(wspace=0.025, hspace=0.025)
 
         else:
             fig, ax1 = plt.subplots(**fig_kw)
