@@ -35,13 +35,13 @@ class TestBesselProcesses(unittest.TestCase):
     def test_charts_simple(self, dim=2, initial=0.0, T=1.0):
         for p in [BESProcess(dim=dim, initial=initial, T=T),
                   BESQProcess(dim=dim, initial=initial, T=T)]:
-            p.draw(n=100, N=100, figsize=(10, 6))
-            p.draw(n=100, N=100, envelope=True, orientation='vertical', figsize=(12, 6))
-
-    def test_charts_complex(self, dim=1.5, initial=2.0, T=1.0):
-        for p in [BESProcess(dim=dim, initial=initial, T=T)]:
             p.draw(n=100, N=100, figsize=(12, 6))
             p.draw(n=100, N=100, envelope=True, orientation='vertical', figsize=(12, 6))
+
+    def test_charts_complex(self, dim=2.5, initial=1.0, T=10.0):
+        for p in [BESProcess(dim=dim, initial=initial, T=T)]:
+            p.draw(n=200, N=100, figsize=(12, 6))
+            p.draw(n=200, N=100, envelope=True, orientation='vertical', figsize=(12, 6))
 
     def test_bessel_marginal(self, dim=2.5, initial=1.0, t=1.5):
         p = BESProcess(dim=dim, initial=initial)
