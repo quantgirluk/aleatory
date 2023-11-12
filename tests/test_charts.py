@@ -56,8 +56,8 @@ def test_figures_examples():
     style = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
     # with plt.style.context(style):
     for process in processes:
-        process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
-        process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=200)  # figure_with_title
+        # process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
+        # process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=200)  # figure_with_title
         #
         # name = process.name.replace(" ", "_").lower()
         # if SAVE:
@@ -66,13 +66,13 @@ def test_figures_examples():
         #     figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=200)
         #     figure.savefig(SAVE_PATH + name + '_drawn.png')
 
-        process.draw(n=100, N=200, figsize=(12, 6), dpi=200)
+        process.draw(n=100, N=100, figsize=(12, 6), dpi=200)
         # process.draw(n=100, N=200, envelope=False, orientation='horizontal')
         # process.draw(n=100, N=250, envelope=False, orientation='vertical', figsize=(12, 6))
         # process.draw(n=100, N=250, envelope=True, orientation='vertical', figsize=(12, 6), style=style)
         # process.draw(n=100, N=250, envelope=True, orientation='horizontal', figsize=(12, 6), style=style)
         # process.draw(n=100, N=1, envelope=False, figsize=(12, 6),)
-        process.draw(n=100, N=2, envelope=False, figsize=(12, 6), dpi=200)
+        # process.draw(n=100, N=2, envelope=False, figsize=(12, 6), dpi=200)
         # process.draw(n=100, N=3, envelope=False, figsize=(12, 6))
         # process.draw(n=100, N=3, envelope=False, orientation='vertical', figsize=(12, 6))
         # process.draw(n=100, N=200, marginal=False, figsize=(9.5, 6), dpi=200)

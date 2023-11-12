@@ -6,6 +6,7 @@ import pandas as pd
 import statsmodels.api as sm
 from matplotlib.gridspec import GridSpec
 from scipy.stats import ncx2
+import math
 
 
 def get_times(end, n):
@@ -37,7 +38,7 @@ def check_positive_number(value, name=""):
 def check_increments(times):
     increments = np.diff(times)
     if np.any([t < 0 for t in times]):
-        raise ValueError("Times must be nonnegative.")
+        raise ValueError("Times must be non-negative.")
     if np.any([t <= 0 for t in increments]):
         raise ValueError("Times must be strictly increasing.")
     return increments
@@ -70,9 +71,9 @@ def draw_paths(times, paths, N, expectations, title=None, KDE=False, marginal=Fa
                               lower=lower, upper=upper, style=style, colormap=colormap, **fig_kw)
     elif orientation == 'vertical':
         draw_paths_vertical(times, paths, N, expectations, title=title, KDE=KDE, marginal=marginal,
-                              marginalT=marginalT,
-                              envelope=envelope,
-                              lower=lower, upper=upper, style=style, colormap=colormap, **fig_kw)
+                            marginalT=marginalT,
+                            envelope=envelope,
+                            lower=lower, upper=upper, style=style, colormap=colormap, **fig_kw)
     else:
         raise ValueError('orientation can only take values horizontal, vertical')
 
@@ -104,7 +105,7 @@ def draw_paths_horizontal(times, paths, N, expectations, title=None, KDE=False, 
                 ax2.axhline(y=np.mean(last_points), linestyle='--', lw=1.75, label=r'$\overline{X_T}$')
             else:
                 marginaldist = marginalT
-                x = np.linspace(marginaldist.ppf(0.005), marginaldist.ppf(0.995), 100)
+                x = np.linspace(marginaldist.ppf(0.001), marginaldist.ppf(0.999), 100)
                 ax2.plot(marginaldist.pdf(x), x, '-', lw=1.75, alpha=0.6, label='$X_T$ pdf')
                 ax2.axhline(y=marginaldist.mean(), linestyle='--', lw=1.75, label='$E[X_T]$')
 
@@ -128,7 +129,7 @@ def draw_paths_horizontal(times, paths, N, expectations, title=None, KDE=False, 
                 ax1.fill_between(times, upper, lower, color='grey', alpha=0.25)
 
         fig.suptitle(title)
-        ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$')  # Title
+        ax1.set_title(r'Simulated Paths $X_t, t \in [t_0, T]$')  # Title
         ax1.set_xlabel('$t$')
         ax1.set_ylabel('$X(t)$')
         ax1.legend()
@@ -145,15 +146,12 @@ def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, ma
             fig = plt.figure(**fig_kw)
             gs = GridSpec(1, 7)
             ax1 = fig.add_subplot(gs[:4])
-            ax2 = fig.add_subplot(gs[4:])  # sharey=ax1)
+            ax2 = fig.add_subplot(gs[4:])
 
             last_points = [path[-1] for path in paths]
             cm = plt.colormaps[colormap]
             n_bins = int(np.sqrt(N))
             n, bins, patches = ax2.hist(last_points, n_bins, orientation='vertical', density=True)
-            # bin_centers = 0.5 * (bins[:-1] + bins[1:])
-            # col = bin_centers - min(bin_centers)  # scale values to interval [0,1]
-            # col /= max(col)
             col = np.linspace(0, 1, n_bins, endpoint=True)
             for c, p in zip(col, patches):
                 plt.setp(p, 'facecolor', cm(c))
@@ -167,7 +165,7 @@ def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, ma
                 ax2.axvline(x=np.mean(last_points), linestyle='--', lw=1.75, label=r'$\overline{X_T}$')
             else:
                 marginaldist = marginalT
-                x = np.linspace(marginaldist.ppf(0.005), marginaldist.ppf(0.995), 100)
+                x = np.linspace(marginaldist.ppf(0.001), marginaldist.ppf(0.999), 100)
                 ax2.plot(x, marginaldist.pdf(x), '-', lw=1.75, alpha=0.6, label='$X_T$ pdf')
                 ax2.axvline(x=marginaldist.mean(), linestyle='--', lw=1.75, label='$E[X_T]$')
 
@@ -190,7 +188,78 @@ def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, ma
                 ax1.fill_between(times, upper, lower, color='grey', alpha=0.25)
 
         fig.suptitle(title)
-        ax1.set_title('Simulated Paths $X_t, t \in [t_0, T]$')  # Title
+        ax1.set_title(r'Simulated Paths $X_t, t \in [t_0, T]$')  # Title
+        ax1.set_xlabel('$t$')
+        ax1.set_ylabel('$X(t)$')
+        ax1.legend()
+        plt.show()
+
+    return fig
+
+
+def draw_paths_bessel(times, paths, N, expectations, title=None, marginal=False, orientation='horizontal',
+                      marginalT=None,
+                      envelope=False,
+                      lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", **fig_kw):
+    with plt.style.context(style):
+        if marginal:
+            fig = plt.figure(**fig_kw)
+
+            last_points = [path[-1] for path in paths]
+            cm = plt.colormaps[colormap]
+            n_bins = int(np.sqrt(N))
+            col = np.linspace(0, 1, n_bins, endpoint=True)
+
+            if orientation == 'horizontal':
+                gs = GridSpec(1, 5)
+                ax1 = fig.add_subplot(gs[:4])
+                ax2 = fig.add_subplot(gs[4:], sharey=ax1)
+
+            elif orientation == 'vertical':
+                gs = GridSpec(1, 7)
+                ax1 = fig.add_subplot(gs[:4])
+                ax2 = fig.add_subplot(gs[4:])
+
+            n, bins, patches = ax2.hist(last_points, n_bins, orientation=orientation, density=True)
+            for c, p in zip(col, patches):
+                plt.setp(p, 'facecolor', cm(c))
+            my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
+            colors = [col[b] for b in my_bins]
+
+            marginaldist = marginalT
+            x = np.linspace(math.sqrt(marginaldist.ppf(0.001)), math.sqrt(marginaldist.ppf(0.999)), 100)
+
+            if orientation == 'horizontal':
+                ax2.plot(marginaldist.pdf(x ** 2) * 2.0 * x, x, '-', lw=1.75, alpha=0.6, label='$X_T$ pdf')
+                ax2.axhline(y=expectations[-1], linestyle='--', lw=1.75, label='$E[X_T]$')
+                plt.setp(ax2.get_yticklabels(), visible=False)
+
+            else:
+                ax2.plot(x, marginaldist.pdf(x ** 2) * 2.0 * x, '-', lw=1.75, alpha=0.6, label='$X_T$ pdf')
+                ax2.axvline(x=expectations[-1], linestyle='--', lw=1.75, label='$E[X_T]$')
+                ax2.yaxis.tick_right()
+
+            ax2.set_title('$X_T$')
+            ax2.legend()
+            for i in range(N):
+                ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
+            ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
+            if envelope:
+                ax1.fill_between(times, upper, lower, alpha=0.25, color='grey')
+
+            if orientation == 'horizontal':
+                plt.subplots_adjust(wspace=0.025, hspace=0.025)
+
+        else:
+            fig, ax1 = plt.subplots(**fig_kw)
+            for i in range(N):
+                ax1.plot(times, paths[i], '-', lw=1.0)
+            ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
+            if envelope:
+                ax1.fill_between(times, upper, lower, color='grey', alpha=0.25)
+
+        fig.suptitle(title)
+        ax1.set_title(r'Simulated Paths $X_t, t \in [t_0, T]$')  # Title
         ax1.set_xlabel('$t$')
         ax1.set_ylabel('$X(t)$')
         ax1.legend()

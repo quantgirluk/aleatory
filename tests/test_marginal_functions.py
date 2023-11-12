@@ -21,3 +21,4 @@ class TestMarginalFunctions:
         means = process.marginal_expectation()
         for m, t in zip(means, process.times):
             assert m == drif*t
+
