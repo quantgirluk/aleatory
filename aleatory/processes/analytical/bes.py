@@ -47,8 +47,8 @@ class BESProcess(SPExplicit):
     - :math:`W_t` is a standard one-dimensional Brownian Motion.
 
 
-    :param float dim: the dimension of the process :math:`n`
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+    :param double dim: the dimension of the process :math:`n`
+    :param double T: the right hand endpoint of the time interval :math:`[0,T]`
         for the process
     :param numpy.random.Generator rng: a custom random number generator
 
@@ -138,8 +138,9 @@ class BESProcess(SPExplicit):
             times = self.times
 
         alpha = (self.dim / 2.0) - 1.0
-        nc = (self.initial ** 2) / times
-        expectations = np.sqrt(times) * math.sqrt(math.pi / 2.0) * eval_genlaguerre(0.5, alpha, (-1.0 / 2.0) * nc)
+        nc = (self.initial ** 2) / times[1:]
+        expectations = np.sqrt(times[1:]) * math.sqrt(math.pi / 2.0) * eval_genlaguerre(0.5, alpha, (-1.0 / 2.0) * nc)
+        expectations = np.insert(expectations, 0, self.initial)
         # expectations = self.initial + np.sqrt(times) * np.sqrt(2) * gamma((self.dim + 1) / 2) / gamma(self.dim / 2)
         return expectations
 
