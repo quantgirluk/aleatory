@@ -27,26 +27,34 @@ class BESProcess(SPExplicit):
     .. image:: _static/bes_process_drawn.png
 
 
-    A Bessel process :math:`BES^{n}_x` for :math:`n` integer is a continuous stochastic process
-    :math:`\{X(t) : t \geq  0\}` is characterised as the Euclidian norm of an :math:`n`-dimensional
+    A Bessel process :math:`BES^{n}_x` for :math:`n\geq 2` integer is a continuous stochastic process
+    :math:`\{X(t) : t \geq  0\}` characterised as the Euclidian norm of an :math:`n`-dimensional
     Brownian motion. That is,
 
     .. math::
         X_t = \sqrt{\sum_{i=1}^n (W^i_t)^2}.
 
-    It satisfies the following SDE
+
+    More generally, for any :math:`\delta >0`, and :math:`x_0 \geq 0`, a Bessel process of dimension :math:`\delta`
+    starting at :math:`x_0`, denoted by
 
     .. math::
-        dX_t = \frac{(n-1)}{2}  \frac{dt}{X_t} + dW_t \ \ \ \ t\in (0,T]
+        BES_{{x_0}}^{{\delta}}
+
+    can be defined by the following SDE
+
+    .. math::
+        dX_t = \frac{(\delta-1)}{2}  \frac{dt}{X_t} + dW_t \ \ \ \ t\in (0,T]
 
 
-    with initial condition :math:`X_0 = 0`,  where
+    with initial condition :math:`X_0 = x_0\geq 0.`,  where
 
-    - :math:`n` is an integer
+    - :math:`\delta` is a positive real
     - :math:`W_t` is a standard one-dimensional Brownian Motion.
 
 
     :param double dim: the dimension of the process :math:`n`
+    :param double initial: the initial point of the process :math:`x_0`
     :param double T: the right hand endpoint of the time interval :math:`[0,T]`
         for the process
     :param numpy.random.Generator rng: a custom random number generator
@@ -78,9 +86,18 @@ class BESProcess(SPExplicit):
     def dim(self, value):
         if value < 0:
             raise TypeError("Dimension must be positive")
-        # if not isinstance(value, int):
-        #     raise TypeError("Current implementation is restricted to integer dimension.")
         self._dim = value
+
+    @property
+    def initial(self):
+        """Bessel Process initial point."""
+        return self._initial
+
+    @initial.setter
+    def initial(self, value):
+        if value < 0:
+            raise TypeError("Initial point must be positive")
+        self._initial = value
 
     def _sample_bessel_alpha_integer(self, n):
         check_positive_integer(n)
