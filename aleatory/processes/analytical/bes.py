@@ -6,13 +6,12 @@ from functools import partial
 from multiprocessing import Pool
 
 import numpy as np
-from scipy.special import gamma, eval_genlaguerre
-from scipy.stats import chi, ncx2
+from scipy.special import eval_genlaguerre
+from scipy.stats import ncx2
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.processes.base import SPExplicit
-
-from aleatory.utils.utils import plot_paths, draw_paths, check_positive_integer, get_times, sample_besselq_global, \
+from aleatory.utils.utils import check_positive_integer, get_times, sample_besselq_global, \
     draw_paths_bessel
 
 

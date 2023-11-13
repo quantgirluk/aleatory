@@ -5,7 +5,7 @@ from functools import partial
 from multiprocessing import Pool
 
 import numpy as np
-from scipy.stats import chi2, ncx2
+from scipy.stats import ncx2
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.processes.base import SPExplicit
