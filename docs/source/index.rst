@@ -40,8 +40,8 @@ Currently, `aleatory` supports the following processes:
 - Vasicek
 - Cox–Ingersoll–Ross
 - Constant Elasticity
-- Bessel (integer dimension)
-- Squared Bessel (integer dimension)
+- Bessel
+- Squared Bessel
 
 
 Installation
@@ -59,7 +59,7 @@ Dependencies
 
 Aleatory relies heavily on
 
-- ``numpy``  ``scipy`` for random number generation, as well as support for a number of one-dimensional distributions.
+- ``numpy`` and  ``scipy`` for random number generation, as well as support for a number of one-dimensional distributions, and special functions.
 
 - ``matplotlib`` for creating visualisations
 
