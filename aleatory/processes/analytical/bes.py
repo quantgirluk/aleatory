@@ -27,7 +27,7 @@ class BESProcess(SPExplicit):
     .. image:: _static/bes_process_drawn.png
 
 
-    A Bessel process :math:`BES^{n}_x` for :math:`n\geq 2` integer is a continuous stochastic process
+    A Bessel process :math:`BES^{n}_{0},` for :math:`n\geq 2` integer is a continuous stochastic process
     :math:`\{X(t) : t \geq  0\}` characterised as the Euclidian norm of an :math:`n`-dimensional
     Brownian motion. That is,
 

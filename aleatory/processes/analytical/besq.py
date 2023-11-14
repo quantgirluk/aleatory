@@ -24,33 +24,40 @@ class BESQProcess(SPExplicit):
     .. image:: _static/besq_process_drawn.png
 
 
-    A squared Bessel process :math:`BESQ^{n}_0` for :math:`n` integer is a continuous stochastic process
+    A squared Bessel process :math:`BESQ^{n}_{0}`, for :math:`n` integer is a continuous stochastic process
     :math:`\{X(t) : t \geq  0\}` which is characterised as the squared Euclidian norm of an :math:`n`-dimensional
     Brownian motion. That is,
 
     .. math::
         X_t = \sum_{i=1}^n (W^i_t)^2.
 
-    It satisfies the following SDE
+    More generally, for any :math:`\delta >0`, and :math:`x_0 \geq 0`, a squared Bessel process of
+    dimension :math:`\delta` starting at :math:`x_0`, denoted by
 
     .. math::
-        dX_t = n dt + 2\sqrt{X_t} dW_t \ \ \ \ t\in (0,T]
+        BESQ_{{x_0}}^{{\delta}}
+
+    can be defined by the following SDE
+
+    .. math::
+        dX_t = \delta dt + 2\sqrt{X_t} dW_t \ \ \ \ t\in (0,T]
 
 
-    with initial condition :math:`X_0 = 0`,  where
+    with initial condition :math:`X_0 = x_0`,  where
 
-    - :math:`n` is an integer
+    - :math:`\delta` is a positive real
     - :math:`W_t` is a standard Brownian Motion.
 
 
-    :param float dim: the dimension of the process :math:`n`
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+    :param double dim: the dimension of the process :math:`n`
+    :param double initial: the initial point of the process :math:`x_0`
+    :param double T: the right hand endpoint of the time interval :math:`[0,T]`
         for the process
     :param numpy.random.Generator rng: a custom random number generator
 
     """
 
-    def __init__(self, dim=1.0, T=1.0, initial=0.0, rng=None):
+    def __init__(self, dim=1.0, initial=0.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
@@ -75,8 +82,6 @@ class BESQProcess(SPExplicit):
     def dim(self, value):
         if value < 0:
             raise TypeError("Dimension must be positive.")
-        # if not isinstance(value, int):
-        #     raise TypeError("Current implementation is restricted to integer dimension.")
         self._dim = value
 
     def _sample_besselq_alpha_integer(self, n):
