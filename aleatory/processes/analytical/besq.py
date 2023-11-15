@@ -132,7 +132,7 @@ class BESQProcess(SPExplicit):
 
     def get_marginal(self, t):
 
-        marginal = ncx2(df=self.dim, nc=self.initial/t, scale=t)
+        marginal = ncx2(df=self.dim, nc=self.initial / t, scale=t)
         # ncx2(df=dim, nc=x / t_size, scale=t_size).rvs(1)[0]
         return marginal
 
@@ -149,8 +149,12 @@ class BESQProcess(SPExplicit):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        variances = 2.0 * self.dim * times ** 2
+        variances = 2.0 * (self.dim + 2.0*self.initial/times) * times**2
 
+        return variances
+
+    def marginal_variance(self, times):
+        variances = self._process_variance(times=times)
         return variances
 
     def _process_stds(self):
