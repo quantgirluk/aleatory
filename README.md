@@ -30,8 +30,8 @@ Currently, `aleatory` supports the following processes:
 - Vasicek
 - Cox–Ingersoll–Ross
 - Constant Elasticity
-- Bessel Process (integer dimension)
-- Squared Bessel Processs (integer dimension)
+- Bessel Process
+- Squared Bessel Processs
 
 ## Installation
 
