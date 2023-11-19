@@ -146,18 +146,30 @@ class BESProcess(SPExplicit):
             return self.paths
 
     def get_marginal(self, t):
+        print("Not implemented")
+        return 0
+
+    def _get_marginal(self, t):
         marginal = ncx2(df=self.dim, nc=self.initial ** 2 / t, scale=t)
         return marginal
 
     def _process_expectation(self, times=None):
+        # TODO: Add the case when times is zero, at the moment this fails because nc required division by t
         if times is None:
             times = self.times
 
         alpha = (self.dim / 2.0) - 1.0
-        nc = (self.initial ** 2) / times[1:]
-        expectations = np.sqrt(times[1:]) * math.sqrt(math.pi / 2.0) * eval_genlaguerre(0.5, alpha, (-1.0 / 2.0) * nc)
-        expectations = np.insert(expectations, 0, self.initial)
-        # expectations = self.initial + np.sqrt(times) * np.sqrt(2) * gamma((self.dim + 1) / 2) / gamma(self.dim / 2)
+
+        if np.isscalar(times):
+            nc = (self.initial ** 2) / times
+            expectations = np.sqrt(times) * math.sqrt(math.pi / 2.0) * eval_genlaguerre(0.5, alpha,
+                                                                                        (-1.0 / 2.0) * nc)
+        else:
+            nc = (self.initial ** 2) / times[1:]
+            expectations = np.sqrt(times[1:]) * math.sqrt(math.pi / 2.0) * eval_genlaguerre(0.5, alpha,
+                                                                                            (-1.0 / 2.0) * nc)
+            expectations = np.insert(expectations, 0, self.initial)
+            # expectations = self.initial + np.sqrt(times) * np.sqrt(2) * gamma((self.dim + 1) / 2) / gamma(self.dim / 2)
         return expectations
 
     def marginal_expectation(self, times=None):
@@ -169,6 +181,10 @@ class BESProcess(SPExplicit):
             times = self.times
         expectations = self._process_expectation(times)
         variances = self.dim * times + self.initial ** 2 - expectations ** 2
+        return variances
+
+    def marginal_variance(self, times):
+        variances = self._process_variance(times=times)
         return variances
 
     def _process_stds(self):
@@ -184,7 +200,7 @@ class BESProcess(SPExplicit):
         expectations = self._process_expectation()
 
         if envelope:
-            marginals = [self.get_marginal(t) for t in self.times[1:]]
+            marginals = [self._get_marginal(t) for t in self.times[1:]]
             upper = [self.initial] + [np.sqrt(m.ppf(0.005)) for m in marginals]
             lower = [self.initial] + [np.sqrt(m.ppf(0.995)) for m in marginals]
         else:
@@ -192,7 +208,7 @@ class BESProcess(SPExplicit):
             lower = None
 
         if marginal:
-            marginalT = self.get_marginal(self.T)
+            marginalT = self._get_marginal(self.T)
         else:
             marginalT = None
 
