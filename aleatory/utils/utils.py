@@ -65,15 +65,15 @@ def draw_paths(times, paths, N, expectations, title=None, KDE=False, marginal=Fa
                marginalT=None, envelope=False,
                lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", **fig_kw):
     if orientation == 'horizontal':
-        draw_paths_horizontal(times, paths, N, expectations, title=title, KDE=KDE, marginal=marginal,
-                              marginalT=marginalT,
-                              envelope=envelope,
-                              lower=lower, upper=upper, style=style, colormap=colormap, **fig_kw)
+        return draw_paths_horizontal(times, paths, N, expectations, title=title, KDE=KDE, marginal=marginal,
+                                     marginalT=marginalT,
+                                     envelope=envelope,
+                                     lower=lower, upper=upper, style=style, colormap=colormap, **fig_kw)
     elif orientation == 'vertical':
-        draw_paths_vertical(times, paths, N, expectations, title=title, KDE=KDE, marginal=marginal,
-                            marginalT=marginalT,
-                            envelope=envelope,
-                            lower=lower, upper=upper, style=style, colormap=colormap, **fig_kw)
+        return draw_paths_vertical(times, paths, N, expectations, title=title, KDE=KDE, marginal=marginal,
+                                   marginalT=marginalT,
+                                   envelope=envelope,
+                                   lower=lower, upper=upper, style=style, colormap=colormap, **fig_kw)
     else:
         raise ValueError('orientation can only take values horizontal, vertical')
 
