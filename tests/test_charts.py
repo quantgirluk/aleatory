@@ -1,3 +1,5 @@
+import matplotlib.figure
+
 from aleatory.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess, BESProcess, BESQProcess
 import numpy as np
 import matplotlib.pyplot as plt
@@ -49,8 +51,8 @@ def test_figures_examples():
     besq = BESQProcess(dim=10)
     besq_float = BESQProcess(dim=3.5)
 
-    processes = [bm, bmd, gbm,  vasicek, ouprocess, cirprocess, cev, bes, besq, bes_float, besq_float]
-        # [bm, besq_float, bes_float]
+    processes = [bm, bmd, gbm, vasicek, ouprocess, cirprocess, cev, bes, besq, bes_float, besq_float]
+    # [bm, besq_float, bes_float]
     # [bm, bmd, gbm,  cirprocess, cev, bes, besq, bes_float, besq_float]
 
     style = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
@@ -86,11 +88,19 @@ def test_figures_examples():
 
 
 def test_charts_orientation():
-
     for process in [BrownianMotion(), Vasicek()]:
         process.draw(n=100, N=200, envelope=False, figsize=(12, 6))
         process.draw(n=100, N=200, envelope=False, orientation='horizontal', figsize=(12, 6))
         process.draw(n=100, N=200, envelope=False, orientation='vertical', figsize=(12, 6), )
+
+
+def test_charts_type():
+    for process in [BrownianMotion(), Vasicek()]:
+        fig = process.draw(n=100, N=200, envelope=False, figsize=(12, 6))
+        assert (isinstance(fig, matplotlib.figure.Figure))
+
+        fig = process.draw(n=100, N=200, envelope=False, orientation='vertical', figsize=(12, 6))
+        assert (isinstance(fig, matplotlib.figure.Figure))
 
 
 def test_quick_start():
