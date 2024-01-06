@@ -22,20 +22,20 @@ def _ncx_pdf(x, df, nc):
 
 
 # noinspection PyMethodOverriding
-class ncx(rv_continuous):
+class ncx_gen(rv_continuous):
 
-    def __init__(self, df: float, nc: float) -> None:
-        super().__init__()
-        self.df = df
-        self.nc = nc
+    # def __init__(self, df: float, nc: float) -> None:
+    #     super().__init__()
+    #     self.df = df
+    #     self.nc = nc
 
     def _argcheck(self, df, nc):
         return (df > 0) & (nc >= 0)
 
-    def _rvs(self, *args, size=None, random_state=None):
+    def _rvs(self, df, nc, size=None, random_state=None):
         if random_state is not None:
             np.random.seed(random_state)
-            ncx2_samples = random_state.noncentral_chisquare(df=self.df, nc=self.nc, size=size)
+            ncx2_samples = random_state.noncentral_chisquare(df=df, nc=nc, size=size)
             return np.sqrt(ncx2_samples)
 
     def _logpdf(self, x, df, nc):
@@ -46,3 +46,13 @@ class ncx(rv_continuous):
         value = _ncx_pdf(x, df, nc)
 
         return value
+
+
+ncx = ncx_gen(a=0.0, name='ncx')
+
+x = np.linspace(0, 5, 100)
+y = ncx.pdf(x, df=4., nc=1.0)
+
+import matplotlib.pyplot as plt
+plt.plot(x, y)
+plt.show()
