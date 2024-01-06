@@ -1,8 +1,7 @@
 import matplotlib.figure
+import numpy as np
 
 from aleatory.processes import BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess, BESProcess, BESQProcess
-import numpy as np
-import matplotlib.pyplot as plt
 
 SAVE = False
 SAVE_PATH = '../docs/source/_static/'
