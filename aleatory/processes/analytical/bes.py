@@ -16,7 +16,8 @@ from aleatory.utils.utils import check_positive_integer, get_times, sample_besse
 
 
 def _sample_bessel_global(T, initial, dim, n):
-    path = np.sqrt(sample_besselq_global(T=T, initial=initial ** 2, dim=dim, n=n))
+    # path = np.sqrt(sample_besselq_global(T=T, initial=initial ** 2, dim=dim, n=n))
+    path = sample_bessel_global(T=T, initial=initial, dim=dim, n=n)
     return path
 
 

@@ -282,15 +282,15 @@ def sample_besselq_global(T, initial, dim, n):
     return path
 
 
-# def sample_bessel_global(T, initial, dim, n):
-#     t_size = T / n
-#     tss = math.sqrt(t_size)
-#     path = np.zeros(n)
-#     path[0] = initial
-#     x = initial
-#     for t in range(n - 1):
-#         sample = ncx(df=dim, nc=x/tss, scale=tss).rvs(1)[0]
-#         path[t + 1] = sample
-#         x = sample
-#
-#     return path
+def sample_bessel_global(T, initial, dim, n):
+    t_size = T / n
+    tss = math.sqrt(t_size)
+    path = np.zeros(n)
+    path[0] = initial
+    x = initial
+    for t in range(n - 1):
+        sample = ncx(df=dim, nc=x/tss, scale=tss).rvs(1)[0]
+        path[t + 1] = sample
+        x = sample
+
+    return path

@@ -96,9 +96,9 @@ class ncx_gen(rv_continuous):
     def _argcheck(self, df, nc):
         return (df > 0) & (nc >= 0)
 
-    # def _rvs(self, df, nc, size=None, random_state=None):
-    #     ncx2_samples = random_state.noncentral_chisquare(df, nc, size)
-    #     return np.sqrt(ncx2_samples)
+    def _rvs(self, df, nc, size=None, random_state=None):
+        ncx2_samples = random_state.noncentral_chisquare(df, nc**2, size)
+        return np.sqrt(ncx2_samples)
 
     def _logpdf(self, x, df, nc):
         cond = np.ones_like(x, dtype=bool) & (nc != 0)
@@ -125,7 +125,7 @@ class ncx_gen(rv_continuous):
 
 ncx = ncx_gen(a=0.0, name='ncx')
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # t = 1.0
 # st = np.sqrt(t)
@@ -164,15 +164,15 @@ import matplotlib.pyplot as plt
 # plt.show()
 #
 
-t = 1.0
-st = np.sqrt(t)
-
-marginal = ncx(df=2.5, nc=4.0)
-auxiliary = ncx2(df=2.5, nc=4.0**2)
+# t = 2.0
+# st = np.sqrt(t)
+#
+# marginal = ncx(df=2.5, nc=4.0/st, scale=st)
+# # auxiliary = ncx2(df=2.5, nc=4.0**2)
 # sample = marginal.rvs(size=200)
 # plt.hist(sample, density=True, bins=10)
-sample1 = np.sqrt(auxiliary.rvs(size=500))
-plt.hist(sample1, density=True, bins=10)
-x = np.linspace(0, 7, 100)
-plt.plot(x, marginal.pdf(x))
-plt.show()
+# # sample1 = np.sqrt(auxiliary.rvs(size=500))
+# # plt.hist(xsample1, density=True, bins=10)
+# x = np.linspace(0, 7, 100)
+# plt.plot(x, marginal.pdf(x))
+# plt.show()
