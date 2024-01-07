@@ -48,22 +48,15 @@ def _ncx_log_pdf(x, df, nc):
     # We use (x**2 + nc**2)/2 = (x - nc)**2/2  + x*nc, and include the
     # factor of exp(-x*nc) into the ive function to improve numerical
     # stability at large values of x.
-    # if nc == 0:
-    #     value = chi.logpdf(x, df)
-    #     return value
 
     df2 = df / 2.0 - 1.0
     res = np.log(nc) + xlogy(df / 2.0, x / nc) - 0.5 * (x - nc) ** 2
     corr = ive(df2, x * nc)
-    # Return res + np.log(corr) avoiding np.log(0)
     value = res + np.log(corr)
     return value
 
 
 def _ncx_pdf(x, df, nc):
-    # if nc == 0:
-    #     value = chi.logpdf(x, df)
-    #     return value
 
     df2 = df / 2.0 - 1.0
     res = np.log(nc) + xlogy(df / 2.0, x / nc) - 0.5 * (x - nc) ** 2
@@ -74,6 +67,33 @@ def _ncx_pdf(x, df, nc):
 
 # noinspection PyMethodOverriding
 class ncx_gen(rv_continuous):
+    r"""A non-central chi continuous random variable.
+
+    %(before_notes)s
+
+    Notes
+    -----
+    The probability density function for `ncx` is:
+
+    .. math::
+
+        f(x, k, \lambda) =  \exp(-(x^2 + \lambda^2)/2)
+            (x/\lambda)^{k/2}  \lambda I_{(k/2)-1}(\lambda x)
+
+    for :math:`x >= 0`, :math:`k > 0` and :math:`\lambda \ge 0`.
+    :math:`k` specifies the degrees of freedom (denoted ``df`` in the
+    implementation) and :math:`\lambda` is the non-centrality parameter
+    (denoted ``nc`` in the implementation). :math:`I_\nu` denotes the
+    modified Bessel function of first order of degree :math:`\nu`
+    (`scipy.special.iv`).
+
+    `ncx` takes ``df`` and ``nc`` as shape parameters.
+
+    %(after_notes)s
+
+    %(example)s
+
+    """
 
     def _argcheck(self, df, nc):
         return (df > 0) & (nc >= 0)
