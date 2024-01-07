@@ -32,27 +32,47 @@ class TestBesselProcesses(unittest.TestCase):
             self.assertEqual(len(sam), 100)
             self.assertEqual(sam[0], initial)
 
+    def test_process_simulate(self, dim=2, initial=1.0, T=1.0):
+        for p in [
+             BESProcess(dim=dim, initial=initial, T=T),
+                  # BESQProcess(dim=dim, initial=initial, T=T)
+                  ]:
+            simulation = p.simulate(n=100, N=1000)
+            last_points = [path[-1] for path in simulation]
+            marginal = p.get_marginal(T)
+
+            plt.hist(last_points, density=True)
+            x = np.linspace(marginal.ppf(0.001), marginal.ppf(0.999), 200)
+            plt.plot(x, marginal.pdf(x))
+            plt.show()
+
+
     def test_charts_simple(self, dim=2, initial=0.0, T=1.0):
         for p in [BESProcess(dim=dim, initial=initial, T=T),
-                  # BESQProcess(dim=dim, initial=initial, T=T)
+                  BESQProcess(dim=dim, initial=initial, T=T)
                   ]:
             p.draw(n=100, N=100, figsize=(12, 6))
             p.draw(n=100, N=100, envelope=True, orientation='vertical', figsize=(12, 6))
 
-    def test_charts_complex(self, dim=2.5, initial=1.0, T=10.0):
+    def test_charts_complex(self, dim=2.5, initial=2.0, T=1.0):
         for p in [BESProcess(dim=dim, initial=initial, T=T)]:
-            # p.draw(n=200, N=100, envelope=True, figsize=(10, 6))
-            p.draw(n=200, N=200, envelope=True, orientation='vertical', figsize=(14, 6))
+            p.draw(n=100, N=100, envelope=True, figsize=(10, 6))
+            # p.draw(n=200, N=200, envelope=True, orientation='vertical', figsize=(14, 6))
 
-    def test_bessel_marginal(self, dim=2.5, initial=1.0, t=1.5, vis=True):
+    def test_bessel_marginal(self, dim=2.5, initial=2.0, t=0.5, vis=True):
         p = BESProcess(dim=dim, initial=initial)
         # X_1 = p._get_marginal(t=t)
         X_1 = p.get_marginal(t=t)
         # xs = np.linspace(0.001, np.sqrt(X_1.ppf(0.999)), 200)
-        xs = np.linspace(0.001, X_1.ppf(0.999), 200)
+        xs = np.linspace(0.001, X_1.ppf(0.99999), 200)
         values1 = [bessel_marginal_formula(initial, x, t, dim) for x in xs]
         # values2 = [X_1.pdf(x ** 2) * 2.0 * x for x in xs]
         values2 = [X_1.pdf(x) for x in xs]
+
+        q05 = X_1.ppf(0.05)
+        q95 = X_1.ppf(0.95)
+
+
 
         for (v1, v2) in zip(values1, values2):
             self.assertAlmostEqual(v1, v2)
@@ -60,7 +80,11 @@ class TestBesselProcesses(unittest.TestCase):
         if vis:
             plt.plot(xs, values1, '-', lw=1.5, alpha=0.75, label=f'$pdf$ for $t$={t:.2f}')
             plt.plot(xs, values2, '-', lw=1.5, alpha=0.75, label=f'Formula')
+            plt.axvline(q05)
+            plt.axvline(q95)
+            plt.axvline(X_1.mean(), color="red")
             plt.legend()
+            plt.title('Bessel Marginal pdf')
             plt.show()
 
     def test_besq_marginal(self, dim=2.5, initial=1.0, t=1.5):
@@ -70,11 +94,17 @@ class TestBesselProcesses(unittest.TestCase):
         test = [besq_marginal_formula(initial, x, t, dim) for x in xs]
         mar = X_1.pdf(xs)
 
+        q05 = X_1.ppf(0.05)
+        q95 = X_1.ppf(0.95)
+
         for (t, m) in zip(test, mar):
             self.assertAlmostEqual(t, m)
 
         plt.plot(xs, mar, '-', lw=1.5, alpha=0.75, label=f'$pdf$ for $t$={t:.2f}')
         plt.plot(xs, test, '-', lw=1.5, alpha=0.75, label=f'Formula')
+        plt.axvline(q05)
+        plt.axvline(q95)
+        plt.axvline(X_1.mean(), color="red")
         plt.legend()
         plt.show()
 
