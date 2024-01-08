@@ -1,4 +1,4 @@
-from scipy.stats import rv_continuous, chi, ncx2
+from scipy.stats import rv_continuous, chi, ncx2, chi2
 import numpy as np
 from scipy.special import xlogy, ive, eval_genlaguerre
 
@@ -100,6 +100,11 @@ class ncx_gen(rv_continuous):
         ncx2_samples = random_state.noncentral_chisquare(df, nc**2, size)
         return np.sqrt(ncx2_samples)
 
+    def _ppf(self, q, df, nc):
+        cond = np.ones_like(q, dtype=bool) & (nc != 0)
+        values = _lazywhere(cond, (q, df, nc**2), f=ncx2.ppf, f2=chi2.ppf)
+        return np.sqrt(values)
+
     def _logpdf(self, x, df, nc):
         cond = np.ones_like(x, dtype=bool) & (nc != 0)
         return _lazywhere(cond, (x, df, nc), f=_ncx_log_pdf, f2=chi.logpdf)
@@ -126,8 +131,8 @@ class ncx_gen(rv_continuous):
 ncx = ncx_gen(a=0.0, name='ncx')
 
 # import matplotlib.pyplot as plt
-
-# t = 1.0
+#
+# t = 0.5
 # st = np.sqrt(t)
 #
 # marginal = ncx(df=2.5, nc=2.0/st, scale=st)
@@ -135,44 +140,35 @@ ncx = ncx_gen(a=0.0, name='ncx')
 #
 # q05 = marginal.ppf(0.05)
 # q95 = marginal.ppf(0.95)
-# # plt.plot(x, ncx.pdf(x, df=2.5, nc=2.0))
+#
 # plt.plot(x, marginal.pdf(x))
 # plt.axvline(marginal.ppf(0.05))
 # plt.axvline(marginal.ppf(0.95))
 # plt.axvline(marginal.mean(), color="red")
 # plt.show()
-#
-# plt.plot(x, ncx.cdf(x, df=4., nc=1.0))
+# #
+# plt.plot(x, ncx.cdf(x, df=2.5, nc=2.0/st, scale=st))
 # plt.plot(x, marginal.cdf(x))
 # plt.show()
-#
 #
 # plt.plot(x, ncx.ppf(ncx.cdf(x, df=4., nc=1.0), df=4., nc=1.0))
 # plt.plot(x, x)
 # plt.show()
 #
-#
 # x = np.linspace(marginal.ppf(0.001), marginal.ppf(0.999), 200)
 # plt.plot(x, marginal.cdf( marginal.ppf(x) ) )
 # plt.plot(x, x)
 # plt.show()
-
+#
 #
 # x = np.linspace(0.001, 0.999, 100)
-# plt.plot(x, ncx.ppf(x, df=4., nc=1.0))
+# plt.plot(x, ncx.ppf(x,  df=2.5, nc=2.0/st, scale=st))
 # plt.plot(x, marginal.ppf(x))
 # plt.show()
 #
-
-# t = 2.0
-# st = np.sqrt(t)
 #
-# marginal = ncx(df=2.5, nc=4.0/st, scale=st)
-# # auxiliary = ncx2(df=2.5, nc=4.0**2)
 # sample = marginal.rvs(size=200)
 # plt.hist(sample, density=True, bins=10)
-# # sample1 = np.sqrt(auxiliary.rvs(size=500))
-# # plt.hist(xsample1, density=True, bins=10)
 # x = np.linspace(0, 7, 100)
 # plt.plot(x, marginal.pdf(x))
 # plt.show()

@@ -131,9 +131,7 @@ class BESQProcess(SPExplicit):
             return self.paths
 
     def get_marginal(self, t):
-
         marginal = ncx2(df=self.dim, nc=self.initial / t, scale=t)
-        # ncx2(df=dim, nc=x / t_size, scale=t_size).rvs(1)[0]
         return marginal
 
     def _process_expectation(self, times=None):
