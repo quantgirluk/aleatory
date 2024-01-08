@@ -64,12 +64,14 @@ class TestBesselProcesses(unittest.TestCase):
 
     def test_bessel_marginal(self, dim=2.5, initial=2.0, t=0.5, vis=False):
 
-        for p in [BESProcess(dim=dim, initial=initial),
-                  BESQProcess(dim=dim, initial=initial)]:
+        for p, formula in [
+            (BESProcess(dim=dim, initial=initial), bessel_marginal_formula),
+            (BESQProcess(dim=dim, initial=initial), besq_marginal_formula)
+        ]:
             X_1 = p.get_marginal(t=t)
             xs = np.linspace(0.001, X_1.ppf(0.99999), 200)
 
-            values1 = [bessel_marginal_formula(initial, x, t, dim) for x in xs]
+            values1 = [formula(initial, x, t, dim) for x in xs]
             values2 = [X_1.pdf(x) for x in xs]
 
             for (v1, v2) in zip(values1, values2):
@@ -116,4 +118,3 @@ class TestBesselProcesses(unittest.TestCase):
                 plt.plot(times, variances2, label='formula')
                 plt.legend()
                 plt.show()
-
