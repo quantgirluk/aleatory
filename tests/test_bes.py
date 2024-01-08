@@ -62,7 +62,7 @@ class TestBesselProcesses(unittest.TestCase):
             p.draw(n=100, N=100, envelope=True, figsize=(10, 6))
             # p.draw(n=200, N=200, envelope=True, orientation='vertical', figsize=(14, 6))
 
-    def test_bessel_marginal(self, dim=2.5, initial=2.0, t=0.5, vis=True):
+    def test_bessel_marginal(self, dim=2.5, initial=2.0, t=0.5, vis=False):
 
         for p in [BESProcess(dim=dim, initial=initial),
                   BESQProcess(dim=dim, initial=initial)]:
@@ -87,7 +87,7 @@ class TestBesselProcesses(unittest.TestCase):
                 plt.title(p.name + ' Marginal pdf')
                 plt.show()
 
-    def test_bessel_expectation(self, dim=2.5, initial=1.0, vis=True):
+    def test_bessel_expectation(self, dim=2.5, initial=1.0, vis=False):
 
         times = np.linspace(0.01, 1, 100)
 
