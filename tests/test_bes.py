@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.figure
 import numpy as np
 
 from aleatory.processes import BESProcess, BESQProcess
@@ -32,109 +33,88 @@ class TestBesselProcesses(unittest.TestCase):
             self.assertEqual(len(sam), 100)
             self.assertEqual(sam[0], initial)
 
+    # def test_process_simulate(self, dim=2, initial=1.0, T=1.0):
+    #     for p in [
+    #         BESProcess(dim=dim, initial=initial, T=T),
+    #         BESQProcess(dim=dim, initial=initial, T=T)
+    #     ]:
+    #         simulation = p.simulate(n=100, N=100)
+    #         last_points = [path[-1] for path in simulation]
+    #         marginal = p.get_marginal(T)
+    #
+    #         plt.hist(last_points, density=True)
+    #         x = np.linspace(marginal.ppf(0.001), marginal.ppf(0.999), 200)
+    #         plt.plot(x, marginal.pdf(x))
+    #         plt.show()
+
     def test_charts_simple(self, dim=2, initial=0.0, T=1.0):
         for p in [BESProcess(dim=dim, initial=initial, T=T),
-                  BESQProcess(dim=dim, initial=initial, T=T)]:
-            p.draw(n=100, N=100, figsize=(12, 6))
+                  BESQProcess(dim=dim, initial=initial, T=T)
+                  ]:
+            fig = p.plot(n=100, N=100, figsize=(12, 6))
+            assert (isinstance(fig, matplotlib.figure.Figure))
+            fig = p.draw(n=100, N=100, figsize=(12, 6))
+            assert (isinstance(fig, matplotlib.figure.Figure))
             p.draw(n=100, N=100, envelope=True, orientation='vertical', figsize=(12, 6))
 
-    def test_charts_complex(self, dim=2.5, initial=1.0, T=10.0):
+    def test_charts_complex(self, dim=2.5, initial=2.0, T=1.0):
         for p in [BESProcess(dim=dim, initial=initial, T=T)]:
-            # p.draw(n=200, N=100, envelope=True, figsize=(10, 6))
-            p.draw(n=200, N=200, envelope=True, orientation='vertical', figsize=(14, 6))
+            p.draw(n=100, N=100, envelope=True, figsize=(10, 6))
+            # p.draw(n=200, N=200, envelope=True, orientation='vertical', figsize=(14, 6))
 
-    def test_bessel_marginal(self, dim=2.5, initial=1.0, t=1.5, vis=False):
-        p = BESProcess(dim=dim, initial=initial)
-        X_1 = p._get_marginal(t=t)
-        xs = np.linspace(0.001, np.sqrt(X_1.ppf(0.999)), 200)
-        values1 = [bessel_marginal_formula(initial, x, t, dim) for x in xs]
-        values2 = [X_1.pdf(x ** 2) * 2.0 * x for x in xs]
+    def test_bessel_marginal(self, dim=2.5, initial=2.0, t=0.5, vis=False):
 
-        for (v1, v2) in zip(values1, values2):
-            self.assertAlmostEqual(v1, v2)
+        for p, formula in [
+            (BESProcess(dim=dim, initial=initial), bessel_marginal_formula),
+            (BESQProcess(dim=dim, initial=initial), besq_marginal_formula)
+        ]:
+            X_1 = p.get_marginal(t=t)
+            xs = np.linspace(0.001, X_1.ppf(0.99999), 200)
 
-        if vis:
-            plt.plot(xs, values1, '-', lw=1.5, alpha=0.75, label=f'$pdf$ for $t$={t:.2f}')
-            plt.plot(xs, values2, '-', lw=1.5, alpha=0.75, label=f'Formula')
-            plt.legend()
-            plt.show()
+            values1 = [formula(initial, x, t, dim) for x in xs]
+            values2 = [X_1.pdf(x) for x in xs]
 
-    def test_besq_marginal(self, dim=2.5, initial=1.0, t=1.5):
-        p = BESQProcess(dim=dim, initial=initial)
-        X_1 = p.get_marginal(t=t)
-        xs = np.linspace(0, X_1.ppf(0.99), 200)
-        test = [besq_marginal_formula(initial, x, t, dim) for x in xs]
-        mar = X_1.pdf(xs)
+            for (v1, v2) in zip(values1, values2):
+                self.assertAlmostEqual(v1, v2)
 
-        for (t, m) in zip(test, mar):
-            self.assertAlmostEqual(t, m)
+            if vis:
+                plt.plot(xs, values1, '-', lw=1.5, alpha=0.75, label=f'$pdf$ for $t$={t:.2f}')
+                plt.plot(xs, values2, '-', lw=1.5, alpha=0.75, label=f'Formula')
+                q05 = X_1.ppf(0.05)
+                q95 = X_1.ppf(0.95)
+                plt.axvline(q05)
+                plt.axvline(q95)
+                plt.axvline(X_1.mean(), color="red")
+                plt.legend()
+                plt.title(p.name + ' Marginal pdf')
+                plt.show()
 
-        plt.plot(xs, mar, '-', lw=1.5, alpha=0.75, label=f'$pdf$ for $t$={t:.2f}')
-        plt.plot(xs, test, '-', lw=1.5, alpha=0.75, label=f'Formula')
-        plt.legend()
-        plt.show()
-
-    def test_besq_expectation(self, dim=2.5, initial=1.0, vis=True):
-
-        p = BESQProcess(dim=dim, initial=initial)
+    def test_bessel_expectation(self, dim=2.5, initial=1.0, vis=False):
 
         times = np.linspace(0.01, 1, 100)
 
-        marginals = [p.get_marginal(t=t) for t in times]
-        means = [X.mean() for X in marginals]
-        variances1 = [X.var() for X in marginals]
-        expectations = [p.marginal_expectation(t) for t in times]
-        variances2 = [p.marginal_variance(t) for t in times]
+        for p in [BESProcess(dim=dim, initial=initial),
+                  BESQProcess(dim=dim, initial=initial)]:
 
-        for (m, e) in zip(means, expectations):
-            self.assertAlmostEqual(m, e)
+            marginals = [p.get_marginal(t=t) for t in times]
+            means = [X.mean() for X in marginals]
+            variances1 = [X.var() for X in marginals]
+            expectations = [p.marginal_expectation(t) for t in times]
+            variances2 = [p.marginal_variance(t) for t in times]
 
-        for (v1, v2) in zip(variances1, variances2):
-            self.assertAlmostEqual(v1, v2)
+            for (m, e) in zip(means, expectations):
+                self.assertAlmostEqual(m, e)
 
-        if vis:
-            plt.plot(times, means, label='marginal + mean')
-            plt.plot(times, expectations, label='formula')
-            plt.legend()
-            plt.show()
+            for (v1, v2) in zip(variances1, variances2):
+                self.assertAlmostEqual(v1, v2)
 
-            plt.plot(times, variances1, label='marginal + variance')
-            plt.plot(times, variances2, label='formula')
-            plt.legend()
-            plt.show()
+            if vis:
+                plt.plot(times, means, label=p.name + ' marginal + mean')
+                plt.plot(times, expectations, label='formula')
+                plt.legend()
+                plt.show()
 
-    def test_bes_expectation(self, dim=2.5, initial=1.0, vis=True):
-
-        p = BESProcess(dim=dim, initial=initial)
-
-        times = np.linspace(0.01, 1, 100)
-        marginals = [p._get_marginal(t=t) for t in times]
-        means = [X.mean() for X in marginals]
-        variances1 = [X.var() for X in marginals]
-        expectations = [p.marginal_expectation(t) for t in times]
-        variances2 = [p.marginal_variance(t) for t in times]
-
-        if vis:
-            plt.plot(times, means, label='marginal + mean')
-            plt.plot(times, expectations, label='formula')
-            plt.legend()
-            plt.show()
-
-            plt.plot(times, variances1, label='marginal + variance')
-            plt.plot(times, variances2, label='formula')
-            plt.legend()
-            plt.show()
-
-
-# def test_bessel_expectations(T=100.0, initial=5.0, dim=3.5, n=200):
-#     times = np.linspace(0, T, n)
-#     times = times[1:]
-#     alpha = (dim / 2.0) - 1.0
-#     nc = (initial ** 2) / times
-#     expectations = math.sqrt(math.pi / 2.0) * sp.eval_genlaguerre(0.5, alpha, ((-1.0 / 2.0) * nc)) * np.sqrt(times)
-#     variances = dim * times + initial ** 2 - expectations ** 2
-#     stds = np.sqrt(variances)
-#     plt.plot(times, expectations, label="expectations")
-#     plt.plot(times, stds, label="stds")
-#     plt.legend()
-#     plt.show()
+                plt.plot(times, variances1, label=p.name + ' marginal + variance')
+                plt.plot(times, variances2, label='formula')
+                plt.legend()
+                plt.show()

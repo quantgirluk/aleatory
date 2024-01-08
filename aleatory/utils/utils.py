@@ -6,6 +6,7 @@ import pandas as pd
 import statsmodels.api as sm
 from matplotlib.gridspec import GridSpec
 from scipy.stats import ncx2
+from aleatory.stats import ncx
 import math
 
 
@@ -197,77 +198,6 @@ def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, ma
     return fig
 
 
-def draw_paths_bessel(times, paths, N, expectations, title=None, marginal=False, orientation='horizontal',
-                      marginalT=None,
-                      envelope=False,
-                      lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", **fig_kw):
-    with plt.style.context(style):
-        if marginal:
-            fig = plt.figure(**fig_kw)
-
-            last_points = [path[-1] for path in paths]
-            cm = plt.colormaps[colormap]
-            n_bins = int(np.sqrt(N))
-            col = np.linspace(0, 1, n_bins, endpoint=True)
-
-            if orientation == 'horizontal':
-                gs = GridSpec(1, 5)
-                ax1 = fig.add_subplot(gs[:4])
-                ax2 = fig.add_subplot(gs[4:], sharey=ax1)
-
-            elif orientation == 'vertical':
-                gs = GridSpec(1, 7)
-                ax1 = fig.add_subplot(gs[:4])
-                ax2 = fig.add_subplot(gs[4:])
-
-            n, bins, patches = ax2.hist(last_points, n_bins, orientation=orientation, density=True)
-            for c, p in zip(col, patches):
-                plt.setp(p, 'facecolor', cm(c))
-            my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
-            colors = [col[b] for b in my_bins]
-
-            marginaldist = marginalT
-            x = np.linspace(math.sqrt(marginaldist.ppf(0.001)), math.sqrt(marginaldist.ppf(0.999)), 100)
-
-            if orientation == 'horizontal':
-                ax2.plot(marginaldist.pdf(x ** 2) * 2.0 * x, x, '-', lw=1.75, alpha=0.6, label='$X_T$ pdf')
-                ax2.axhline(y=expectations[-1], linestyle='--', lw=1.75, label='$E[X_T]$')
-                plt.setp(ax2.get_yticklabels(), visible=False)
-
-            else:
-                ax2.plot(x, marginaldist.pdf(x ** 2) * 2.0 * x, '-', lw=1.75, alpha=0.6, label='$X_T$ pdf')
-                ax2.axvline(x=expectations[-1], linestyle='--', lw=1.75, label='$E[X_T]$')
-                ax2.yaxis.tick_right()
-
-            ax2.set_title('$X_T$')
-            ax2.legend()
-            for i in range(N):
-                ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
-            ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
-            if envelope:
-                ax1.fill_between(times, upper, lower, alpha=0.25, color='grey')
-
-            if orientation == 'horizontal':
-                plt.subplots_adjust(wspace=0.025, hspace=0.025)
-
-        else:
-            fig, ax1 = plt.subplots(**fig_kw)
-            for i in range(N):
-                ax1.plot(times, paths[i], '-', lw=1.0)
-            ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
-            if envelope:
-                ax1.fill_between(times, upper, lower, color='grey', alpha=0.25)
-
-        fig.suptitle(title)
-        ax1.set_title(r'Simulated Paths $X_t, t \in [t_0, T]$')  # Title
-        ax1.set_xlabel('$t$')
-        ax1.set_ylabel('$X(t)$')
-        ax1.legend()
-        plt.show()
-
-    return fig
-
-
 def sample_besselq_global(T, initial, dim, n):
     t_size = T / n
     path = np.zeros(n)
@@ -275,6 +205,20 @@ def sample_besselq_global(T, initial, dim, n):
     x = initial
     for t in range(n - 1):
         sample = ncx2(df=dim, nc=x / t_size, scale=t_size).rvs(1)[0]
+        path[t + 1] = sample
+        x = sample
+
+    return path
+
+
+def sample_bessel_global(T, initial, dim, n):
+    t_size = T / n
+    tss = math.sqrt(t_size)
+    path = np.zeros(n)
+    path[0] = initial
+    x = initial
+    for t in range(n - 1):
+        sample = ncx(df=dim, nc=x / tss, scale=tss).rvs(1)[0]
         path[t + 1] = sample
         x = sample
 
