@@ -139,7 +139,7 @@ class CEVProcess(SPEulerMaruyama):
         stds = self._process_stds()
         return stds
 
-    def draw(self, n, N, marginal=True, envelope=False, **fig_kw):
+    def draw(self, n, N, marginal=True, envelope=False, title=None, **fig_kw):
         self.simulate(n, N)
         expectations = self.estimate_expectations()
 
@@ -150,12 +150,14 @@ class CEVProcess(SPEulerMaruyama):
             lower = None
             upper = None
 
+        chart_title = title if title else self.name
+
         if marginal:
-            fig = draw_paths(times=self.times, paths=self.paths, N=N, KDE=True, name=self.name, marginal=marginal,
+            fig = draw_paths(times=self.times, paths=self.paths, N=N, title=chart_title, KDE=True, marginal=marginal,
                              expectations=expectations, envelope=envelope, lower=lower, upper=upper,
                              **fig_kw)
         else:
-            fig = draw_paths(times=self.times, paths=self.paths, N=N, name=self.name,
+            fig = draw_paths(times=self.times, paths=self.paths, N=N, title=chart_title,
                              expectations=expectations, marginal=marginal, **fig_kw)
 
         return fig

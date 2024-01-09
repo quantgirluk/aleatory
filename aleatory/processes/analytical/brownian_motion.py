@@ -147,7 +147,7 @@ class BrownianMotion(SPExplicit):
         marginal = norm(loc=self.drift * t, scale=self.scale * np.sqrt(t))
         return marginal
 
-    def draw(self, n, N, marginal=True, envelope=False, type='3sigma', **fig_kw):
+    def draw(self, n, N, marginal=True, envelope=False, type='3sigma', title=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
 
@@ -157,7 +157,7 @@ class BrownianMotion(SPExplicit):
         - the expectation of the process across time
         - histogram showing the empirical marginal distribution :math:`X_T` (optional when ``marginal = True``)
         - probability density function of the marginal distribution :math:`X_T` (optional when ``marginal = True``)
-        - envelope of confidence intervals acroos time (optional when ``envelope = True``)
+        - envelope of confidence intervals across time (optional when ``envelope = True``)
 
 
         :param n: number of steps in each path
@@ -165,12 +165,13 @@ class BrownianMotion(SPExplicit):
         :param marginal: bool, default: True
         :param envelope: bool, default: False
         :param type: string, default: '3sigma'
+        :param title: string to customise plot title
         :return:
         """
 
         if type == '3sigma':
-            return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope, **fig_kw)
+            return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
         elif type == 'qq':
-            return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, **fig_kw)
+            return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
         else:
             raise ValueError
