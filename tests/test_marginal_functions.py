@@ -9,7 +9,6 @@ class TestMarginalFunctions:
 
         process = BrownianMotion(drift=drift, scale=scale)
         process.sample(n=100)
-        # process.simulate(n=100, N=2)
         means = process.marginal_expectation(grid_times)
         variances = process.marginal_variance(grid_times)
 
