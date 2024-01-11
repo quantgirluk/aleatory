@@ -33,8 +33,8 @@ def _lazywhere(cond, arrays, f, fillvalue=None, f2=None):
     args = np.broadcast_arrays(cond, *arrays)
     cond, arrays = args[0], args[1:]
     temp = tuple(np.extract(cond, arr) for arr in arrays)
-    tcode = np.mintypecode([a.dtype.char for a in arrays])
-    out = np.full(np.shape(arrays[0]), fill_value=fillvalue, dtype=tcode)
+    type_code = np.mintypecode([a.dtype.char for a in arrays])
+    out = np.full(np.shape(arrays[0]), fill_value=fillvalue, dtype=type_code)
     np.place(out, cond, f(*temp))
     if f2 is not None:
         temp = tuple(np.extract(~cond, arr) for arr in arrays)
@@ -129,46 +129,3 @@ class ncx_gen(rv_continuous):
 
 
 ncx = ncx_gen(a=0.0, name='ncx')
-
-# import matplotlib.pyplot as plt
-#
-# t = 0.5
-# st = np.sqrt(t)
-#
-# marginal = ncx(df=2.5, nc=2.0/st, scale=st)
-# x = np.linspace(0, 5, 100)
-#
-# q05 = marginal.ppf(0.05)
-# q95 = marginal.ppf(0.95)
-#
-# plt.plot(x, marginal.pdf(x))
-# plt.axvline(marginal.ppf(0.05))
-# plt.axvline(marginal.ppf(0.95))
-# plt.axvline(marginal.mean(), color="red")
-# plt.show()
-# #
-# plt.plot(x, ncx.cdf(x, df=2.5, nc=2.0/st, scale=st))
-# plt.plot(x, marginal.cdf(x))
-# plt.show()
-#
-# plt.plot(x, ncx.ppf(ncx.cdf(x, df=4., nc=1.0), df=4., nc=1.0))
-# plt.plot(x, x)
-# plt.show()
-#
-# x = np.linspace(marginal.ppf(0.001), marginal.ppf(0.999), 200)
-# plt.plot(x, marginal.cdf( marginal.ppf(x) ) )
-# plt.plot(x, x)
-# plt.show()
-#
-#
-# x = np.linspace(0.001, 0.999, 100)
-# plt.plot(x, ncx.ppf(x,  df=2.5, nc=2.0/st, scale=st))
-# plt.plot(x, marginal.ppf(x))
-# plt.show()
-#
-#
-# sample = marginal.rvs(size=200)
-# plt.hist(sample, density=True, bins=10)
-# x = np.linspace(0, 7, 100)
-# plt.plot(x, marginal.pdf(x))
-# plt.show()
