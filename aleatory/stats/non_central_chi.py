@@ -90,7 +90,6 @@ class ncx_gen(rv_continuous):
     %(after_notes)s
 
     %(example)s
-
     """
 
     def _argcheck(self, df, nc):
