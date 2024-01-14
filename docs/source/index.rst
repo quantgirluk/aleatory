@@ -44,6 +44,7 @@ Currently, `aleatory` supports the following processes:
 - Squared Bessel
 
 
+
 Installation
 ------------
 
@@ -72,13 +73,13 @@ Aleatory is tested on Python versions 3.8, 3.9, and 3.10.
 Documentation
 -------------
 
-
 .. toctree::
    :maxdepth: 2
 
    general
    processes_analytical
    processes_euler_maruyama
+   stats
 
 
 Indices and tables
