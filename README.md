@@ -74,7 +74,7 @@ generates a chart like this:
 <img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/brownian_motion_quickstart_08.png"   style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%">
 </p>
 
-For more example visit the [Quick-Start Guide](https://aleatory.readthedocs.io/en/latest/general.html).
+For more examples visit the [Quick-Start Guide](https://aleatory.readthedocs.io/en/latest/general.html).
 
 
 ⭐️ **If you like this project, please give it a star!** ⭐️
