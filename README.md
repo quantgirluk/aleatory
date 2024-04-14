@@ -17,10 +17,10 @@ stochastic processes $X = (X_t : t\geq 0)$ and provides methods to:
 - generate realizations/trajectories from each process —over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
 
-<figure>
-  <p><img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png"
-    width="900" height="450">
-</figure>
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png"   style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%">
+</p>
 
 Currently, `aleatory` supports the following processes:
 
@@ -70,12 +70,14 @@ brownian.draw(n=100, N=100, colormap="cool", figsize=(12,9))
 
 generates a chart like this:
 
-<figure>
-  <p><img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/brownian_motion_quickstart_08.png"
-    width="900" height="450">
-</figure>
+<p align="center">
+<img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/brownian_motion_quickstart_08.png"   style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%">
+</p>
 
 For more example visit the [Quick-Start Guide](https://aleatory.readthedocs.io/en/latest/general.html).
+
+
+⭐️ **If you like this project, please give it a star!** ⭐️
 
 ## Thanks for Visiting! ✨
 
@@ -86,4 +88,4 @@ Connect with me via:
 - 📸 [Instagram](https://www.instagram.com/quant_girl/)
 - 👾 [Personal Website](https://quantgirl.blog)
 
-⭐️ **If you like this projet, please give it a star!** ⭐️
+
