@@ -77,6 +77,8 @@ generates a chart like this:
 
 For more example visit the [Quick-Start Guide](https://aleatory.readthedocs.io/en/latest/general.html).
 
+⭐️ **If you like this project, please give it a star!** 
+
 ## Thanks for Visiting! ✨
 
 Connect with me via:
@@ -86,4 +88,4 @@ Connect with me via:
 - 📸 [Instagram](https://www.instagram.com/quant_girl/)
 - 👾 [Personal Website](https://quantgirl.blog)
 
-⭐️ **If you like this projet, please give it a star!** ⭐️
+
