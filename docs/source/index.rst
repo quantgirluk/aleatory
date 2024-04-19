@@ -35,6 +35,9 @@ functionality to:
 Currently, `aleatory` supports the following processes:
 
 - Brownian Motion
+- Brownian Bridge
+- Brownian Excursion
+- Brownian Meander
 - Geometric Brownian Motion
 - Ornstein–Uhlenbeck
 - Vasicek
