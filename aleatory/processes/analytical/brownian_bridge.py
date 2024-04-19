@@ -13,6 +13,8 @@ class BrownianBridge(BrownianMotion):
     r"""
     Brownian Bridge
 
+    .. image:: _static/brownian_bridge_drawn.png
+
     A Brownian bridge is a continuous-time stochastic process  :math:`\{B_t : t \geq 0\}`
     whose probability distribution is the conditional probability distribution of a
     standard Wiener process (Brownian Motion)  :math:`\{W_t : t \geq 0\}`

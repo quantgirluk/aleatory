@@ -12,6 +12,8 @@ class BrownianExcursion(BrownianBridge):
     r"""
     Brownian Excursion
 
+    .. image:: _static/brownian_excursion_drawn.png
+
     A Brownian excursion process, is a Wiener process (or Brownian motion) conditioned
     to be positive and to take the value 0 at time 1. Alternatively, it can be defined as a Brownian
     Bridge process conditioned to be positive.

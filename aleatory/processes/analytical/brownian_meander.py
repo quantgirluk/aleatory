@@ -10,6 +10,10 @@ from aleatory.utils.utils import check_positive_integer, draw_paths_with_end_poi
 class BrownianMeander(BrownianMotion):
     r"""
     Brownian Meander
+
+    .. image:: _static/brownian_meander_drawn.png
+    .. image:: _static/tied_brownian_meander_drawn.png
+
     Let :math:`\{W_t : t \geq 0\}` be a standard Brownian motion and
 
     .. math::
