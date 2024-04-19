@@ -55,7 +55,7 @@ def test_figures_examples():
     besq = BESQProcess(dim=10)
     besq_float = BESQProcess(dim=3.5)
 
-    processes = [bm, bridge, excursion, meander, meander_end]
+    processes = [bridge, excursion, meander, meander_end]
     # processes = [bm, bmd, bridge, excursion, meander, gbm, vasicek, ouprocess, cirprocess, cev, bes, besq, bes_float, besq_float]
     # [bm, besq_float, bes_float]
     # processes = [gbm, vasicek, ouprocess, cirprocess, cev, bes, besq]
@@ -68,12 +68,12 @@ def test_figures_examples():
         # process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
         # process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=200)  # figure_with_title
         #
-        # name = process.name.replace(" ", "_").lower()
-        # if SAVE:
-        #     figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
-        #     figure.savefig(SAVE_PATH + name + '_simple_plot.png')
-        #     figure = process.draw(n=100, N=200, figsize=(12, 6), dpi=200)
-        #     figure.savefig(SAVE_PATH + name + '_drawn.png')
+        name = process.name.replace(" ", "_").lower()
+        if SAVE:
+            figure = process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
+            figure.savefig(SAVE_PATH + name + '_simple_plot.png')
+            figure = process.draw(n=100, N=200, figsize=(10, 6), dpi=200, colormap="spring")
+            figure.savefig(SAVE_PATH + name + '_drawn.png')
 
         process.draw(n=100, N=200, figsize=(10, 6), dpi=200, colormap="spring", envelope=True, marginal=True)
         # process.draw(n=100, N=200, figsize=(10, 6), dpi=200, colormap="spring", envelope=True, marginal=True)
