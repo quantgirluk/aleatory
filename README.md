@@ -55,7 +55,7 @@ Aleatory relies heavily on
 
 ## Compatibility
 
-Aleatory is tested on Python versions 3.8, 3.9, and 3.10
+Aleatory is tested on Python versions 3.8, 3.9, 3.10, and 3.11
 
 ## Quick-Start
 
