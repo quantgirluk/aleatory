@@ -25,6 +25,9 @@ stochastic processes $X = (X_t : t\geq 0)$ and provides methods to:
 Currently, `aleatory` supports the following processes:
 
 - Brownian Motion
+- Brownian Bridge
+- Brownian Excursion
+- Brownian Meander
 - Geometric Brownian Motion
 - Ornstein–Uhlenbeck
 - Vasicek
