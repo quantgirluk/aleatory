@@ -28,7 +28,7 @@ class BrownianMeander(BrownianMotion):
 
     def __init__(self, T=1.0, fixed_end=False, end=None, rng=None):
         super().__init__(T=T, rng=rng)
-        self.name = "Brownian Meander"
+        self.name = "Tied Brownian Meander" if fixed_end else "Brownian Meander"
         self.fixed_end = fixed_end
         self.end = end
         self._BrownianBridge = BrownianBridge(T=self.T)
@@ -89,7 +89,8 @@ class BrownianMeander(BrownianMotion):
         fig_kw['envelope'] = False
 
         if self.fixed_end:
-            fig_kw.pop('marginal')
+            if 'marginal' in fig_kw:
+                fig_kw.pop('marginal')
             fig = draw_paths_with_end_point(times=self.times, paths=self.paths,
                                             title=chart_title,
                                             **fig_kw)
