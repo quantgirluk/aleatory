@@ -95,6 +95,8 @@ class BrownianMeander(BrownianMotion):
         if self.fixed_end:
             if 'marginal' in fig_kw:
                 fig_kw.pop('marginal')
+            if 'orientation' in fig_kw:
+                fig_kw.pop('orientation')
             fig = draw_paths_with_end_point(times=self.times, paths=self.paths,
                                             title=chart_title,
                                             **fig_kw)

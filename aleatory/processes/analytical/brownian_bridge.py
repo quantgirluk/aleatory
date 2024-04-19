@@ -139,6 +139,8 @@ class BrownianBridge(BrownianMotion):
         chart_title = title if title else self.name
         if 'marginal' in fig_kw:
             fig_kw.pop('marginal')
+        if 'orientation' in fig_kw:
+            fig_kw.pop('orientation')
         fig = draw_paths_with_end_point(times=self.times, paths=self.paths,
                                         expectations=expectations, title=chart_title,
                                         envelope=envelope,
