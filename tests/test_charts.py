@@ -44,6 +44,7 @@ def test_figures_examples():
     excursion = BrownianExcursion()
     meander = BrownianMeander()
     meander_end = BrownianMeander(fixed_end=True, end=2.0)
+    meander_end_automatic = BrownianMeander(fixed_end=True)
     bmd = BrownianMotion(drift=-1.0, scale=0.5)
     gbm = GBM()
     vasicek = Vasicek()
@@ -55,7 +56,7 @@ def test_figures_examples():
     besq = BESQProcess(dim=10)
     besq_float = BESQProcess(dim=3.5)
 
-    processes = [bridge, excursion, meander, meander_end]
+    processes = [bridge, excursion, meander, meander_end, meander_end_automatic]
     # processes = [bm, bmd, bridge, excursion, meander, gbm, vasicek, ouprocess, cirprocess, cev, bes, besq, bes_float, besq_float]
     # [bm, besq_float, bes_float]
     # processes = [gbm, vasicek, ouprocess, cirprocess, cev, bes, besq]
@@ -65,7 +66,7 @@ def test_figures_examples():
     style = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
     # with plt.style.context(style):
     for process in processes:
-        # process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
+        process.plot(n=100, N=5, figsize=(9.5, 6), dpi=200)
         # process.plot(n=100, N=5, title='My favourite figure', figsize=(9.5, 6), dpi=200)  # figure_with_title
         #
         name = process.name.replace(" ", "_").lower()
@@ -75,9 +76,9 @@ def test_figures_examples():
             figure = process.draw(n=100, N=200, figsize=(10, 6), dpi=200, colormap="spring")
             figure.savefig(SAVE_PATH + name + '_drawn.png')
 
-        process.draw(n=100, N=200, figsize=(10, 6), dpi=200, colormap="spring", envelope=True, marginal=True)
+        process.draw(n=100, N=200, figsize=(10, 6), dpi=200, colormap="spring", envelope=False, marginal=True)
         # process.draw(n=100, N=200, figsize=(10, 6), dpi=200, colormap="spring", envelope=True, marginal=True)
-        # process.draw(n=100, N=200, envelope=False, orientation='horizontal')
+        # process.draw(n=100, N=200, envelope=False, dpi=200, orientation='horizontal')
         # process.draw(n=100, N=250, envelope=False, orientation='vertical', figsize=(12, 6))
         # process.draw(n=100, N=250, envelope=True, orientation='vertical', figsize=(12, 6), style=style)
         # process.draw(n=100, N=250, envelope=True, orientation='horizontal', figsize=(12, 6), style=style)
