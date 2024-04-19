@@ -6,3 +6,6 @@ from aleatory.processes.analytical.geometric_brownian import GBM
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.processes.analytical.bes import BESProcess
 from aleatory.processes.analytical.besq import BESQProcess
+from aleatory.processes.analytical.brownian_bridge import BrownianBridge
+from aleatory.processes.analytical.brownian_excursion import BrownianExcursion
+from aleatory.processes.analytical.brownian_meander import BrownianMeander

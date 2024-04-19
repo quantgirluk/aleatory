@@ -42,6 +42,8 @@ class BrownianMotion(SPExplicit):
 
     and each :math:`X_t \sim N(\mu t, \sigma^2 t)`.
 
+    Parameters:
+
     :param float drift: the parameter :math:`\mu` in the above SDE
     :param float scale: the parameter :math:`\sigma>0` in the above SDE
     :param float initial: the initial condition :math:`x_0` in the above SDE
