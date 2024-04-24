@@ -21,8 +21,7 @@ aleatory
     :target: https://pypi.python.org/pypi/aleatory
 
 
-**Aleatory** (/ˈeɪliətəri/) is a Python library for simulating and visualising stochastic processes
-defined by Stochastic Differential Equations (SDEs). It introduces objects representing continuous-time
+**Aleatory** (/ˈeɪliətəri/) is a Python library for simulating and visualising stochastic processes. It introduces objects representing continuous-time
 stochastic processes :math:`X = \{X_t : t\geq 0\}`, and provides
 functionality to:
 
