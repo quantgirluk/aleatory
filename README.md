@@ -80,7 +80,7 @@ generates a chart like this:
 For more examples visit the [Quick-Start Guide](https://aleatory.readthedocs.io/en/latest/general.html).
 
 
-⭐️ **If you like this project, please give it a star!** ⭐️
+**If you like this project, please give it a star!** ⭐️
 
 ## Thanks for Visiting! ✨
 
