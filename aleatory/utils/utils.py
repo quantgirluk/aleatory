@@ -107,15 +107,17 @@ def draw_paths_horizontal(times, paths, N, expectations=None, title=None, KDE=Fa
                 kde.fit()  # Estimate the densities
                 ax2.plot(kde.density, kde.support, '--', lw=1.75, alpha=0.6, label='$X_T$  KDE', zorder=10)
                 ax2.axhline(y=np.mean(last_points), linestyle='--', lw=1.75, label=r'$\overline{X_T}$')
+                ax2.legend()
             elif marginal and marginalT:
                 marginaldist = marginalT
                 x = np.linspace(marginaldist.ppf(0.001), marginaldist.ppf(0.999), 100)
                 ax2.plot(marginaldist.pdf(x), x, '-', lw=1.75, alpha=0.6, label='$X_T$ pdf')
                 ax2.axhline(y=marginaldist.mean(), linestyle='--', lw=1.75, label='$E[X_T]$')
+                ax2.legend()
 
             plt.setp(ax2.get_yticklabels(), visible=False)
             ax2.set_title('$X_T$')
-            ax2.legend()
+
 
             for i in range(N):
                 ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
