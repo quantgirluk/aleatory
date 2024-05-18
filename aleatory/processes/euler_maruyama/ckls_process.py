@@ -8,12 +8,12 @@ from aleatory.utils.utils import draw_paths
 
 class CKLSProcess(SPEulerMaruyama):
     r"""
-    CEV or constant elasticity of variance process
+    CKLS process
 
     .. image:: _static/cev_process_drawn.png
 
 
-    A CEV process  :math:`X = \{X : t \geq  0\}` is characterised by the following
+    A CKLS process  :math:`X = \{X : t \geq  0\}` is characterised by the following
     Stochastic Differential Equation
 
     .. math::
@@ -22,13 +22,18 @@ class CKLSProcess(SPEulerMaruyama):
 
     with initial condition :math:`X_0 = x_0`, where
 
-    - :math:`\mu` is the drift
+    - :math:`\alpha \in \mathbb{R}`
+    - :math:`\beata \in \mathbb{R}`
     - :math:`\sigma>0` is the scale of the volatility
     - :math:`\gamma\geq 0` is the elasticity term
     - :math:`W_t` is a standard Brownian Motion.
 
+    Reference: CHAN, K.C., KAROLYI, G.A., LONGSTAFF, F.A. and SANDERS, A.B. (1992),
+    An Empirical Comparison of Alternative Models of the Short-Term Interest Rate. The Journal of Finance,
+    47: 1209-1227. https://doi.org/10.1111/j.1540-6261.1992.tb04011.x
 
-    :param float mu: the parameter :math:`\mu` in the above SDE
+    :param float alpha: the parameter :math:`\alpha` in the above SDE
+    :param float beta: the parameter :math:`\beta` in the above SDE
     :param float sigma: the parameter :math:`\sigma>0` in the above SDE
     :param float gamma: the parameter :math:`\gamma` in the above SDE
     :param float initial: the initial condition :math:`x_0` in the above SDE
@@ -37,12 +42,12 @@ class CKLSProcess(SPEulerMaruyama):
     :param numpy.random.Generator rng: a custom random number generator
     """
 
-    def __init__(self, gamma=1.5, alpha=0.5, beta=0.5, sigma=0.1, initial=1.0, T=1.0, rng=None):
+    def __init__(self, alpha=0.5, beta=0.5, sigma=0.1, gamma=1.0, initial=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
-        self.gamma = gamma
         self.alpha = alpha
         self.beta = beta
         self.sigma = sigma
+        self.gamma = gamma
         self.initial = initial
         self.n = 1.0
         self.dt = 1.0 * self.T / self.n
@@ -52,15 +57,30 @@ class CKLSProcess(SPEulerMaruyama):
         self._marginals = None
 
         def f(x, _):
-            return self.mu - 0.5 * (self.sigma ** 2) * np.exp(2.0 * (self.gamma - 1.0) * x)
-            # return self.mu * x
+            return self.beta + self.alpha * np.exp(-1.0 * x) - 0.5 * (self.sigma ** 2) * np.exp(
+                2.0 * (self.gamma - 1.0) * x)
 
         def g(x, _):
             return self.sigma * np.exp((self.gamma - 1.0) * x)
-            # return self.sigma * (x ** self.gamma)
 
         self.f = f
         self.g = g
+
+    @property
+    def alpha(self):
+        return self._alpha
+
+    @alpha.setter
+    def alpha(self, value):
+        self._alpha = value
+
+    @property
+    def beta(self):
+        return self._beta
+
+    @beta.setter
+    def beta(self, value):
+        self._beta = value
 
     @property
     def sigma(self):
@@ -83,8 +103,9 @@ class CKLSProcess(SPEulerMaruyama):
         self._gamma = value
 
     def __str__(self):
-        return "CEV process with parameters {gamma}, {drift}, and {volatility} on [0, {T}].".format(
-            T=str(self.T), gamma=str(self.gamma), drift=str(self.mu), volatility=str(self.sigma))
+
+        return "CKLS process with parameters  {alpha}, {beta}, {gamma},{sigma} on [0, {T}].".format(
+            T=str(self.T), gamma=str(self.gamma), alpha=str(self.alpha), beta=str(self.beta), sigma=str(self.sigma))
 
     def _get_empirical_marginal_samples(self):
         if self.paths is None:
