@@ -9,7 +9,7 @@ import numpy as np
 from scipy.special import eval_genlaguerre
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
-from aleatory.processes.base import SPExplicit
+from aleatory.processes.base_analytical import SPAnalytical
 from aleatory.stats import ncx
 from aleatory.utils.utils import check_positive_integer, get_times, sample_bessel_global
 
@@ -19,7 +19,7 @@ def _sample_bessel_global(T, initial, dim, n):
     return path
 
 
-class BESProcess(SPExplicit):
+class BESProcess(SPAnalytical):
     r"""Bessel process
 
     .. image:: _static/bes_process_drawn.png
@@ -143,9 +143,6 @@ class BESProcess(SPExplicit):
             self.paths = results
             return self.paths
 
-    def get_marginal(self, t):
-        marginal = ncx(df=self.dim, nc=self.initial / np.sqrt(t), scale=np.sqrt(t))
-        return marginal
 
     def _process_expectation(self, times=None):
         # TODO: Add the case when times is zero, at the moment this fails because nc required division by t
@@ -165,10 +162,6 @@ class BESProcess(SPExplicit):
             expectations = np.insert(expectations, 0, self.initial)
         return expectations
 
-    def marginal_expectation(self, times=None):
-        expectations = self._process_expectation(times=times)
-        return expectations
-
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
@@ -176,14 +169,21 @@ class BESProcess(SPExplicit):
         variances = self.dim * times + self.initial ** 2 - expectations ** 2
         return variances
 
+    def _process_stds(self, times=None):
+        if times is None:
+            times = self.times
+        variances = self._process_variance(times=times)
+        stds = np.sqrt(variances)
+        return stds
+
+    def get_marginal(self, t):
+        marginal = ncx(df=self.dim, nc=self.initial / np.sqrt(t), scale=np.sqrt(t))
+        return marginal
+
+    def marginal_expectation(self, times=None):
+        expectations = self._process_expectation(times=times)
+        return expectations
+
     def marginal_variance(self, times):
         variances = self._process_variance(times=times)
         return variances
-
-    def _process_stds(self):
-        stds = np.sqrt(self._process_variance())
-        return stds
-
-    def process_stds(self):
-        stds = self._process_stds()
-        return stds

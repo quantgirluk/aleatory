@@ -2,12 +2,12 @@
 import numpy as np
 from scipy.stats import norm
 
-from aleatory.processes.base import SPExplicit
+from aleatory.processes.base_analytical import SPAnalytical
 from aleatory.processes.analytical.gaussian import GaussianIncrements
 from aleatory.utils.utils import check_positive_number, check_numeric, get_times
 
 
-class BrownianMotion(SPExplicit):
+class BrownianMotion(SPAnalytical):
     r"""Brownian motion
 
     .. image:: _static/brownian_motion_drawn.png
@@ -20,7 +20,7 @@ class BrownianMotion(SPExplicit):
     3. :math:`W(t) - W(s)` follows a Gaussian distribution :math:`N(0, t-s)`
     4. Almost surely continuous
 
-    A more general version of a Brownian motion, is the Drifted Brownian Motion which  is defined
+    A more general version of a Brownian motion, is the Arithmetic Brownian Motion which  is defined
     by the following SDE
 
     .. math::
@@ -53,11 +53,13 @@ class BrownianMotion(SPExplicit):
 
     """
 
-    def __init__(self, drift=0.0, scale=1.0, T=1.0, rng=None):
+    def __init__(self, drift=0.0, scale=1.0, initial=0.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng, initial=0.0)
         self.drift = drift
         self.scale = scale
-        self.name = "Brownian Motion" if drift == 0.0 else "Brownian Motion with Drift"
+        self.initial = initial
+        standard_condition = drift == 0.0 and scale == 1.0 and initial == 0.0
+        self.name = "Brownian Motion" if standard_condition else "Arithmetic Brownian Motion"
         self.n = None
         self.times = None
         self.gaussian_increments = GaussianIncrements(T=self.T, rng=self.rng)
@@ -80,15 +82,35 @@ class BrownianMotion(SPExplicit):
         check_positive_number(value, "Scale")
         self._scale = value
 
+    @property
+    def initial(self):
+        return self._initial
+
+    @initial.setter
+    def initial(self, value):
+        self._initial = value
+
     def _sample_brownian_motion(self, n):
         self.n = n
         self.times = get_times(self.T, self.n)
-        bm = np.cumsum(self.scale * self.gaussian_increments.sample(n - 1))
-        bm = np.insert(bm, 0, [0])
-        if self.drift == 0:
-            return bm
-        else:
-            return self.times * self.drift + bm
+        # increments = np.random.normal(scale=np.sqrt(self.T/self.n), size=self.n)
+        increments = np.cumsum(self.gaussian_increments.sample(n - 1))
+        increments = np.insert(increments, 0, [0])
+
+        path = np.full(n, self.initial) + self.drift * self.times + self.scale * increments
+        # bm = np.cumsum(self.scale *self.gaussian_increments.sample(n - 1))
+        # bm = np.insert(bm, 0, [0])
+        # if self.drift == 0:
+        #     return bm
+        # else:
+        # return self.initial + self.drift+self.times + bm
+        return path
+
+    def __str__(self):
+
+        return "Brownian Motion with drift={drift}, and scale={scale} on [0, {T}].".format(
+            T=str(self.T), drift=str(self.drift), scale=str(self.scale),
+            initial=str(self.initial))
 
     def sample(self, n):
         """
@@ -100,16 +122,21 @@ class BrownianMotion(SPExplicit):
         return self._sample_brownian_motion(n)
 
     def _sample_brownian_motion_at(self, times):
-        self.times = times
-        bm = np.cumsum(self.scale * self.gaussian_increments.sample_at(times))
-
         if times[0] != 0:
-            bm = np.insert(bm, 0, [0])
+            times = np.insert(times, 0, [0])
+        self.times = times
 
-        if self.drift != 0:
-            bm += [self.drift * t for t in times]
+        increments = np.cumsum(self.gaussian_increments.sample_at(times))
+        # increments = np.insert(increments, 0, [0])
 
-        return bm
+        path = np.full(len(self.times), self.initial) + self.drift * self.times + self.scale * increments
+        # bm = np.cumsum(self.scale * self.gaussian_increments.sample_at(times))
+
+        #
+        # if self.drift != 0:
+        #     bm += [self.drift * t for t in times]
+
+        return path
 
     def sample_at(self, times):
         """
@@ -123,31 +150,33 @@ class BrownianMotion(SPExplicit):
     def _process_expectation(self, times=None):
         if times is None:
             times = self.times
-        return self.drift * times
-
-    def marginal_expectation(self, times=None):
-        expectations = self._process_expectation(times=times)
-        return expectations
+        return self.initial + self.drift * times
 
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
         return (self.scale ** 2) * times
 
-    def marginal_variance(self, times):
-        variances = self._process_variance(times=times)
-        return variances
-
-    def _process_stds(self):
-        return self.scale * np.sqrt(self.times)
+    def _process_stds(self, times=None):
+        if times is None:
+            times = self.times
+        return self.scale * np.sqrt(times)
 
     def process_stds(self):
         stds = self._process_stds()
         return stds
 
     def get_marginal(self, t):
-        marginal = norm(loc=self.drift * t, scale=self.scale * np.sqrt(t))
+        marginal = norm(loc=self.initial + self.drift * t, scale=self.scale * np.sqrt(t))
         return marginal
+
+    def marginal_expectation(self, times=None):
+        expectations = self._process_expectation(times=times)
+        return expectations
+
+    def marginal_variance(self, times):
+        variances = self._process_variance(times=times)
+        return variances
 
     def draw(self, n, N, marginal=True, envelope=False, type='3sigma', title=None, **fig_kw):
         """

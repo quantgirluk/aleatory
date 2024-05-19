@@ -1,4 +1,4 @@
-from aleatory.processes.base import SPEulerMaruyama
+from aleatory.processes.base_eu import SPEulerMaruyama
 import numpy as np
 from scipy.stats import ncx2
 

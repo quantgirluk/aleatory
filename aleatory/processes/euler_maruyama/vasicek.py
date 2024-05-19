@@ -1,7 +1,7 @@
 """
 Vasicek Process
 """
-from aleatory.processes.base import SPEulerMaruyama
+from aleatory.processes.base_eu import SPEulerMaruyama
 import numpy as np
 from scipy.stats import norm
 
@@ -22,7 +22,7 @@ class Vasicek(SPEulerMaruyama):
 
     with initial condition :math:`X_0 = x_0`, where
 
-    - :math:`\theta` is the speed of reversion
+    - :math:`\theta>0` is the speed of reversion
     - :math:`\mu` is the long term mean value.
     - :math:`\sigma>0` is the instantaneous volatility
     - :math:`W_t` is a standard Brownian Motion.
@@ -60,9 +60,20 @@ class Vasicek(SPEulerMaruyama):
         self.f = f
         self.g = g
 
+    @property
+    def theta(self):
+        return self._theta
+
+    @theta.setter
+    def theta(self, value):
+        if value < 0:
+            raise ValueError("theta parameter must be positive")
+        self._theta = value
+
     def __str__(self):
-        return "Vasicek process with parameters {speed}, {mean}, and {volatility} on [0, {T}].".format(
-            T=str(self.T), speed=str(self.theta), mean=str(self.mu), volatility=str(self.sigma))
+        return "Vasicek process with parameters theta={speed}, mu={mean}, sigma={volatility}, initial={initial} on [0, {T}].".format(
+            T=str(self.T), speed=str(self.theta), mean=str(self.mu), volatility=str(self.sigma),
+            initial=str(self.initial))
 
     def _process_expectation(self, times=None):
         if times is None:
@@ -74,7 +85,7 @@ class Vasicek(SPEulerMaruyama):
         expectations = self._process_expectation(times=times)
         return expectations
 
-    def _process_variance(self,times=None):
+    def _process_variance(self, times=None):
         if times is None:
             times = self.times
         variances = (self.sigma ** 2) * (1.0 / (2.0 * self.theta)) * (

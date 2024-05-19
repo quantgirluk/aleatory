@@ -4,12 +4,12 @@ Geometric Brownian Motion
 import numpy as np
 from scipy.stats import lognorm
 
-from aleatory.processes.base import SPExplicit
+from aleatory.processes.base_analytical import SPAnalytical
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.utils.utils import check_positive_number, check_numeric, get_times, check_positive_integer
 
 
-class GBM(SPExplicit):
+class GBM(SPAnalytical):
     r"""Geometric Brownian Motion
 
     .. image:: _static/geometric_brownian_motion_drawn.png
@@ -126,9 +126,6 @@ class GBM(SPExplicit):
             times = self.times
         return self.initial * np.exp(self.drift * times)
 
-    def marginal_expectation(self, times=None):
-        expectations = self._process_expectation(times=times)
-        return expectations
 
     def _process_variance(self, times=None):
         if times is None:
@@ -137,14 +134,13 @@ class GBM(SPExplicit):
                 np.exp(times * self.volatility ** 2) - 1)
         return variances
 
-    def marginal_variance(self, times=None):
+    def _process_stds(self, times=None):
+        if times is None:
+            times = self.times
         variances = self._process_variance(times=times)
-        return variances
-
-    def _process_stds(self):
-        variances = self.marginal_variance()
         stds = np.sqrt(variances)
         return stds
+
 
     def get_marginal(self, t):
         mu_x = np.log(self.initial) + (self.drift - 0.5 * self.volatility ** 2) * t
@@ -152,3 +148,11 @@ class GBM(SPExplicit):
         marginal = lognorm(s=sigma_x, scale=np.exp(mu_x))
 
         return marginal
+
+    def marginal_expectation(self, times=None):
+        expectations = self._process_expectation(times=times)
+        return expectations
+
+    def marginal_variance(self, times=None):
+        variances = self._process_variance(times=times)
+        return variances
