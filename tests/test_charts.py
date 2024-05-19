@@ -2,7 +2,8 @@ import matplotlib.figure
 import numpy as np
 
 from aleatory.processes import (BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess, BESProcess,
-                                BESQProcess, BrownianBridge, BrownianExcursion, BrownianMeander)
+                                BESQProcess, BrownianBridge, BrownianExcursion, BrownianMeander,
+                                CKLSProcess)
 
 SAVE = False
 SAVE_PATH = '../docs/source/_static/'
@@ -40,6 +41,7 @@ def test_rng():
 
 def test_figures_examples():
     bm = BrownianMotion()
+    bm_arithmetic = BrownianMotion(initial=1.0, drift=1.0, scale=2.5)
     bridge = BrownianBridge(initial=1.0, end=2.0)
     excursion = BrownianExcursion()
     meander = BrownianMeander()
@@ -55,14 +57,18 @@ def test_figures_examples():
     bes_float = BESProcess(dim=4.5)
     besq = BESQProcess(dim=10)
     besq_float = BESQProcess(dim=3.5)
+    ckls = CKLSProcess()
 
-    processes = [bridge, excursion, meander, meander_end, meander_end_automatic]
+    # processes = [cirprocess]
+    # processes = [bridge, excursion, meander, meander_end, meander_end_automatic]
+    # processes = [cirprocess, cev]
     # processes = [bm, bmd, bridge, excursion, meander, gbm, vasicek, ouprocess, cirprocess, cev, bes, besq, bes_float, besq_float]
-    # [bm, besq_float, bes_float]
+    # processes = [bm, besq_float, bes_float]
     # processes = [gbm, vasicek, ouprocess, cirprocess, cev, bes, besq]
     # processes = [bes_float, besq_float]
     # processes = [bm, bmd, bridge, excursion, meander, meander_end]
     # [bm, bmd, gbm,  cirprocess, cev, bes, besq, bes_float, besq_float]
+    processes = [ckls]
     style = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
     # with plt.style.context(style):
     for process in processes:
