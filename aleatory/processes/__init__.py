@@ -11,3 +11,4 @@ from aleatory.processes.analytical.brownian_excursion import BrownianExcursion
 from aleatory.processes.analytical.brownian_meander import BrownianMeander
 from aleatory.processes.euler_maruyama.ckls_process import CKLSProcess
 from aleatory.processes.euler_maruyama.cev_process import CEVProcess
+from aleatory.processes.jump.poisson import PoissonProcess
