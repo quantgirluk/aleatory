@@ -20,5 +20,3 @@ class TestMarginalFunctions:
 
         for m, t in zip(means, process.times):
             assert m == drift * t
-
-
