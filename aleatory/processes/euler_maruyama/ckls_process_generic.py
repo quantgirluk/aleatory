@@ -10,7 +10,7 @@ class CKLSProcessGeneric(SPEulerMaruyama):
     r"""
     Chan-Karolyi-Longstaff-Sanders (CKLS) process
 
-    .. image:: _static/cev_process_drawn.png
+    .. image:: _static/ckls_process_draw.png
 
 
     A CKLS process  :math:`X = \{X : t \geq  0\}` is characterised by the following

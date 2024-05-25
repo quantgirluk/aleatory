@@ -1,4 +1,5 @@
 """Poisson Process"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import poisson
@@ -10,6 +11,19 @@ import pandas as pd
 
 
 class PoissonProcess(BaseProcess):
+    r"""Poisson Process
+
+        .. image:: _static/poisson_process_draw.png
+
+    A Poisson point process is a type of random mathematical object that consists of points randomly located on
+    a mathematical space with the essential feature that the points occur independently of one another.
+
+    A Poisson process :math:`{N(t) : t\geq 0}` with intensity rate :math:`\lambda>0` is defined by the following properties:
+
+    1. :math:`N(t)` has a Poisson distribution with parameter :math:`\lambda t`, for each :math:`t> 0`.
+    2. It has independent increments
+
+    """
 
     def __init__(self, rate=1.0, rng=None):
         super().__init__(rng=rng)
@@ -182,4 +196,4 @@ class PoissonProcess(BaseProcess):
             plt.show()
 
         return fig
-    
+

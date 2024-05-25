@@ -1,8 +1,37 @@
+"""Chan-Karolyi-Longstaff-Sanders (CKLS) process"""
+
 from aleatory.processes.euler_maruyama.ckls_process_generic import CKLSProcessGeneric
 from aleatory.processes import BrownianMotion, Vasicek, CIRProcess, GBM
 
 
 class CKLSProcess(CKLSProcessGeneric):
+
+    r"""
+    Chan-Karolyi-Longstaff-Sanders (CKLS) process
+
+    .. image:: _static/ckls_process_draw.png
+
+
+    A CKLS process  :math:`X = \{X : t \geq  0\}` is characterised by the following
+    Stochastic Differential Equation
+
+    .. math::
+
+      dX_t = (\alpha  + \beta X_t) dt + \sigma X_t^{\gamma} dW_t, \ \ \ \ \forall t\in (0,T],
+
+    with initial condition :math:`X_0 = x_0`, where
+
+    - :math:`\alpha \in \mathbb{R}`
+    - :math:`\beata \in \mathbb{R}`
+    - :math:`\sigma>0` is the scale of the volatility
+    - :math:`\gamma\geq 0` is the elasticity term
+    - :math:`W_t` is a standard Brownian Motion.
+
+    Reference: CHAN, K.C., KAROLYI, G.A., LONGSTAFF, F.A. and SANDERS, A.B. (1992),
+    An Empirical Comparison of Alternative Models of the Short-Term Interest Rate. The Journal of Finance,
+    47: 1209-1227. https://doi.org/10.1111/j.1540-6261.1992.tb04011.x
+
+    """
     def __new__(cls, *args, **kwargs):
         alpha = kwargs['alpha'] if  'alpha' in kwargs else 0.5
         beta = kwargs['beta'] if 'beta' in kwargs else 0.5
@@ -26,10 +55,3 @@ class CKLSProcess(CKLSProcessGeneric):
         else:
             return CKLSProcessGeneric(alpha=alpha, beta=beta, sigma=sigma, gamma=gamma, initial=initial, T=T, rng=rng)
 
-    # def __init__(self, alpha=0.5, beta=0.5, sigma=0.1, gamma=1.0, initial=1.0, T=1.0, rng=None):
-    #     super().__init__(alpha, beta, sigma, gamma, initial, T, rng)
-
-    # def __str__(self):
-    #     return "CKLS process with parameters alpha={alpha}, beta={beta}, sigma={sigma}, gamma={gamma}, initial={initial} on [0, {T}].".format(
-    #         T=str(self.T), gamma=str(self.gamma), alpha=str(self.alpha), beta=str(self.beta), sigma=str(self.sigma),
-    #         initial=self.initial)
