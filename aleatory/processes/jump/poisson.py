@@ -182,13 +182,4 @@ class PoissonProcess(BaseProcess):
             plt.show()
 
         return fig
-
-
-# p = PoissonProcess(rate=0.5)
-# plot1 = p.plot(N=20, T=20, dpi=200, figsize=(9.5, 6),)
-# plot2 = p.plot(N=100, jumps=20, dpi=200,figsize=(9.5, 6)),
-# fig1 = p.draw(N=300, T=20, figsize=(12, 6), dpi=200, colormap="cool", )
-# fig2 = p.draw(N=300, T=40, figsize=(12, 6), dpi=200, colormap="PiYG", )
-# fig3 = p.draw(N=300, T=50, figsize=(9, 6), dpi=200, colormap="BrBG", marginal=False)
-# fig4 = p.draw(N=300, T=50, figsize=(12, 6), dpi=200, colormap="PuOr", envelope=False)
-#
+    
