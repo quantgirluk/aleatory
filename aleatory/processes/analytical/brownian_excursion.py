@@ -18,10 +18,9 @@ class BrownianExcursion(BrownianBridge):
     to be positive and to take the value 0 at time 1. Alternatively, it can be defined as a Brownian
     Bridge process conditioned to be positive.
 
-    Parameters
-        :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
         for the process
-        :param numpy.random.Generator rng: a custom random number generator
+    :param numpy.random.Generator rng: a custom random number generator
 
     """
     def __init__(self, T=1.0, rng=None):

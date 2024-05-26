@@ -18,10 +18,10 @@ class PoissonProcess(BaseProcess):
     A Poisson point process is a type of random mathematical object that consists of points randomly located on
     a mathematical space with the essential feature that the points occur independently of one another.
 
-    A Poisson process :math:`{N(t) : t\geq 0}` with intensity rate :math:`\lambda>0` is defined by the following properties:
+    A Poisson process :math:`{N(t) : t\geq 0}` with intensity rate :math:`\lambda>0`, is defined by the following properties:
 
-    1. :math:`N(t)` has a Poisson distribution with parameter :math:`\lambda t`, for each :math:`t> 0`.
-    2. It has independent increments
+    -  :math:`N(t)` has a Poisson distribution with parameter :math:`\lambda t`, for each :math:`t> 0`.
+    -  It has independent increments
 
     """
 
@@ -81,17 +81,30 @@ class PoissonProcess(BaseProcess):
     def simulate(self, N, jumps=None, T=None):
         """
         Simulate paths/trajectories from the instanced stochastic process.
+        It requires either the number of jumps (`jumps`) or the  time (`T`)
+        for the simulation to end.
 
-        :param N: number of paths to simulate
-        :param jumps: number of jumps
-        :param T: time T
+        - If `jumps` is provided, the function returns :math:`N` paths each one with exactly
+            that number of jumps.
+
+        - If `T` is provided, the function returns :math:`N` paths over the time :math:`[0,T]`. Note
+            that in this case each path can have a different number of jumps.
+
+        :param int N: number of paths to simulate
+        :param int jumps: number of jumps
+        :param float T: time T
         :return: list with N paths (each one is a numpy array of size n)
+
         """
         self.N = N
         self.paths = [self.sample(jumps=jumps, T=T) for _ in range(N)]
         return self.paths
 
     def plot(self, N, jumps=None, T=None, style="seaborn-v0_8-whitegrid", title=None, **fig_kw):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process. Simple plot of times
+        versus process values as lines and/or markers.
+        """
 
         plot_title = title if title else self.name
         self.simulate(N, jumps=jumps, T=T)

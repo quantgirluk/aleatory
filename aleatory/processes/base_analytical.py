@@ -26,8 +26,8 @@ class SPAnalytical(StochasticProcess):
         """
         Simulate paths/trajectories from the instanced stochastic process.
 
-        :param n: number of steps in each path
-        :param N: number of paths to simulate
+        :param int n: number of steps in each path
+        :param int N: number of paths to simulate
         :return: list with N paths (each one is a numpy array of size n)
         """
         self.n = n
@@ -94,10 +94,11 @@ class SPAnalytical(StochasticProcess):
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Simple plot of times versus process values as lines and/or markers.
 
-        :param n: number of steps in each path
-        :param N: number of paths to simulate
-        :param title: string to customise plot title
+        :parameter int n: number of steps in each path
+        :parameter int N: number of paths to simulate
+        :parameter str title: string to customise plot title
         :return:
+
         """
         self.simulate(n, N)
         if title:
@@ -155,11 +156,11 @@ class SPAnalytical(StochasticProcess):
         - probability density function of the marginal distribution :math:`X_T`
         - envelope of confidence intervals
 
-        :param n: number of steps in each path
-        :param N: number of paths to simulate
-        :param marginal: bool, default: True
-        :param envelope: bool, default: False
-        :param title: string optional default to None
+        :param int n: number of steps in each path
+        :param int N: number of paths to simulate
+        :param bool marginal: defaults to True
+        :param bool envelope: defaults to False
+        :param str title: string optional default to the name of the process
         :return:
         """
         return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw)

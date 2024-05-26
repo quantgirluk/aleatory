@@ -9,6 +9,7 @@ cannot be expressed in analytical form. These processes are simulated via the
 * :py:class:`aleatory.processes.Vasicek`
 * :py:class:`aleatory.processes.CIRProcess`
 * :py:class:`aleatory.processes.CEVProcess`
+* :py:class:`aleatory.processes.CKLSProcess`
 
 
 .. autoclass:: aleatory.processes.OUProcess
@@ -21,4 +22,7 @@ cannot be expressed in analytical form. These processes are simulated via the
     :members: T, sample, simulate, plot, draw
 
 .. autoclass:: aleatory.processes.CEVProcess
+    :members: T, sample, simulate, plot, draw
+
+.. autoclass:: aleatory.processes.CKLSProcess
     :members: T, sample, simulate, plot, draw

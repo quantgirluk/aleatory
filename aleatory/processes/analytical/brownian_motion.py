@@ -32,7 +32,7 @@ class BrownianMotion(SPAnalytical):
 
     - :math:`\mu` is the drift
     - :math:`\sigma>0` is the volatility
-    - :math:`W_t` is a standard Brownian Motion.
+    - :math:`W_t` is a standard Brownian Motion
 
     Clearly, the solution to this equation can be written as
 
@@ -42,14 +42,12 @@ class BrownianMotion(SPAnalytical):
 
     and each :math:`X_t \sim N(\mu t, \sigma^2 t)`.
 
-    Parameters:
 
-    :param float drift: the parameter :math:`\mu` in the above SDE
-    :param float scale: the parameter :math:`\sigma>0` in the above SDE
-    :param float initial: the initial condition :math:`x_0` in the above SDE
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
+    :parameter float drift: the parameter :math:`\mu` in the above SDE
+    :parameter float scale: the parameter :math:`\sigma>0` in the above SDE
+    :parameter float initial: the initial condition :math:`x_0` in the above SDE
+    :parameter float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
+    :parameter numpy.random.Generator rng: a custom random number generator
 
     """
 
@@ -116,7 +114,7 @@ class BrownianMotion(SPAnalytical):
         """
         Generates a discrete time sample from a Brownian Motion instance.
 
-        :param n: the number of steps
+        :param int n: the number of steps
         :return: numpy array
         """
         return self._sample_brownian_motion(n)
@@ -190,13 +188,12 @@ class BrownianMotion(SPAnalytical):
         - probability density function of the marginal distribution :math:`X_T` (optional when ``marginal = True``)
         - envelope of confidence intervals across time (optional when ``envelope = True``)
 
-
-        :param n: number of steps in each path
-        :param N: number of paths to simulate
-        :param marginal: bool, default: True
-        :param envelope: bool, default: False
-        :param type: string, default: '3sigma'
-        :param title: string to customise plot title
+        :param int n: number of steps in each path
+        :param int N: number of paths to simulate
+        :param bool marginal:  defaults to True
+        :param bool envelope:   defaults to False
+        :param str type:   defaults to  '3sigma'
+        :param str title:  to be used to customise plot title. If not passed, the title defaults to the name of the process.
         :return:
         """
 

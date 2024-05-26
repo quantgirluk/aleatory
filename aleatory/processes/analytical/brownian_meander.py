@@ -25,8 +25,11 @@ class BrownianMeander(BrownianMotion):
     .. math::
         W_t^{+} = \frac{1}{\sqrt{1-\tau}} |W(\tau  + t (1-\tau))|, \ \ \ \   t\in (0,1].
 
-
-    Parameters
+    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+        for the process
+    :param bool fixed_end: flag to indicate if the process has a fixed end point. Defaults to `False`
+    :param float end: end point for the Meander, in the case of `fixed_end` equal `True`
+    :param numpy.random.Generator rng: a custom random number generator
 
     """
 

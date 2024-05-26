@@ -1,7 +1,6 @@
 # *aleatory*
 
 [![PyPI version fury.io](https://badge.fury.io/py/aleatory.svg)](https://pypi.org/project/aleatory/) [![Downloads](https://static.pepy.tech/personalized-badge/aleatory?period=total&units=international_system&left_color=black&right_color=blue&left_text=Downloads)](https://pepy.tech/project/aleatory)
-
 ![example workflow](https://github.com/quantgirluk/aleatory/actions/workflows/python-package.yml/badge.svg) [![Documentation Status](https://readthedocs.org/projects/aleatory/badge/?version=latest)](https://aleatory.readthedocs.io/en/latest/?badge=latest)
 
 - [Git Homepage](https://github.com/quantgirluk/aleatory)
@@ -22,19 +21,21 @@ stochastic processes $X = (X_t : t\geq 0)$ and provides methods to:
 <img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png"   style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%">
 </p>
 
-Currently, `aleatory` supports the following processes:
+Currently, `aleatory` supports the following 13 processes:
 
 - Brownian Motion
 - Brownian Bridge
 - Brownian Excursion
 - Brownian Meander
-- Geometric Brownian Motion
-- Ornstein–Uhlenbeck
-- Vasicek
-- Cox–Ingersoll–Ross
-- Constant Elasticity
-- Bessel Process
-- Squared Bessel Processs
+- Geometric Brownian Motion (GBM) process
+- Ornstein–Uhlenbeck (OU) process
+- Vasicek process
+- Cox–Ingersoll–Ross (CIR) process
+- Constant Elasticity Variance (CEV) process
+- Chan-Karolyi-Longstaff-Sanders (CKLS) process
+- Bessel (BES) process
+- Squared Bessel (BESQ) process
+- Poisson process
 
 ## Installation
 

@@ -27,12 +27,12 @@ class BrownianBridge(BrownianMotion):
 
     More generally, a Brownian Bridge is  subject to the conditions :math:`W(0) = a` and :math:`W(T) = b`.
 
-    Parameters
-        :param float initial: initial condition
-        :param float end: end condition
-        :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+
+    :param float initial: initial condition
+    :param float end: end condition
+    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
         for the process
-        :param numpy.random.Generator rng: a custom random number generator
+    :param numpy.random.Generator rng: a custom random number generator
 
     """
     def __init__(self, initial=0.0, end=0.0, T=1.0, rng=None):

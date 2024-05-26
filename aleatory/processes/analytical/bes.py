@@ -117,9 +117,9 @@ class BESProcess(SPAnalytical):
         """
         Simulate paths/trajectories from the instanced stochastic process.
 
-        param n: number of steps in each path
-        param N: number of paths to simulate
-        return: list with N paths (each one is a numpy array of size n)
+        :param int n: number of steps in each path
+        :param int N: number of paths to simulate
+        :return: list with N paths (each one is a numpy array of size n)
         """
         self.n = n
         self.N = N

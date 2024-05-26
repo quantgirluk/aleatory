@@ -33,17 +33,19 @@ functionality to:
 
 Currently, `aleatory` supports the following processes:
 
-- Brownian Motion
-- Brownian Bridge
-- Brownian Excursion
-- Brownian Meander
-- Geometric Brownian Motion
-- Ornstein–Uhlenbeck
-- Vasicek
-- Cox–Ingersoll–Ross
-- Constant Elasticity
-- Bessel
-- Squared Bessel
+1. Brownian Motion
+2. Brownian Bridge
+3. Brownian Excursion
+4. Brownian Meander
+5. Geometric Brownian Motion
+6. Ornstein–Uhlenbeck (OU) process
+7. Vasicek process
+8. Cox–Ingersoll–Ross (CIR) process
+9. Constant Elasticity Variance (CEV) process
+10. Chan-Karolyi-Longstaff-Sanders (CKLS) process
+11. Bessel processes
+12. Squared Bessel processes
+13. Poisson process
 
 
 

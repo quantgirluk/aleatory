@@ -22,7 +22,7 @@ class CKLSProcess(CKLSProcessGeneric):
     with initial condition :math:`X_0 = x_0`, where
 
     - :math:`\alpha \in \mathbb{R}`
-    - :math:`\beata \in \mathbb{R}`
+    - :math:`\beta \in \mathbb{R}`
     - :math:`\sigma>0` is the scale of the volatility
     - :math:`\gamma\geq 0` is the elasticity term
     - :math:`W_t` is a standard Brownian Motion.
@@ -30,6 +30,16 @@ class CKLSProcess(CKLSProcessGeneric):
     Reference: CHAN, K.C., KAROLYI, G.A., LONGSTAFF, F.A. and SANDERS, A.B. (1992),
     An Empirical Comparison of Alternative Models of the Short-Term Interest Rate. The Journal of Finance,
     47: 1209-1227. https://doi.org/10.1111/j.1540-6261.1992.tb04011.x
+
+
+    :param float alpha: the parameter :math:`\alpha` in the above SDE
+    :param float beta: the parameter :math:`\beta` in the above SDE
+    :param float sigma: the parameter :math:`\sigma>0` in the above SDE
+    :param float gamma: the parameter :math:`\gamma\geq 0` in the above SDE
+    :param float initial: the initial condition :math:`x_0` in the above SDE
+    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+        for the process
+    :param numpy.random.Generator rng: a custom random number generator
 
     """
     def __new__(cls, *args, **kwargs):
