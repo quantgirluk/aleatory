@@ -62,6 +62,26 @@ def plot_paths(times, paths, style="seaborn-v0_8-whitegrid", title=None, **fig_k
     return fig
 
 
+def plot_paths_random_walk(*args, times, paths, style="seaborn-v0_8-whitegrid", title=None, plot_style='points',
+                           **fig_kw):
+    with plt.style.context(style):
+        fig, ax = plt.subplots(**fig_kw)
+        for p in paths:
+            if plot_style == 'points':
+                ax.scatter(times, p, s=7)
+            elif plot_style == 'steps':
+                ax.step(times, p)
+            elif plot_style == 'linear':
+                ax.plot(times, p, *args)
+            else:
+                raise ValueError("plot_style must be 'points', 'steps', or 'linear'.")
+        ax.set_title(title)
+        ax.set_xlabel('$t$')
+        ax.set_ylabel('$X(t)$')
+        plt.show()
+    return fig
+
+
 def draw_paths(times, paths, N, expectations, title=None, KDE=False, marginal=False, orientation='horizontal',
                marginalT=None, envelope=False,
                lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", **fig_kw):
@@ -118,7 +138,6 @@ def draw_paths_horizontal(times, paths, N, expectations=None, title=None, KDE=Fa
             plt.setp(ax2.get_yticklabels(), visible=False)
             ax2.set_title('$X_T$')
 
-
             for i in range(N):
                 ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
 
@@ -132,14 +151,14 @@ def draw_paths_horizontal(times, paths, N, expectations=None, title=None, KDE=Fa
         else:
             fig, ax1 = plt.subplots(**fig_kw)
             if colorspos:
-                colors = [path[colorspos]/np.max(np.abs(path)) for path in paths]
+                colors = [path[colorspos] / np.max(np.abs(path)) for path in paths]
             else:
                 _, bins = np.histogram(last_points, n_bins)
                 my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
                 colors = [col[b] for b in my_bins]
 
-            for path, color in zip(paths,colors):
-                ax1.plot(times, path, '-',  color=cm(color), lw=0.75)
+            for path, color in zip(paths, colors):
+                ax1.plot(times, path, '-', color=cm(color), lw=0.75)
             if expectations is not None:
                 ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
                 ax1.legend()
@@ -221,18 +240,17 @@ def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, ma
 
 
 def draw_paths_with_end_point(times, paths, expectations=None, title=None, envelope=False,
-                          lower=None, upper=None,
-                          style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r",
-                          **fig_kw):
-
+                              lower=None, upper=None,
+                              style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r",
+                              **fig_kw):
     cm = plt.colormaps[colormap]
-    mid = int(len(paths[0])/2)+1
+    mid = int(len(paths[0]) / 2) + 1
 
     with plt.style.context(style):
 
         fig, ax1 = plt.subplots(**fig_kw)
         for path in paths:
-            ax1.plot(times, path, '-',  color=cm(path[mid]/np.max(np.abs(path))), lw=0.75)
+            ax1.plot(times, path, '-', color=cm(path[mid] / np.max(np.abs(path))), lw=0.75)
         if expectations is not None:
             ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
             ax1.legend()
@@ -248,6 +266,7 @@ def draw_paths_with_end_point(times, paths, expectations=None, title=None, envel
         plt.show()
 
     return fig
+
 
 def sample_besselq_global(T, initial, dim, n):
     t_size = T / n
