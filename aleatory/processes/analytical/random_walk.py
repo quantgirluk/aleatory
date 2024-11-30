@@ -1,3 +1,6 @@
+"""
+Random Walk
+"""
 from aleatory.processes.base_analytical import SPAnalytical
 from abc import ABC
 from aleatory.utils.utils import check_positive_integer, get_times, plot_paths_random_walk
@@ -114,16 +117,14 @@ class RandomWalk(GeneralRandomWalk):
     def __repr__(self):
         return f'Random Walk (step_sizes={self.step_sizes}, probabilities={self.probs})'
 
-
-
 # p = GeneralRandomWalk(p=0.7)
-p = RandomWalk()
-s = p.sample(n=10)
-sim = p.simulate(n=100, N=10)
-p.plot(n=100, N=10, figsize=(12, 10))
-p.plot(n=100, N=50, figsize=(12, 10), plot_style='steps')
-p.plot(n=100, N=50, figsize=(12, 10), plot_style='linear')
-
-p.draw(n=10, N=50, figsize=(14, 10), envelope=False)
-p.draw(n=10, N=50, figsize=(14, 10), envelope=True)
-p.draw(n=300, N=200, figsize=(14, 10), envelope=True)
+# p = RandomWalk()
+# s = p.sample(n=10)
+# sim = p.simulate(n=100, N=10)
+# p.plot(n=100, N=10, figsize=(12, 10))
+# p.plot(n=100, N=50, figsize=(12, 10), plot_style='steps')
+# p.plot(n=100, N=50, figsize=(12, 10), plot_style='linear')
+#
+# p.draw(n=10, N=50, figsize=(14, 10), envelope=False)
+# p.draw(n=10, N=50, figsize=(14, 10), envelope=True)
+# p.draw(n=300, N=200, figsize=(14, 10), envelope=True)
