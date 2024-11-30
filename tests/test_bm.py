@@ -24,7 +24,7 @@ def draw_mean_variance(process, T):
     plt.show()
 
 
-class testBM:
+class testBM(unittest.TestCase):
     vis = False
 
     @unittest.skipIf(not vis, "No Visualisation Required")
@@ -42,7 +42,7 @@ class testBM:
 
     def test_bm_expectation(self):
         process = BrownianMotion(initial=1.0, drift=2.0, scale=1.0)
-        # process.plot(n=100, N=5)
+        process.sample(n=100)
         exp1 = process.process_expectation()
         ts = process.times
         exp2 = process.marginal_expectation(ts)
