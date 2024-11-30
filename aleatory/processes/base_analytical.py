@@ -32,6 +32,7 @@ class SPAnalytical(StochasticProcess):
         """
         self.n = n
         self.N = N
+        self._empirical_marginals = None # Cleaning the empirical marginals from previous simulations
         self.paths = [self.sample(n) for _ in range(N)]
         return self.paths
 
@@ -71,7 +72,6 @@ class SPAnalytical(StochasticProcess):
     def process_expectation(self):
         return self._process_expectation()
 
-
     def _process_variance(self):
         return self.estimate_variances()
 
@@ -102,9 +102,9 @@ class SPAnalytical(StochasticProcess):
         """
         self.simulate(n, N)
         if title:
-            figure = plot_paths(self.times, self.paths, title=title, **fig_kw)
+            figure = plot_paths(times=self.times, paths=self.paths, title=title, **fig_kw)
         else:
-            figure = plot_paths(self.times, self.paths, title=self.name, **fig_kw)
+            figure = plot_paths(times=self.times, paths=self.paths,  title=self.name, **fig_kw)
         return figure
 
     def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, title=None, **fig_kw):
