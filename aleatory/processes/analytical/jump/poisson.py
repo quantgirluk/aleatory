@@ -122,14 +122,13 @@ class PoissonProcess(BaseProcess):
             if T is not None:
                 ax.set_xlim(right=T)
             if jumps is not None:
-                ax.set_ylim(top=jumps+2)
+                ax.set_ylim(top=jumps + 2)
             plt.show()
 
         return fig
 
-
     def draw(self, N, T=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", envelope=True,
-                  marginal=True, colorspos=None, **fig_kw):
+             marginal=True, colorspos=None, **fig_kw):
 
         title = self.name
         self.simulate(N, T=T)
@@ -209,4 +208,3 @@ class PoissonProcess(BaseProcess):
             plt.show()
 
         return fig
-

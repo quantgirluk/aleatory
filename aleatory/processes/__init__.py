@@ -9,6 +9,10 @@ from aleatory.processes.analytical.besq import BESQProcess
 from aleatory.processes.analytical.brownian_bridge import BrownianBridge
 from aleatory.processes.analytical.brownian_excursion import BrownianExcursion
 from aleatory.processes.analytical.brownian_meander import BrownianMeander
+
+from aleatory.processes.analytical.jump.random_walk import GeneralRandomWalk
+from aleatory.processes.analytical.jump.random_walk import RandomWalk
+from aleatory.processes.analytical.jump.poisson import PoissonProcess
+
 from aleatory.processes.euler_maruyama.ckls_process import CKLSProcess
 from aleatory.processes.euler_maruyama.cev_process import CEVProcess
-from aleatory.processes.jump.poisson import PoissonProcess
