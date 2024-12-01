@@ -3,7 +3,7 @@ import numpy as np
 
 from aleatory.processes import (BrownianMotion, GBM, Vasicek, OUProcess, CIRProcess, CEVProcess, BESProcess,
                                 BESQProcess, BrownianBridge, BrownianExcursion, BrownianMeander,
-                                CKLSProcess)
+                                CKLSProcess, RandomWalk, PoissonProcess)
 
 SAVE = False
 SAVE_PATH = '../docs/source/_static/'
@@ -104,9 +104,21 @@ def test_figures_examples():
 
 def test_charts_orientation():
     for process in [BrownianMotion(), Vasicek()]:
-        process.draw(n=100, N=200, envelope=False, figsize=(12, 6))
         process.draw(n=100, N=200, envelope=False, orientation='horizontal', figsize=(12, 6))
-        process.draw(n=100, N=200, envelope=False, orientation='vertical', figsize=(12, 6), )
+        process.draw(n=100, N=200, envelope=False, orientation='vertical', figsize=(12, 6))
+
+
+def test_charts_styles():
+    for sty in ["steps", "points", "linear"]:
+        for process in [Vasicek()]:
+            process.plot(n=100, N=200, figsize=(12, 6), plot_style=sty)
+            process.draw(n=100, N=200, envelope=False, figsize=(12, 6), draw_style=sty)
+
+
+def test_poisson():
+    process = PoissonProcess()
+    process.plot(N=10, T=100)
+    process.draw(N=100, T=100, envelope=False, figsize=(12, 8))
 
 
 def test_charts_type():
