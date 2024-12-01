@@ -50,11 +50,18 @@ def times_to_increments(times):
     return check_increments(times)
 
 
-def plot_paths(times, paths, style="seaborn-v0_8-whitegrid", title=None, **fig_kw):
+def plot_paths(times, paths, style="seaborn-v0_8-whitegrid", title=None, plot_style="linear", **fig_kw):
     with plt.style.context(style):
         fig, ax = plt.subplots(**fig_kw)
         for p in paths:
-            ax.plot(times, p)
+            if plot_style == 'points':
+                ax.scatter(times, p, s=7)
+            elif plot_style == 'steps':
+                ax.step(times, p)
+            elif plot_style == 'linear':
+                ax.plot(times, p)
+            else:
+                raise ValueError("plot_style must be 'points', 'steps', or 'linear'.")
         ax.set_title(title)
         ax.set_xlabel('$t$')
         ax.set_ylabel('$X(t)$')
@@ -102,7 +109,7 @@ def draw_paths(times, paths, N, expectations, title=None, KDE=False, marginal=Fa
 def draw_paths_horizontal(times, paths, N, expectations=None, title=None, KDE=False, marginal=False, marginalT=None,
                           envelope=False,
                           lower=None, upper=None,
-                          style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", colorspos=None,
+                          style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", colorspos=None, draw_style='linear',
                           **fig_kw):
     cm = plt.colormaps[colormap]
     last_points = [path[-1] for path in paths]
@@ -139,7 +146,14 @@ def draw_paths_horizontal(times, paths, N, expectations=None, title=None, KDE=Fa
             ax2.set_title('$X_T$')
 
             for i in range(N):
-                ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
+                if draw_style == 'points':
+                    ax1.scatter(times, paths[i], s=7, color=cm(colors[i]))
+                elif draw_style == 'steps':
+                    ax1.step(times, paths[i], color=cm(colors[i]))
+                elif draw_style == 'linear':
+                    ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
+                else:
+                    raise ValueError("plot_style must be 'points', 'steps', or 'linear'.")
 
             if expectations is not None:
                 ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
@@ -176,7 +190,9 @@ def draw_paths_horizontal(times, paths, N, expectations=None, title=None, KDE=Fa
 
 def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, marginal=False, marginalT=None,
                         envelope=False,
-                        lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", **fig_kw):
+                        lower=None, upper=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r",
+                        draw_style="linear",
+                        **fig_kw):
     with plt.style.context(style):
 
         cm = plt.colormaps[colormap]
@@ -212,7 +228,15 @@ def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, ma
             ax2.yaxis.tick_right()
 
             for i in range(N):
-                ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
+                if draw_style == 'points':
+                    ax1.scatter(times, paths[i], s=7, color=cm(colors[i]))
+                elif draw_style == 'steps':
+                    ax1.step(times, paths[i], color=cm(colors[i]))
+                elif draw_style == 'linear':
+                    ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
+                else:
+                    raise ValueError("plot_style must be 'points', 'steps', or 'linear'.")
+
             ax1.plot(times, expectations, '--', lw=1.75, label='$E[X_t]$')
             if envelope:
                 ax1.fill_between(times, upper, lower, alpha=0.25, color='grey')
