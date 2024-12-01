@@ -112,7 +112,7 @@ class RandomWalk(GeneralRandomWalk):
 
     def __init__(self, rng=None):
         super().__init__(p=0.5, rng=rng)
-        self.name = 'Random Walk'
+        self.name = 'Simple Random Walk'
 
     def __str__(self):
         return f'Random Walk with step sizes {self.step_sizes} and probabilities {self.probs}'
@@ -120,11 +120,3 @@ class RandomWalk(GeneralRandomWalk):
     def __repr__(self):
         return f'Random Walk (step_sizes={self.step_sizes}, probabilities={self.probs})'
 
-# p = GeneralRandomWalk(p=0.7)
-# p = RandomWalk()
-#
-# # p.plot(n=100, N=200, figsize=(12, 10), plot_style='steps')
-# # p.plot(n=100, N=200, figsize=(12, 10), plot_style='linear')
-#
-# p.draw(n=10, N=50, figsize=(14, 10), envelope=False)
-# p.draw(n=10, N=50, figsize=(14, 10), envelope=True)
