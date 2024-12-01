@@ -81,7 +81,7 @@ class GeneralRandomWalk(SPAnalytical, ABC):
             figure = plot_paths_random_walk(*args, times=self.times, paths=self.paths, title=self.name, **fig_kw)
         return figure
 
-    def draw(self, n, N, marginal=True, envelope=True, title=None, **fig_kw):
+    def draw(self, n, N, marginal=True, envelope=True, draw_style='steps', title=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
 
@@ -97,12 +97,15 @@ class GeneralRandomWalk(SPAnalytical, ABC):
         :param int N: number of paths to simulate
         :param bool marginal:  defaults to True
         :param bool envelope:   defaults to False
+        :param str draw_style: defaults to 'steps'
         :param str type:   defaults to  '3sigma'
         :param str title:  to be used to customise plot title. If not passed, the title defaults to the name of the process.
         :return:
         """
 
-        return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
+        return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope, title=title,
+                                      draw_style=draw_style,
+                                      **fig_kw)
 
 
 class RandomWalk(GeneralRandomWalk):
@@ -119,12 +122,9 @@ class RandomWalk(GeneralRandomWalk):
 
 # p = GeneralRandomWalk(p=0.7)
 # p = RandomWalk()
-# s = p.sample(n=10)
-# sim = p.simulate(n=100, N=10)
-# p.plot(n=100, N=10, figsize=(12, 10))
-# p.plot(n=100, N=50, figsize=(12, 10), plot_style='steps')
-# p.plot(n=100, N=50, figsize=(12, 10), plot_style='linear')
+#
+# # p.plot(n=100, N=200, figsize=(12, 10), plot_style='steps')
+# # p.plot(n=100, N=200, figsize=(12, 10), plot_style='linear')
 #
 # p.draw(n=10, N=50, figsize=(14, 10), envelope=False)
 # p.draw(n=10, N=50, figsize=(14, 10), envelope=True)
-# p.draw(n=300, N=200, figsize=(14, 10), envelope=True)
