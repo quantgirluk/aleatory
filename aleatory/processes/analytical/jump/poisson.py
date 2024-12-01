@@ -115,7 +115,7 @@ class PoissonProcess(BaseProcess):
             fig, ax = plt.subplots(**fig_kw)
             for p in paths:
                 counts = np.arange(0, len(p))
-                ax.step(p, counts)
+                ax.step(p, counts, where='post')
             ax.set_title(plot_title)
             ax.set_xlabel('$t$')
             ax.set_ylabel('$N(t)$')
@@ -172,7 +172,7 @@ class PoissonProcess(BaseProcess):
 
                 for i in range(N):
                     counts = np.arange(0, len(paths[i]))
-                    ax1.step(paths[i], counts, color=cm(colors[i]), lw=0.75)
+                    ax1.step(paths[i], counts, color=cm(colors[i]), lw=0.75, where='post')
 
                 if expectations is not None:
                     ax1.plot(times, expectations, '--', lw=1.75, label='$E[N_t]$')
@@ -192,7 +192,7 @@ class PoissonProcess(BaseProcess):
 
                 for i in range(N):
                     counts = np.arange(0, len(paths[i]))
-                    ax1.step(paths[i], counts, color=cm(colors[i]), lw=0.75)
+                    ax1.step(paths[i], counts, color=cm(colors[i]), lw=0.75, where='post')
 
                 if expectations is not None:
                     ax1.plot(times, expectations, '--', lw=1.75, label='$E[N_t]$')
