@@ -58,7 +58,7 @@ class GaltonWatson(SPAnalytical):
         self.times = np.arange(0, len(self.paths[0]))
         return self.paths
 
-    def plot(self, N, generations=None, plot_style="steps",
+    def plot(self, N, generations=None, mode="steps",
              style="seaborn-v0_8-whitegrid", title=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process. Simple plot of times
@@ -73,18 +73,18 @@ class GaltonWatson(SPAnalytical):
         with plt.style.context(style):
             fig, ax = plt.subplots(**fig_kw)
             for p in paths:
-                if plot_style == 'points':
+                if mode == 'points':
                     ax.scatter(times, p, s=7)
-                elif plot_style == 'steps':
+                elif mode == 'steps':
                     ax.step(times, p, where='post')
-                elif plot_style == 'linear':
+                elif mode == 'linear':
                     ax.plot(times, p)
-                elif plot_style == 'points+steps':
+                elif mode == 'points+steps':
                     ax.step(times, p, where='post', alpha=0.5)
                     color = plt.gca().lines[-1].get_color()
                     ax.plot(times, p, 'o', color=color)
                 else:
-                    raise ValueError("plot_style must be 'points', 'steps', 'points+steps' or 'linear'.")
+                    raise ValueError("mode can only take values 'points', 'steps', 'points+steps' or 'linear'.")
 
             ax.set_title(plot_title)
             ax.set_xlabel('$t$')
