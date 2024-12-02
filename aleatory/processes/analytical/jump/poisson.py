@@ -100,22 +100,40 @@ class PoissonProcess(BaseProcess):
         self.paths = [self.sample(jumps=jumps, T=T) for _ in range(N)]
         return self.paths
 
-    def plot(self, N, jumps=None, T=None, style="seaborn-v0_8-whitegrid", title=None, **fig_kw):
+    def plot(self, N, jumps=None, T=None, style="seaborn-v0_8-whitegrid", mode="steps", title=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process. Simple plot of times
-        versus process values as lines and/or markers.
+        versus process values as lines and/or markers
+        :param int N: number of paths to simulate
+        :param int jumps: number of jumps
+        :param float T: time T
+        :param str style: style of plot
+        :param str mode: type of plot
+        :param str title: title of plot
         """
+
+        if jumps and T:
+            raise ValueError("Only one must be provided either jumps or T")
 
         plot_title = title if title else self.name
         self.simulate(N, jumps=jumps, T=T)
         paths = self.paths
-        # max_time = np.max(np.hstack(paths))
 
         with plt.style.context(style):
             fig, ax = plt.subplots(**fig_kw)
             for p in paths:
                 counts = np.arange(0, len(p))
-                ax.step(p, counts, where='post')
+                if mode == 'points':
+                    ax.scatter(p, counts, s=10)
+                elif mode == 'steps':
+                    ax.step(p, counts, where='post', linewidth=1.25)
+                elif mode == 'linear':
+                    ax.plot(p, counts)
+                elif mode == 'points+steps':
+                    ax.step(p, counts, where='post', alpha=0.5)
+                    color = plt.gca().lines[-1].get_color()
+                    ax.plot(p, counts, 'o', color=color, markersize=6)
+
             ax.set_title(plot_title)
             ax.set_xlabel('$t$')
             ax.set_ylabel('$N(t)$')
@@ -128,9 +146,9 @@ class PoissonProcess(BaseProcess):
         return fig
 
     def draw(self, N, T=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", envelope=True,
-             marginal=True, colorspos=None, **fig_kw):
+             marginal=True, mode="steps", colorspos=None, title=None, **fig_kw):
 
-        title = self.name
+        title = title if title else self.name
         self.simulate(N, T=T)
         paths = self.paths
 
@@ -170,15 +188,22 @@ class PoissonProcess(BaseProcess):
                 plt.setp(ax2.get_yticklabels(), visible=False)
                 ax2.set_title('$N_T$')
 
-                for i in range(N):
-                    counts = np.arange(0, len(paths[i]))
-                    ax1.step(paths[i], counts, color=cm(colors[i]), lw=0.75, where='post')
-
+                for i, p in enumerate(paths):
+                    counts = np.arange(0, len(p))
+                    if mode == 'points':
+                        ax1.scatter(p, counts, color=cm(colors[i]), s=10)
+                    elif mode == 'steps':
+                        ax1.step(p, counts, color=cm(colors[i]), where='post', linewidth=1.25)
+                    elif mode == 'points+steps':
+                        ax1.step(p, counts, color=cm(colors[i]), where='post', linewidth=1.25)
+                        ax1.plot(p, counts, 'o', color=cm(colors[i]), markersize=6)
+                    else:
+                        raise ValueError("mode can only take values 'points', 'steps' or 'points+steps'")
                 if expectations is not None:
                     ax1.plot(times, expectations, '--', lw=1.75, label='$E[N_t]$')
                     ax1.legend()
                 if envelope:
-                    ax1.fill_between(times, upper, lower, alpha=0.25, color='grey')
+                    ax1.fill_between(times, upper, lower, alpha=0.25, color='silver')
                 plt.subplots_adjust(wspace=0.2, hspace=0.5)
 
             else:
@@ -198,7 +223,7 @@ class PoissonProcess(BaseProcess):
                     ax1.plot(times, expectations, '--', lw=1.75, label='$E[N_t]$')
                     ax1.legend()
                 if envelope:
-                    ax1.fill_between(times, upper, lower, color='grey', alpha=0.25)
+                    ax1.fill_between(times, upper, lower, color='lightgray', alpha=0.25)
 
             fig.suptitle(title)
             ax1.set_xlim(right=T)
@@ -208,3 +233,4 @@ class PoissonProcess(BaseProcess):
             plt.show()
 
         return fig
+
