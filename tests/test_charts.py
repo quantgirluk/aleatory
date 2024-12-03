@@ -108,11 +108,11 @@ def test_charts_orientation():
         process.draw(n=100, N=200, envelope=False, orientation='vertical', figsize=(12, 6))
 
 
-def test_charts_styles():
+def test_charts_modes():
     for sty in ["steps", "points", "linear"]:
         for process in [Vasicek()]:
-            process.plot(n=100, N=200, figsize=(12, 6), plot_style=sty)
-            process.draw(n=100, N=200, envelope=False, figsize=(12, 6), draw_style=sty)
+            process.plot(n=100, N=200, figsize=(12, 6), mode=sty)
+            process.draw(n=100, N=200, envelope=False, figsize=(12, 6), mode=sty)
 
 
 def test_poisson():

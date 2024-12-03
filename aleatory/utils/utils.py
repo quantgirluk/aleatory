@@ -50,18 +50,18 @@ def times_to_increments(times):
     return check_increments(times)
 
 
-def plot_paths(times, paths, style="seaborn-v0_8-whitegrid", title=None, plot_style="linear", **fig_kw):
+def plot_paths(times, paths, style="seaborn-v0_8-whitegrid", title=None, mode="linear", **fig_kw):
     with plt.style.context(style):
         fig, ax = plt.subplots(**fig_kw)
         for p in paths:
-            if plot_style == 'points':
+            if mode == 'points':
                 ax.scatter(times, p, s=7)
-            elif plot_style == 'steps':
+            elif mode == 'steps':
                 ax.step(times, p, where='post')
-            elif plot_style == 'linear':
+            elif mode == 'linear':
                 ax.plot(times, p)
             else:
-                raise ValueError("plot_style must be 'points', 'steps', or 'linear'.")
+                raise ValueError("mode must be 'points', 'steps', or 'linear'.")
         ax.set_title(title)
         ax.set_xlabel('$t$')
         ax.set_ylabel('$X(t)$')
@@ -85,7 +85,7 @@ def plot_paths_random_walk(*args, times, paths, style="seaborn-v0_8-whitegrid", 
                 color = plt.gca().lines[-1].get_color()
                 ax.plot(times, p, 'o', color=color)
             else:
-                raise ValueError("plot_style must be 'points', 'steps', or 'points+steps'.")
+                raise ValueError("mode must be 'points', 'steps', or 'points+steps'.")
         ax.set_title(title)
         ax.set_xlabel('$t$')
         ax.set_ylabel('$X(t)$')
