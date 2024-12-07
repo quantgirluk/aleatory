@@ -154,6 +154,9 @@ def draw_paths_horizontal(times, paths, N, expectations=None, title=None, KDE=Fa
                     ax1.scatter(times, paths[i], s=7, color=cm(colors[i]))
                 elif mode == 'steps':
                     ax1.step(times, paths[i], color=cm(colors[i]), where='post')
+                elif mode in ['steps+points', 'points+steps']:
+                    ax1.step(times, paths[i], color=cm(colors[i]), where='post')
+                    ax1.scatter(times, paths[i], s=7, color=cm(colors[i]))
                 elif mode == 'linear':
                     ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
                 else:
@@ -236,6 +239,9 @@ def draw_paths_vertical(times, paths, N, expectations, title=None, KDE=False, ma
                     ax1.scatter(times, paths[i], s=7, color=cm(colors[i]))
                 elif mode == 'steps':
                     ax1.step(times, paths[i], color=cm(colors[i]), where='post')
+                elif mode in ['steps+points', 'points+steps']:
+                    ax1.step(times, paths[i], color=cm(colors[i]), where='post')
+                    ax1.scatter(times, paths[i], s=7, color=cm(colors[i]))
                 elif mode == 'linear':
                     ax1.plot(times, paths[i], '-', lw=1.0, color=cm(colors[i]))
                 else:
