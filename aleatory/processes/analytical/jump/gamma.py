@@ -1,6 +1,7 @@
 """
 Gamma Process
 """
+
 import numpy as np
 from scipy.stats import gamma
 from aleatory.utils.utils import check_positive_number, get_times
@@ -15,19 +16,21 @@ class GammaProcess(SPAnalytical):
         super().__init__(T=T, rng=rng, initial=0.0)
         self.mu = mu
         self.nu = nu
-        self.name = "Gamma Process"
+        self.name = f"Gamma Process X($\\mu$={self.mu}, $\\nu$={self.nu})"
         self.n = None
         self.times = None
-        self.shape = self.mu ** 2 / self.nu
+        self.shape = self.mu**2 / self.nu
         self.scale = self.nu / self.mu
         self.rate = 1.0 / self.scale
-        self.gamma_increments = GammaIncrements(k=self.shape, theta=self.scale, T=self.T, rng=self.rng)
+        self.gamma_increments = GammaIncrements(
+            k=self.shape, theta=self.scale, T=self.T, rng=self.rng
+        )
 
     def __str__(self):
-        return f'Gamma Process with parameters mu = {self.mu} and nu = {self.nu}'
+        return f"Gamma Process with parameters mu = {self.mu} and nu = {self.nu}"
 
     def __repr__(self):
-        return f'GammaProcess(mu={self.mu}, nu={self.nu})'
+        return f"GammaProcess(mu={self.mu}, nu={self.nu})"
 
     @property
     def mu(self):
@@ -96,20 +99,73 @@ class GammaProcess(SPAnalytical):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        return np.full(len(times), self.nu)
+        return self.nu * times
 
     def marginal_expectation(self, times=None):
         expectations = self._process_expectation(times=times)
         return expectations
 
-    def marginal_variance(self, times):
+    def marginal_variance(self, times=None):
         variances = self._process_variance(times=times)
         return variances
 
+    def plot(self, n, N, mode="steps", title=None, **fig_kw):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process.
+        Simple plot of times versus process values as lines and/or markers.
 
-# p = GammaProcess(mu=1.0, nu=2.0, T=10)
-# # p.sample(n=10)
-# p.plot(n=100, N=200)
-# p.draw(n=10, N=200)
-# p.draw(n=100, N=200)
-# p.draw(n=100, N=200, envelope=True)
+        :parameter int n: number of steps in each path
+        :parameter int N: number of paths to simulate
+        :parameter str mode: defines the type of plot to produce
+        :parameter str title: string to customise plot title
+        :return:
+
+        """
+        self._plot_process(n=n, N=N, mode=mode, title=title, **fig_kw)
+
+    def draw(
+        self, n, N, marginal=True, envelope=False, mode="steps", title=None, **fig_kw
+    ):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process.
+        Visualisation shows
+        - times versus process values as lines
+        - the expectation of the process across time
+        - histogram showing the empirical marginal distribution :math:`X_T`
+        - probability density function of the marginal distribution :math:`X_T`
+        - envelope of confidence intervals
+
+        :param int n: number of steps in each path
+        :param int N: number of paths to simulate
+        :param bool marginal: defaults to True
+        :param bool envelope: defaults to False
+        :param mode: defines the type of plot to produce (e.g. "steps", "points" or "steps+points")
+        :param str title: string optional default to the name of the process
+        :return:
+        """
+        return self._draw_qqstyle(
+            n, N, marginal=marginal, mode=mode, envelope=envelope, title=title, **fig_kw
+        )
+
+
+# if __name__ == "__main__":
+#     import matplotlib.pyplot as plt
+#
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+#     p = GammaProcess(mu=2.0, nu=4.0, T=10.0)
+#     p.draw(n=100, N=200, figsize=(12, 8), style=qs)
+#     exps = p.process_expectation()
+#     vars = p.process_variance()
+#     p.plot(
+#         n=100,
+#         N=5,
+#         figsize=(12, 8),
+#         style=qs,
+#         title=f"5 Paths from a Gamma Process on $[0,10]$",
+#     )
+#     p.draw(n=100, N=200, figsize=(12, 8), style=qs)
+#     p = GammaProcess(mu=1.5, nu=0.5, T=10)
+#     p.draw(n=100, N=200, figsize=(12, 8), style=qs, colormap="twilight")
+#     p = GammaProcess(mu=2.0, nu=4.0, T=10)
+#     p.draw(n=100, N=200, envelope=True, figsize=(12, 8), style=qs, colormap="winter")

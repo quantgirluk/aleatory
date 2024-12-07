@@ -89,6 +89,26 @@ class SPAnalytical(StochasticProcess):
     def get_marginal(self, t):
         pass
 
+
+
+    def _plot_process(self, n, N, title=None, **fig_kw):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process.
+        Simple plot of times versus process values as lines and/or markers.
+
+        :parameter int n: number of steps in each path
+        :parameter int N: number of paths to simulate
+        :parameter str title: string to customise plot title
+        :return:
+
+        """
+        self.simulate(n, N)
+        if title:
+            figure = plot_paths(times=self.times, paths=self.paths, title=title, **fig_kw)
+        else:
+            figure = plot_paths(times=self.times, paths=self.paths,  title=self.name, **fig_kw)
+        return figure
+
     def plot(self, n, N, title=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
