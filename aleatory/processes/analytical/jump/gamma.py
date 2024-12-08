@@ -148,13 +148,22 @@ class GammaProcess(SPAnalytical):
         )
 
 
-# if __name__ == "__main__":
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#     p = GammaProcess(mu=2.0, nu=4.0, T=10.0)
-#     p.draw(n=100, N=200, figsize=(12, 8), style=qs)
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+    p = GammaProcess(T=10.0)
+
+    from aleatory.utils.utils import check_increments
+
+    for i in range(100):
+        sam = p.sample(n=100)
+        print(i)
+        check_increments(sam)
+
+    # p.draw(n=100, N=200, figsize=(12, 8), style=qs)
+
 #     exps = p.process_expectation()
 #     vars = p.process_variance()
 #     p.plot(
