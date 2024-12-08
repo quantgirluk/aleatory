@@ -75,7 +75,7 @@ class GammaIncrements(IndependentIncrements):
         super().__init__(T=T, rng=rng)
         self.name = "Gamma Independent Increments"
         self.k = k  # shape
-        self.theta = theta  #scale
+        self.theta = theta  # scale
 
     def _sample(self, n):
         """
@@ -87,10 +87,6 @@ class GammaIncrements(IndependentIncrements):
         self.n = n
         delta_t = 1.0 * self.T / self.n
         self.times = get_times(self.T, self.n)
-
-        # alpha = (self.mu ** 2 / self.nu) * delta_t
-        # beta = self.nu / self.mu
-        # noise = self.rng.gamma(alpha, beta, size=self.n)
         noise = self.rng.gamma(self.k * delta_t, self.theta, size=self.n)
         return noise
 
@@ -105,6 +101,8 @@ class GammaIncrements(IndependentIncrements):
         increments = times_to_increments(times)
         self.times = times
 
-        noise = np.array([self.rng.gamma(shape=self.k * inc, scale=self.theta) for inc in increments])
+        noise = np.array(
+            [self.rng.gamma(shape=self.k * inc, scale=self.theta) for inc in increments]
+        )
         noise = np.concatenate(([0], noise))
         return noise
