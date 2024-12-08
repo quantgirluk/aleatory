@@ -1,4 +1,5 @@
 """Brownian Motion"""
+
 import numpy as np
 from scipy.stats import norm
 
@@ -57,7 +58,9 @@ class BrownianMotion(SPAnalytical):
         self.scale = scale
         self.initial = initial
         standard_condition = drift == 0.0 and scale == 1.0 and initial == 0.0
-        self.name = "Brownian Motion" if standard_condition else "Arithmetic Brownian Motion"
+        self.name = (
+            "Brownian Motion" if standard_condition else "Arithmetic Brownian Motion"
+        )
         self.n = None
         self.times = None
         self.gaussian_increments = GaussianIncrements(T=self.T, rng=self.rng)
@@ -95,7 +98,9 @@ class BrownianMotion(SPAnalytical):
         increments = np.cumsum(self.gaussian_increments.sample(n - 1))
         increments = np.insert(increments, 0, [0])
 
-        path = np.full(n, self.initial) + self.drift * self.times + self.scale * increments
+        path = (
+            np.full(n, self.initial) + self.drift * self.times + self.scale * increments
+        )
         # bm = np.cumsum(self.scale *self.gaussian_increments.sample(n - 1))
         # bm = np.insert(bm, 0, [0])
         # if self.drift == 0:
@@ -106,9 +111,14 @@ class BrownianMotion(SPAnalytical):
 
     def __str__(self):
 
-        return "Brownian Motion with drift={drift}, and scale={scale} on [0, {T}].".format(
-            T=str(self.T), drift=str(self.drift), scale=str(self.scale),
-            initial=str(self.initial))
+        return (
+            "Brownian Motion with drift={drift}, and scale={scale} on [0, {T}].".format(
+                T=str(self.T),
+                drift=str(self.drift),
+                scale=str(self.scale),
+                initial=str(self.initial),
+            )
+        )
 
     def sample(self, n):
         """
@@ -127,7 +137,11 @@ class BrownianMotion(SPAnalytical):
         increments = np.cumsum(self.gaussian_increments.sample_at(times))
         # increments = np.insert(increments, 0, [0])
 
-        path = np.full(len(self.times), self.initial) + self.drift * self.times + self.scale * increments
+        path = (
+            np.full(len(self.times), self.initial)
+            + self.drift * self.times
+            + self.scale * increments
+        )
         # bm = np.cumsum(self.scale * self.gaussian_increments.sample_at(times))
 
         #
@@ -153,7 +167,7 @@ class BrownianMotion(SPAnalytical):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        return (self.scale ** 2) * times
+        return (self.scale**2) * times
 
     def _process_stds(self, times=None):
         if times is None:
@@ -165,7 +179,9 @@ class BrownianMotion(SPAnalytical):
         return stds
 
     def get_marginal(self, t):
-        marginal = norm(loc=self.initial + self.drift * t, scale=self.scale * np.sqrt(t))
+        marginal = norm(
+            loc=self.initial + self.drift * t, scale=self.scale * np.sqrt(t)
+        )
         return marginal
 
     def marginal_expectation(self, times=None):
@@ -176,7 +192,9 @@ class BrownianMotion(SPAnalytical):
         variances = self._process_variance(times=times)
         return variances
 
-    def draw(self, n, N, marginal=True, envelope=False, type='3sigma', title=None, **fig_kw):
+    def draw(
+        self, n, N, marginal=True, envelope=False, type="3sigma", title=None, **fig_kw
+    ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
 
@@ -197,9 +215,19 @@ class BrownianMotion(SPAnalytical):
         :return:
         """
 
-        if type == '3sigma':
-            return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
-        elif type == 'qq':
-            return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
+        if type == "3sigma":
+            return self._draw_3sigmastyle(
+                n=n, N=N, marginal=marginal, envelope=envelope, title=title, **fig_kw
+            )
+        elif type == "qq":
+            return self._draw_qqstyle(
+                n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw
+            )
         else:
             raise ValueError
+
+
+if __name__ == "__main__":
+
+    p = BrownianMotion()
+    p.draw(n=20, N=100, figsize=(12, 7))
