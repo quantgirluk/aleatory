@@ -1,31 +1,39 @@
 """
 Random Walk
 """
+
 from aleatory.processes.base_analytical import SPAnalytical
 from abc import ABC
-from aleatory.utils.utils import check_positive_integer, get_times, plot_paths_random_walk
+from aleatory.utils.utils import (
+    check_positive_integer,
+    get_times,
+    plot_paths_random_walk,
+)
 import numpy as np
 
 
-class GeneralRandomWalk(SPAnalytical, ABC):
+class SimpleRandomWalk(SPAnalytical, ABC):
 
-    def __init__(self, p, rng=None):
+    def __init__(self, p=0.5, rng=None):
         super().__init__(rng=rng)
-        self.step_sizes = (1., -1.)
+        self.step_sizes = (1.0, -1.0)
         self.p = p
-        self.q = 1. - p
+        self.q = 1.0 - p
         self.probs = (self.p, self.q)
         self.paths = None
         self.n = None
         self.N = None
-        self.name = "General Random Walk"
+        if p == 0.5:
+            self.name = "Simple Random Walk"
+        else:
+            self.name = f"Simple Random Walk with p={self.p}"
         self.times = None
 
     def __str__(self):
-        return f'General Random Walk with step sizes {self.step_sizes} and probabilities {self.probs}'
+        return f"General Random Walk with step sizes {self.step_sizes} and probabilities {self.probs}"
 
     def __repr__(self):
-        return f'GeneralRandomWalk(step_sizes={self.step_sizes}, probabilities={self.probs})'
+        return f"GeneralRandomWalk(step_sizes={self.step_sizes}, probabilities={self.probs})"
 
     def _sample_random_walk_steps(self, n):
         """Generate a sample of a general random walk increments"""
@@ -76,12 +84,18 @@ class GeneralRandomWalk(SPAnalytical, ABC):
         """
         self.simulate(n, N)
         if title:
-            figure = plot_paths_random_walk(*args, times=self.times, paths=self.paths, title=title, **fig_kw)
+            figure = plot_paths_random_walk(
+                *args, times=self.times, paths=self.paths, title=title, **fig_kw
+            )
         else:
-            figure = plot_paths_random_walk(*args, times=self.times, paths=self.paths, title=self.name, **fig_kw)
+            figure = plot_paths_random_walk(
+                *args, times=self.times, paths=self.paths, title=self.name, **fig_kw
+            )
         return figure
 
-    def draw(self, n, N, marginal=True, envelope=False, mode='steps', title=None, **fig_kw):
+    def draw(
+        self, n, N, marginal=True, envelope=False, mode="steps", title=None, **fig_kw
+    ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
 
@@ -102,24 +116,44 @@ class GeneralRandomWalk(SPAnalytical, ABC):
         :return:
         """
 
-        return self._draw_3sigmastyle(n=n, N=N, marginal=marginal, envelope=envelope, title=title,
-                                      mode=mode,
-                                      **fig_kw)
+        return self._draw_3sigmastyle(
+            n=n,
+            N=N,
+            marginal=marginal,
+            envelope=envelope,
+            title=title,
+            mode=mode,
+            **fig_kw,
+        )
 
 
-class RandomWalk(GeneralRandomWalk):
+class RandomWalk(SimpleRandomWalk):
 
     def __init__(self, rng=None):
+
         super().__init__(p=0.5, rng=rng)
-        self.name = 'Simple Random Walk'
 
-    def __str__(self):
-        return f'Random Walk with step sizes {self.step_sizes} and probabilities {self.probs}'
 
-    def __repr__(self):
-        return f'Random Walk (step_sizes={self.step_sizes}, probabilities={self.probs})'
+if __name__ == "__main__":
 
-# if __name__ == "__main__":
-#     p = RandomWalk()
-#     p.draw(n=10, N=200)
-#     p.plot(n=10, N=200)
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    for prob in [0.25, 0.5, 0.75]:
+        p = SimpleRandomWalk(p=prob)
+
+        p.plot(
+            n=10,
+            N=10,
+            figsize=(12, 7),
+            mode="steps+points",
+            style=qs,
+        )
+        p.draw(
+            n=100,
+            N=200,
+            figsize=(12, 7),
+            style=qs,
+        )
