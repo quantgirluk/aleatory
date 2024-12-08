@@ -12,33 +12,43 @@ from aleatory.utils.utils import (
 import numpy as np
 
 
-class SimpleRandomWalk(SPAnalytical, ABC):
+class GeneralRandomWalk(SPAnalytical, ABC):
 
-    def __init__(self, p=0.5, rng=None):
+    def __init__(
+        self,
+        step_dist=None,
+        step_args=None,
+        step_kwargs=None,
+        normalised=False,
+        rng=None,
+    ):
         super().__init__(rng=rng)
-        self.step_sizes = (1.0, -1.0)
-        self.p = p
-        self.q = 1.0 - p
-        self.probs = (self.p, self.q)
+        self.step_dist = step_dist
+        self.step_args = step_args if step_args is not None else tuple()
+        self.step_kwargs = step_kwargs if step_kwargs is not None else dict()
+        self.mean = self.step_dist.mean()
+        self.std = self.step_dist.std()
+        self.normalised = normalised
         self.paths = None
         self.n = None
         self.N = None
-        if p == 0.5:
-            self.name = "Simple Random Walk"
-        else:
-            self.name = f"Simple Random Walk with p={self.p}"
+        self.name = "General Random Walk"
         self.times = None
 
     def __str__(self):
-        return f"General Random Walk with step sizes {self.step_sizes} and probabilities {self.probs}"
+        return f"General Random Walk"
 
     def __repr__(self):
-        return f"GeneralRandomWalk(step_sizes={self.step_sizes}, probabilities={self.probs})"
+        return f"GeneralRandomWalk"
 
     def _sample_random_walk_steps(self, n):
         """Generate a sample of a general random walk increments"""
         check_positive_integer(n)
-        steps = self.rng.choice(self.step_sizes, p=self.probs, size=n)
+        steps = self.step_dist.rvs(size=n)
+
+        if self.normalised:
+            steps = (steps - self.mean) / self.std
+        # steps = self.rng.choice(self.step_sizes, p=self.probs, size=n)
         return steps
 
     def _sample_random_walk(self, n):
@@ -52,24 +62,6 @@ class SimpleRandomWalk(SPAnalytical, ABC):
     def sample(self, n):
         sample = self._sample_random_walk(n)
         return sample
-
-    def _process_expectation(self, times=None):
-        if times is None:
-            times = self.times
-        return times * (self.p - self.q)
-
-    def _process_variance(self, times=None):
-        if times is None:
-            times = self.times
-        return times * 4.0 * self.p * self.q
-
-    def marginal_expectation(self, times=None):
-        expectations = self._process_expectation(times=times)
-        return expectations
-
-    def marginal_variance(self, times):
-        variances = self._process_variance(times=times)
-        return variances
 
     def plot(self, *args, n, N, title=None, **fig_kw):
         """
@@ -127,33 +119,63 @@ class SimpleRandomWalk(SPAnalytical, ABC):
         )
 
 
-class RandomWalk(SimpleRandomWalk):
-
-    def __init__(self, rng=None):
-
-        super().__init__(p=0.5, rng=rng)
-
-
 if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
+    from scipy.stats import norm, expon, binom
 
     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
     plt.style.use(qs)
 
-    for prob in [0.25, 0.5, 0.75]:
-        p = SimpleRandomWalk(p=prob)
+    p = GeneralRandomWalk(step_dist=norm, normalised=True)
+    p.plot(
+        n=10,
+        N=20,
+        figsize=(12, 7),
+        title="Random Walk with Normalised Gaussian Steps",
+        mode="steps+points",
+        style=qs,
+    )
+    p.draw(
+        n=100,
+        N=200,
+        figsize=(12, 7),
+        title="Random Walk with Normalised Gaussian Steps",
+        style=qs,
+    )
 
-        p.plot(
-            n=10,
-            N=10,
-            figsize=(12, 7),
-            mode="steps+points",
-            style=qs,
-        )
-        p.draw(
-            n=100,
-            N=200,
-            figsize=(12, 7),
-            style=qs,
-        )
+    p = GeneralRandomWalk(step_dist=expon, normalised=True)
+    p.plot(
+        n=50,
+        N=200,
+        figsize=(12, 7),
+        title="Random Walk with Normalised Exponential Steps",
+        mode="steps+points",
+        style=qs,
+    )
+    p.draw(
+        n=100,
+        N=200,
+        figsize=(12, 7),
+        title="Random Walk with Normalised Exponential Steps",
+        style=qs,
+        colormap="viridis",
+    )
+
+    p = GeneralRandomWalk(step_dist=binom(n=10, p=0.2), normalised=True)
+    p.plot(
+        n=10,
+        N=200,
+        figsize=(12, 7),
+        title="Random Walk Normalised Binomial Steps",
+        mode="steps+points",
+        style=qs,
+    )
+    p.draw(
+        n=20,
+        N=200,
+        figsize=(12, 7),
+        title="Random Walk Normalised Binomial Steps",
+        style=qs,
+        colormap="magma",
+    )
