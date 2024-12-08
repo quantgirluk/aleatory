@@ -32,7 +32,9 @@ class SPAnalytical(StochasticProcess):
         """
         self.n = n
         self.N = N
-        self._empirical_marginals = None # Cleaning the empirical marginals from previous simulations
+        self._empirical_marginals = (
+            None  # Cleaning the empirical marginals from previous simulations
+        )
         self.paths = [self.sample(n) for _ in range(N)]
         return self.paths
 
@@ -86,10 +88,8 @@ class SPAnalytical(StochasticProcess):
         stds = self._process_stds()
         return stds
 
-    def get_marginal(self, t):
-        pass
-
-
+    # def get_marginal(self, t):
+    #     pass
 
     def _plot_process(self, n, N, title=None, **fig_kw):
         """
@@ -104,9 +104,13 @@ class SPAnalytical(StochasticProcess):
         """
         self.simulate(n, N)
         if title:
-            figure = plot_paths(times=self.times, paths=self.paths, title=title, **fig_kw)
+            figure = plot_paths(
+                times=self.times, paths=self.paths, title=title, **fig_kw
+            )
         else:
-            figure = plot_paths(times=self.times, paths=self.paths,  title=self.name, **fig_kw)
+            figure = plot_paths(
+                times=self.times, paths=self.paths, title=self.name, **fig_kw
+            )
         return figure
 
     def plot(self, n, N, title=None, **fig_kw):
@@ -122,48 +126,88 @@ class SPAnalytical(StochasticProcess):
         """
         self.simulate(n, N)
         if title:
-            figure = plot_paths(times=self.times, paths=self.paths, title=title, **fig_kw)
+            figure = plot_paths(
+                times=self.times, paths=self.paths, title=title, **fig_kw
+            )
         else:
-            figure = plot_paths(times=self.times, paths=self.paths,  title=self.name, **fig_kw)
+            figure = plot_paths(
+                times=self.times, paths=self.paths, title=self.name, **fig_kw
+            )
         return figure
 
-    def _draw_paths(self, n, N, marginal=False, envelope=False, type=None, title=None, **fig_kw):
+    def _draw_paths(
+        self, n, N, marginal=False, envelope=False, type=None, title=None, **fig_kw
+    ):
         self.simulate(n, N)
         expectations = self._process_expectation()
 
+        marginal_available = getattr(self, "get_marginal", None)
+        marginal_available = callable(marginal_available)
+
         if envelope:
-            if type == '3sigma':
+            if type == "3sigma":
                 stds = self._process_stds()
                 upper = expectations + 3.0 * stds
                 lower = expectations - 3.0 * stds
             else:
-                marginals = [self.get_marginal(t) for t in self.times[1:]]
-                upper = [self.initial] + [m.ppf(0.005) for m in marginals]
-                lower = [self.initial] + [m.ppf(0.995) for m in marginals]
+                if marginal_available:
+                    marginals = [self.get_marginal(t) for t in self.times[1:]]
+                    upper = [self.initial] + [m.ppf(0.005) for m in marginals]
+                    lower = [self.initial] + [m.ppf(0.995) for m in marginals]
+                else:
+                    upper = self.estimate_quantiles(0.005)
+                    lower = self.estimate_quantiles(0.995)
         else:
             upper = None
             lower = None
 
-        if marginal:
+        if marginal and marginal_available:
             marginalT = self.get_marginal(self.T)
         else:
             marginalT = None
 
         chart_title = title if title else self.name
-        fig = draw_paths(times=self.times, paths=self.paths, N=N, title=chart_title, expectations=expectations,
-                         marginal=marginal, marginalT=marginalT, envelope=envelope, lower=lower, upper=upper,
-                         **fig_kw)
+        fig = draw_paths(
+            times=self.times,
+            paths=self.paths,
+            N=N,
+            title=chart_title,
+            expectations=expectations,
+            marginal=marginal,
+            marginalT=marginalT,
+            envelope=envelope,
+            lower=lower,
+            upper=upper,
+            **fig_kw,
+        )
         return fig
 
-    def _draw_qqstyle(self, n, N, marginal=False, envelope=False, title=None,
-                      **fig_kw):
+    def _draw_qqstyle(self, n, N, marginal=False, envelope=False, title=None, **fig_kw):
 
-        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='qq', title=title, **fig_kw)
+        fig = self._draw_paths(
+            n=n,
+            N=N,
+            marginal=marginal,
+            envelope=envelope,
+            type="qq",
+            title=title,
+            **fig_kw,
+        )
         return fig
 
-    def _draw_3sigmastyle(self, n, N, marginal=False, envelope=False, title=None, **fig_kw):
+    def _draw_3sigmastyle(
+        self, n, N, marginal=False, envelope=False, title=None, **fig_kw
+    ):
 
-        fig = self._draw_paths(n=n, N=N, marginal=marginal, envelope=envelope, type='3sigma', title=title, **fig_kw)
+        fig = self._draw_paths(
+            n=n,
+            N=N,
+            marginal=marginal,
+            envelope=envelope,
+            type="3sigma",
+            title=title,
+            **fig_kw,
+        )
         return fig
 
     def draw(self, n, N, marginal=True, envelope=False, title=None, **fig_kw):
@@ -183,4 +227,6 @@ class SPAnalytical(StochasticProcess):
         :param str title: string optional default to the name of the process
         :return:
         """
-        return self._draw_qqstyle(n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw)
+        return self._draw_qqstyle(
+            n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw
+        )
