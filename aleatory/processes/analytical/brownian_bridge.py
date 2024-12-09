@@ -1,6 +1,7 @@
 """
 Brownian Bridge
 """
+
 import numpy as np
 from scipy.stats import norm
 
@@ -35,6 +36,7 @@ class BrownianBridge(BrownianMotion):
     :param numpy.random.Generator rng: a custom random number generator
 
     """
+
     def __init__(self, initial=0.0, end=0.0, T=1.0, rng=None):
         """
         Parameters
@@ -48,17 +50,24 @@ class BrownianBridge(BrownianMotion):
         self.initial = initial
         self.end = end
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
-        self.name = "Brownian Bridge"
+        if self.initial == 0.0 and self.end == 0.0:
+            self.name = "Brownian Bridge"
+        else:
+            self.name = f"Brownian Bridge from {self.initial} to {self.end}"
         self.n = None
         self.times = None
 
     def __str__(self):
-        return "Brownian Bridge starting at  {a} and ending at  {b} on [0, {T}].".format(
-            T=str(self.T), a=str(self.initial), b=str(self.end))
+        return (
+            "Brownian Bridge starting at  {a} and ending at  {b} on [0, {T}].".format(
+                T=str(self.T), a=str(self.initial), b=str(self.end)
+            )
+        )
 
     def __repr__(self):
         return "BrownianBridge(initial={a}, end={b}, T={T})".format(
-            T=str(self.T), a=str(self.initial), b=str(self.end))
+            T=str(self.T), a=str(self.initial), b=str(self.end)
+        )
 
     @property
     def initial(self):
@@ -87,7 +96,12 @@ class BrownianBridge(BrownianMotion):
         a = self.initial
         b = self.end
         scaled_times = self.times / self.T
-        bridge_path = a * (1.0 - scaled_times) + b * scaled_times + brownian_path - scaled_times * brownian_path[-1]
+        bridge_path = (
+            a * (1.0 - scaled_times)
+            + b * scaled_times
+            + brownian_path
+            - scaled_times * brownian_path[-1]
+        )
         return bridge_path
 
     def _sample_brownian_bridge_at(self, times):
@@ -96,7 +110,11 @@ class BrownianBridge(BrownianMotion):
         a = self.initial
         b = self.end
         scaled_times = self.times / self.T
-        bridge_path = a * (1.0 - scaled_times) + b * scaled_times + (brownian_path - scaled_times * brownian_path[-1])
+        bridge_path = (
+            a * (1.0 - scaled_times)
+            + b * scaled_times
+            + (brownian_path - scaled_times * brownian_path[-1])
+        )
         return bridge_path
 
     def sample(self, n):
@@ -137,15 +155,20 @@ class BrownianBridge(BrownianMotion):
             lower = None
 
         chart_title = title if title else self.name
-        if 'marginal' in fig_kw:
-            fig_kw.pop('marginal')
-        if 'orientation' in fig_kw:
-            fig_kw.pop('orientation')
-        fig = draw_paths_with_end_point(times=self.times, paths=self.paths,
-                                        expectations=expectations, title=chart_title,
-                                        envelope=envelope,
-                                        lower=lower, upper=upper,
-                                        **fig_kw)
+        if "marginal" in fig_kw:
+            fig_kw.pop("marginal")
+        if "orientation" in fig_kw:
+            fig_kw.pop("orientation")
+        fig = draw_paths_with_end_point(
+            times=self.times,
+            paths=self.paths,
+            expectations=expectations,
+            title=chart_title,
+            envelope=envelope,
+            lower=lower,
+            upper=upper,
+            **fig_kw,
+        )
         return fig
 
     def draw(self, n, N, envelope=False, title=None, **fig_kw):
