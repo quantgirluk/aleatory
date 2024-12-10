@@ -270,7 +270,7 @@ def draw_paths_horizontal(
 
             for path, color in zip(paths, colors):
 
-                if mode == "linea":
+                if mode == "linear":
                     ax1.plot(times, path, "-", color=cm(color), lw=0.75)
                 elif mode == "steps":
                     ax1.step(times, path, color=cm(color), where="post")
