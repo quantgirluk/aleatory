@@ -1,6 +1,7 @@
 """
 Brownian Excursion
 """
+
 import numpy as np
 
 from aleatory.processes import BrownianBridge
@@ -23,9 +24,13 @@ class BrownianExcursion(BrownianBridge):
     :param numpy.random.Generator rng: a custom random number generator
 
     """
+
     def __init__(self, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
-        self.name = "Brownian Excursion"
+        if self.T == 1.0:
+            self.name = "Brownian Excursion"
+        else:
+            self.name = f"Brownian Excursion defined on [0,{self.T}]"
         self.description = "Brownian Excursion"
         self._brownian_bridge = BrownianBridge(initial=0.0, end=0.0, T=T, rng=rng)
         self.n = None
@@ -41,10 +46,13 @@ class BrownianExcursion(BrownianBridge):
         """Generate a random sample of the Brownian Excursion."""
         check_positive_integer(n)
         self.n = n
-        self.times = np.linspace(0, 1, n)
+        self.times = np.linspace(0, self.T, n)
         bridge_path = self._brownian_bridge.sample(n)
         id_bridge_min = np.argmin(bridge_path)
-        excursion_path = [bridge_path[(id_bridge_min + idx) % (n - 1)] - bridge_path[id_bridge_min] for idx in range(n)]
+        excursion_path = [
+            bridge_path[(id_bridge_min + idx) % (n - 1)] - bridge_path[id_bridge_min]
+            for idx in range(n)
+        ]
         return np.asarray(excursion_path)
 
     def _sample_brownian_excursion_at(self, times):
@@ -52,7 +60,10 @@ class BrownianExcursion(BrownianBridge):
         bridge_path = self._brownian_bridge.sample_at(times)
         id_bridge_min = np.argmin(bridge_path)
         n = len(times)
-        excursion_path = [bridge_path[(id_bridge_min + idx) % (n - 1)] - bridge_path[id_bridge_min] for idx in range(n)]
+        excursion_path = [
+            bridge_path[(id_bridge_min + idx) % (n - 1)] - bridge_path[id_bridge_min]
+            for idx in range(n)
+        ]
         return np.asarray(excursion_path)
 
     def sample(self, n):
@@ -65,14 +76,33 @@ class BrownianExcursion(BrownianBridge):
         if times is None:
             times = self.times
 
-        return np.sqrt(times * (1.0 - times)) * chi.mean(df=3)
+        return np.sqrt(times * (self.T - times) / self.T) * chi.mean(df=3)
 
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        return times * (1.0 - times) * chi.var(df=3)
+        return times * ((self.T - times) / self.T) * chi.var(df=3)
 
     def get_marginal(self, t):
-        scale = np.sqrt(t * (1.0 - t))
+        scale = np.sqrt(t * (self.T - t) / self.T)
         marginal = chi(df=3, scale=scale)
         return marginal
+
+
+# if __name__ == "__main__":
+#
+#     import matplotlib.pyplot as plt
+#
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+#
+#     for p, cm in [
+#         (BrownianExcursion(), "twilight"),
+#         (BrownianExcursion(T=2.0), "viridis"),
+#         (BrownianExcursion(T=10.0), "Accent"),
+#     ]:
+#
+#         p.draw(n=200, N=100, figsize=(12, 7), style=qs, colormap=cm, envelope=False)
+#
+#     p = BrownianExcursion()
+#     p.plot(n=500, N=5, figsize=(12, 7), style=qs)
