@@ -136,7 +136,15 @@ class SPAnalytical(StochasticProcess):
         return figure
 
     def _draw_paths(
-        self, n, N, marginal=False, envelope=False, type=None, title=None, **fig_kw
+        self,
+        n,
+        N,
+        marginal=False,
+        envelope=False,
+        type=None,
+        title=None,
+        empirical_envelope=False,
+        **fig_kw,
     ):
         self.simulate(n, N)
         expectations = self._process_expectation()
@@ -150,7 +158,7 @@ class SPAnalytical(StochasticProcess):
                 upper = expectations + 3.0 * stds
                 lower = expectations - 3.0 * stds
             else:
-                if marginal_available:
+                if marginal_available and empirical_envelope == False:
                     marginals = [self.get_marginal(t) for t in self.times[1:]]
                     upper = [self.initial] + [m.ppf(0.005) for m in marginals]
                     lower = [self.initial] + [m.ppf(0.995) for m in marginals]

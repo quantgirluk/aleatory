@@ -177,6 +177,7 @@ def draw_paths_horizontal(
     colormap="RdYlBu_r",
     colorspos=None,
     mode="linear",
+    estimate_quantiles=False,
     **fig_kw,
 ):
     cm = plt.colormaps[colormap]
@@ -220,9 +221,19 @@ def draw_paths_horizontal(
                     label=r"$\overline{X_T}$",
                 )
                 ax2.legend()
+
             elif marginal and marginalT:
                 marginaldist = marginalT
-                x = np.linspace(marginaldist.ppf(0.001), marginaldist.ppf(0.999), 100)
+                # lower_q = marginaldist.ppf(0.001)
+                # upper_q = marginaldist.ppf(0.999)
+
+                if estimate_quantiles:
+                    lower_val = np.min(last_points)
+                    upper_val = np.max(last_points)
+                else:
+                    lower_val = marginaldist.ppf(0.001)
+                    upper_val = marginaldist.ppf(0.999)
+                x = np.linspace(lower_val, upper_val, 100)
                 ax2.plot(
                     marginaldist.pdf(x), x, "-", lw=1.75, alpha=0.6, label="$X_T$ pdf"
                 )
@@ -235,17 +246,19 @@ def draw_paths_horizontal(
             ax2.set_title("$X_T$")
 
             for i in range(N):
-                if mode == "points":
+                if mode == "linear":
+                    ax1.plot(times, paths[i], "-", lw=1.0, color=cm(colors[i]))
+                elif mode == "points":
                     ax1.scatter(times, paths[i], s=7, color=cm(colors[i]))
                 elif mode == "steps":
                     ax1.step(times, paths[i], color=cm(colors[i]), where="post")
                 elif mode in ["steps+points", "points+steps"]:
                     ax1.step(times, paths[i], color=cm(colors[i]), where="post")
                     ax1.scatter(times, paths[i], s=7, color=cm(colors[i]))
-                elif mode == "linear":
-                    ax1.plot(times, paths[i], "-", lw=1.0, color=cm(colors[i]))
                 else:
-                    raise ValueError("mode must be 'points', 'steps', or 'linear'.")
+                    raise ValueError(
+                        "mode must be 'linear', 'points', 'steps', 'steps+points'."
+                    )
 
             if expectations is not None:
                 ax1.plot(times, expectations, "--", lw=1.75, label="$E[X_t]$")
@@ -272,13 +285,17 @@ def draw_paths_horizontal(
 
                 if mode == "linear":
                     ax1.plot(times, path, "-", color=cm(color), lw=0.75)
-                elif mode == "steps":
-                    ax1.step(times, path, color=cm(color), where="post")
                 elif mode in ["points"]:
                     ax1.scatter(times, path, s=7, color=cm(color))
+                elif mode == "steps":
+                    ax1.step(times, path, color=cm(color), where="post")
                 elif mode in ["steps+points", "points+steps"]:
                     ax1.step(times, path, color=cm(color), where="post")
                     ax1.scatter(times, path, s=7, color=cm(color))
+                else:
+                    raise ValueError(
+                        "mode must be 'linear', 'points', 'steps', 'steps+points'."
+                    )
             if expectations is not None:
                 ax1.plot(times, expectations, "--", lw=1.75, label="$E[X_t]$")
                 ax1.legend()
@@ -354,7 +371,11 @@ def draw_paths_vertical(
                 )
             elif marginal and marginalT:
                 marginaldist = marginalT
-                x = np.linspace(marginaldist.ppf(0.001), marginaldist.ppf(0.999), 100)
+
+                lower_val = np.min(last_points)
+                upper_val = np.max(last_points)
+                x = np.linspace(lower_val, upper_val, 100)
+                # x = np.linspace(marginaldist.ppf(0.001), marginaldist.ppf(0.999), 100)
                 ax2.plot(
                     x, marginaldist.pdf(x), "-", lw=1.75, alpha=0.6, label="$X_T$ pdf"
                 )
