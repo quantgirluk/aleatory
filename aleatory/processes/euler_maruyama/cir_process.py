@@ -45,11 +45,16 @@ class CIRProcess(SPEulerMaruyama):
         self.n = 1.0
         self.dt = 1.0 * self.T / self.n
         self.times = np.arange(0.0, self.T + self.dt, self.dt)
-        self.name = "CIR Process"
+        self.name = (
+            f"CIR Process $X(\\theta={self.theta}, \\mu={self.mu}, \\sigma={self.sigma})$"
+            f"\n starting at $x_0=${self.initial}"
+        )
 
         def f(x, _):
             # return self.theta * (self.mu - x)
-            return np.exp(-x) * (self.theta * (self.mu - np.exp(x)) - 0.5 * self.sigma ** 2)
+            return np.exp(-x) * (
+                self.theta * (self.mu - np.exp(x)) - 0.5 * self.sigma**2
+            )
 
         def g(x, _):
             # return self.sigma * np.sqrt(x)
@@ -64,9 +69,19 @@ class CIRProcess(SPEulerMaruyama):
 
     @theta.setter
     def theta(self, value):
-        if value < 0:
+        if value <= 0:
             raise ValueError("theta must be positive")
         self._theta = value
+
+    @property
+    def mu(self):
+        return self._mu
+
+    @mu.setter
+    def mu(self, value):
+        if value <= 0:
+            raise ValueError("mu must be positive")
+        self._mu = value
 
     @property
     def sigma(self):
@@ -76,19 +91,24 @@ class CIRProcess(SPEulerMaruyama):
     def sigma(self, value):
         if value <= 0:
             raise ValueError("sigma has to be positive")
-        if 2 * self.theta * self.mu <= value ** 2:
+        if 2 * self.theta * self.mu <= value**2:
             raise ValueError("Condition 2*theta*mu >= sigma**2 must be satisfied")
         self._sigma = value
 
     def __str__(self):
         return "Cox–Ingersoll–Ross process with parameters {speed}, {mean}, and {volatility} on [0, {T}].".format(
-            T=str(self.T), speed=str(self.theta), mean=str(self.mu), volatility=str(self.sigma))
+            T=str(self.T),
+            speed=str(self.theta),
+            mean=str(self.mu),
+            volatility=str(self.sigma),
+        )
 
     def _process_expectation(self, times=None):
         if times is None:
             times = self.times
         expectations = self.initial * np.exp((-1.0) * self.theta * times) + self.mu * (
-                np.ones(len(times)) - np.exp((-1.0) * self.theta * times))
+            np.ones(len(times)) - np.exp((-1.0) * self.theta * times)
+        )
         return expectations
 
     def marginal_expectation(self, times=None):
@@ -98,14 +118,15 @@ class CIRProcess(SPEulerMaruyama):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        variances = (self.sigma ** 2 / self.theta) * self.initial * (
-                np.exp(-1.0 * self.theta * times) - np.exp(-2.0 * self.theta * times)) + (
-                            self.mu * self.sigma ** 2 / (2 * self.theta)) * (
-                            (np.ones(len(times)) - np.exp(-1.0 * self.theta * times)) ** 2)
+        variances = (self.sigma**2 / self.theta) * self.initial * (
+            np.exp(-1.0 * self.theta * times) - np.exp(-2.0 * self.theta * times)
+        ) + (self.mu * self.sigma**2 / (2 * self.theta)) * (
+            (np.ones(len(times)) - np.exp(-1.0 * self.theta * times)) ** 2
+        )
         return variances
 
     def _process_degrees_of_freedom(self):
-        df = 4.0 * self.theta * self.mu / (self.sigma ** 2)
+        df = 4.0 * self.theta * self.mu / (self.sigma**2)
 
         return df
 
@@ -116,7 +137,11 @@ class CIRProcess(SPEulerMaruyama):
     def _process_nc_parameter(self, times=None):
         if times is None:
             times = self.times
-        c = 2.0 * self.theta / ((1.0 - np.exp(-1.0 * self.theta * times)) * self.sigma ** 2)
+        c = (
+            2.0
+            * self.theta
+            / ((1.0 - np.exp(-1.0 * self.theta * times)) * self.sigma**2)
+        )
         ncs = 2.0 * c * self.initial * np.exp(-1.0 * self.theta * times)
 
         return ncs
@@ -129,7 +154,11 @@ class CIRProcess(SPEulerMaruyama):
     def _process_scales(self, times=None):
         if times is None:
             times = self.times
-        c = 2.0 * self.theta / ((1.0 - np.exp(-1.0 * self.theta * times)) * self.sigma ** 2)
+        c = (
+            2.0
+            * self.theta
+            / ((1.0 - np.exp(-1.0 * self.theta * times)) * self.sigma**2)
+        )
         scales = 1.0 / (2.0 * c)
 
         return scales
@@ -156,8 +185,8 @@ class CIRProcess(SPEulerMaruyama):
         b = self.mu
         sigma = self.sigma
 
-        c = 2.0 * a / ((1.0 - np.exp(-1.0 * a * t)) * sigma ** 2)
-        df = 4.0 * a * b / sigma ** 2
+        c = 2.0 * a / ((1.0 - np.exp(-1.0 * a * t)) * sigma**2)
+        df = 4.0 * a * b / sigma**2
         nc = 2.0 * c * self.initial * np.exp(-1.0 * a * t)
         scale = 1.0 / (2 * c)
         marginal = ncx2(df, nc, scale=scale)
@@ -166,3 +195,35 @@ class CIRProcess(SPEulerMaruyama):
 
     def sample(self, n):
         return self._sample_em_process(n, log=True)
+
+
+# if __name__ == "__main__":
+#
+#     import matplotlib.pyplot as plt
+#
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+#
+#     p1 = CIRProcess()
+#     p2 = CIRProcess(theta=1.0, mu=2.0, sigma=1.0, initial=7.0, T=5.0)
+#     p3 = CIRProcess(theta=1.0, mu=10.0, sigma=2.0, initial=1.0, T=10.0)
+#     p4 = CIRProcess(theta=1.0, mu=10.0, sigma=0.2, initial=1.0, T=1.0)
+#
+#     for p, cm in [
+#         (p1, "terrain"),
+#         (p2, "RdPu"),
+#         (p3, "Oranges"),
+#         (p4, "Blues"),
+#     ]:
+#
+#         p.draw(
+#             n=500,
+#             N=300,
+#             figsize=(12, 7),
+#             style=qs,
+#             colormap=cm,
+#             envelope=True,
+#         )
+#
+#     p1.plot(n=500, N=10, figsize=(12, 7), style=qs)
+#     p1.draw(n=500, N=300, figsize=(12, 7), style=qs, envelope=True)
