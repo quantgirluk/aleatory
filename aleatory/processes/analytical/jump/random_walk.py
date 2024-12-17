@@ -7,8 +7,8 @@ from abc import ABC
 from aleatory.utils.utils import (
     check_positive_integer,
     get_times,
-    plot_paths_random_walk,
 )
+from aleatory.utils.plotters import plot_paths_random_walk
 import numpy as np
 
 
@@ -134,26 +134,26 @@ class RandomWalk(SimpleRandomWalk):
         super().__init__(p=0.5, rng=rng)
 
 
-if __name__ == "__main__":
-
-    import matplotlib.pyplot as plt
-
-    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-    plt.style.use(qs)
-
-    for prob in [0.25, 0.5, 0.75]:
-        p = SimpleRandomWalk(p=prob)
-
-        p.plot(
-            n=10,
-            N=10,
-            figsize=(12, 7),
-            mode="steps+points",
-            style=qs,
-        )
-        p.draw(
-            n=100,
-            N=200,
-            figsize=(12, 7),
-            style=qs,
-        )
+# if __name__ == "__main__":
+#
+#     import matplotlib.pyplot as plt
+#
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+#
+#     for prob in [0.25, 0.5, 0.75]:
+#         p = SimpleRandomWalk(p=prob)
+#
+#         p.plot(
+#             n=10,
+#             N=10,
+#             figsize=(12, 7),
+#             mode="steps+points",
+#             style=qs,
+#         )
+#         p.draw(
+#             n=100,
+#             N=200,
+#             figsize=(12, 7),
+#             style=qs,
+#         )
