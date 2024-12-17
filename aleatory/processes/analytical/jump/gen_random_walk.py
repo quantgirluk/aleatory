@@ -7,8 +7,8 @@ from abc import ABC
 from aleatory.utils.utils import (
     check_positive_integer,
     get_times,
-    plot_paths_random_walk,
 )
+from aleatory.utils.plotters import plot_paths_random_walk
 import numpy as np
 
 

@@ -3,7 +3,7 @@ from abc import abstractmethod
 import numpy as np
 
 from aleatory.processes.base import StochasticProcess
-from aleatory.utils.utils import plot_paths, draw_paths
+from aleatory.utils.plotters import plot_paths, draw_paths
 
 
 class SPAnalytical(StochasticProcess):

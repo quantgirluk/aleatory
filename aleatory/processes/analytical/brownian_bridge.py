@@ -6,7 +6,8 @@ import numpy as np
 from scipy.stats import norm
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
-from aleatory.utils.utils import check_numeric, draw_paths_with_end_point
+from aleatory.utils.utils import check_numeric
+from aleatory.utils.plotters import draw_paths_with_end_point
 from aleatory.utils.utils import check_positive_integer, get_times
 
 
@@ -189,3 +190,19 @@ class BrownianBridge(BrownianMotion):
         """
 
         return self._draw_paths(n, N, envelope=envelope, title=title, **fig_kw)
+
+
+# if __name__ == "__main__":
+#
+#     import matplotlib.pyplot as plt
+#
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+#
+#     for p, cm in [
+#         (BrownianBridge(), "PRGn"),
+#         (BrownianBridge(initial=10.0, end=11.0), "viridis"),
+#         (BrownianBridge(initial=1.0, end=-1.0), "PiYG"),
+#     ]:
+#         # p.plot(n=100, N=5, figsize=(10, 7), style=qs)
+#         p.draw(n=200, N=200, figsize=(10, 7), style=qs, colormap=cm)

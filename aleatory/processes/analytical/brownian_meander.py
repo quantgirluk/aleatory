@@ -1,10 +1,14 @@
 """
 Brownian Meander
 """
+
 import numpy as np
 
 from aleatory.processes import BrownianBridge, BrownianMotion
-from aleatory.utils.utils import check_positive_integer, draw_paths_with_end_point, draw_paths
+from aleatory.utils.utils import (
+    check_positive_integer,
+)
+from aleatory.utils.plotters import draw_paths, draw_paths_with_end_point
 
 
 class BrownianMeander(BrownianMotion):
@@ -35,9 +39,15 @@ class BrownianMeander(BrownianMotion):
 
     def __init__(self, T=1.0, fixed_end=False, end=None, rng=None):
         super().__init__(T=T, rng=rng)
-        self.name = "Tied Brownian Meander" if fixed_end else "Brownian Meander"
+
         self.fixed_end = fixed_end
         self.end = end
+        if self.fixed_end and self.end:
+            self.name = (
+                f"Tied Brownian Meander ending at {self.end:.2f} on [0, {self.T}]"
+            )
+        else:
+            self.name = f"Brownian Meander on [0, {self.T}]"
         self._BrownianBridge = BrownianBridge(T=self.T)
         self.n = None
         self.times = None
@@ -69,11 +79,17 @@ class BrownianMeander(BrownianMotion):
         """
         check_positive_integer(n)
         self.n = n
-        self.times = np.linspace(0, 1, n)
+        self.times = np.linspace(0, self.T, n)
         bridges = self._BrownianBridge.simulate(n=n, N=3)
-        end = self.end if self.fixed_end else np.sqrt(2.0 * self.T * self.rng.exponential(1))
+        end = (
+            self.end
+            if self.fixed_end
+            else np.sqrt(2.0 * self.T * self.rng.exponential(1))
+        )
         times_scaled = self.times / self.T
-        meander = np.sqrt((end * times_scaled + bridges[0]) ** 2 + bridges[1] ** 2 + bridges[2] ** 2)
+        meander = np.sqrt(
+            (end * times_scaled + bridges[0]) ** 2 + bridges[1] ** 2 + bridges[2] ** 2
+        )
         return meander
 
     def _sample_brownian_meander_at(self, times):
@@ -81,7 +97,9 @@ class BrownianMeander(BrownianMotion):
         bridges = self._BrownianBridge.sample_at(times)
         end = np.sqrt(2.0 * self.T * self.rng.exponential(1))
         times_scaled = self.times / self.T
-        meander = np.sqrt((end * times_scaled + bridges[0]) ** 2 + bridges[1] ** 2 + bridges[2] ** 2)
+        meander = np.sqrt(
+            (end * times_scaled + bridges[0]) ** 2 + bridges[1] ** 2 + bridges[2] ** 2
+        )
         return meander
 
     def sample(self, n):
@@ -93,19 +111,27 @@ class BrownianMeander(BrownianMotion):
     def _draw_paths(self, n, N, title=None, **fig_kw):
         self.simulate(n, N)
         chart_title = title if title else self.name
-        fig_kw['envelope'] = False
+        fig_kw["envelope"] = False
 
         if self.fixed_end:
-            if 'marginal' in fig_kw:
-                fig_kw.pop('marginal')
-            if 'orientation' in fig_kw:
-                fig_kw.pop('orientation')
-            fig = draw_paths_with_end_point(times=self.times, paths=self.paths,
-                                            title=chart_title,
-                                            **fig_kw)
+            if "marginal" in fig_kw:
+                fig_kw.pop("marginal")
+            if "orientation" in fig_kw:
+                fig_kw.pop("orientation")
+            fig = draw_paths_with_end_point(
+                times=self.times, paths=self.paths, title=chart_title, **fig_kw
+            )
         else:
-            fig = draw_paths(times=self.times, paths=self.paths, N=N, expectations=None, KDE=False, title=chart_title,
-                             **fig_kw)
+            fig = draw_paths(
+                times=self.times,
+                paths=self.paths,
+                N=N,
+                expectations=None,
+                KDE=False,
+                title=chart_title,
+                marginal=True,
+                **fig_kw,
+            )
 
         return fig
 
@@ -128,3 +154,23 @@ class BrownianMeander(BrownianMotion):
         :return:
         """
         return self._draw_paths(n, N, title, **fig_kw)
+
+
+# if __name__ == "__main__":
+#
+#     import matplotlib.pyplot as plt
+#
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+#
+#     for p, cm in [
+#         (BrownianMeander(), "twilight"),
+#         (BrownianMeander(fixed_end=True, end=3.0), "RdPu"),
+#         (BrownianMeander(T=2.0, fixed_end=True), "viridis"),
+#         (BrownianMeander(T=10.0), "Accent"),
+#     ]:
+#
+#         p.draw(n=200, N=100, figsize=(12, 7), style=qs, colormap=cm, envelope=False)
+#
+#     p = BrownianMeander()
+#     p.plot(n=500, N=5, figsize=(12, 7), style=qs)
