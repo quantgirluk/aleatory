@@ -1,12 +1,18 @@
 """
 Geometric Brownian Motion
 """
+
 import numpy as np
 from scipy.stats import lognorm
 
 from aleatory.processes.base_analytical import SPAnalytical
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
-from aleatory.utils.utils import check_positive_number, check_numeric, get_times, check_positive_integer
+from aleatory.utils.utils import (
+    check_positive_number,
+    check_numeric,
+    get_times,
+    check_positive_integer,
+)
 
 
 class GBM(SPAnalytical):
@@ -54,17 +60,19 @@ class GBM(SPAnalytical):
         self.drift = drift
         self.volatility = volatility
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
-        self.name = "Geometric Brownian Motion"
+        self.name = f"Geometric Brownian Motion $X(\\mu={self.drift}, \\sigma={self.volatility})$"
         self.n = None
         self.times = None
 
     def __str__(self):
         return "Geometric Brownian motion with drift {d} and volatility {v} on [0, {T}].".format(
-            T=str(self.T), d=str(self.drift), v=str(self.volatility))
+            T=str(self.T), d=str(self.drift), v=str(self.volatility)
+        )
 
     def __repr__(self):
         return "GeometricBrownianMotion(drift={d}, volatility={v}, T={T})".format(
-            T=str(self.T), d=str(self.drift), v=str(self.volatility))
+            T=str(self.T), d=str(self.drift), v=str(self.volatility)
+        )
 
     @property
     def drift(self):
@@ -102,23 +110,25 @@ class GBM(SPAnalytical):
         check_positive_number(self.initial, "Initial")
         self.n = n
         self.times = get_times(self.T, n)
-        return self.initial * np.exp((self.drift - 0.5 * self.volatility ** 2) * self.times
-                                     + self.volatility * self._brownian_motion.sample(n))
+        return self.initial * np.exp(
+            (self.drift - 0.5 * self.volatility**2) * self.times
+            + self.volatility * self._brownian_motion.sample(n)
+        )
 
     def _sample_geometric_brownian_motion_at(self, times):
         """Generate a realization of a Geometric Brownian motion."""
         self.times = times
-        return self.initial * np.exp((self.drift - 0.5 * self.volatility ** 2) * times
-                                     + self.volatility * self._brownian_motion.sample_at(times))
+        return self.initial * np.exp(
+            (self.drift - 0.5 * self.volatility**2) * times
+            + self.volatility * self._brownian_motion.sample_at(times)
+        )
 
     def sample(self, n):
-        """Generate a realization.
-        """
+        """Generate a realization."""
         return self._sample_geometric_brownian_motion(n)
 
     def sample_at(self, times):
-        """Generate a realization using specified times.
-        """
+        """Generate a realization using specified times."""
         return self._sample_geometric_brownian_motion_at(times)
 
     def _process_expectation(self, times=None):
@@ -126,12 +136,14 @@ class GBM(SPAnalytical):
             times = self.times
         return self.initial * np.exp(self.drift * times)
 
-
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        variances = (self.initial ** 2) * np.exp(2 * self.drift * times) * (
-                np.exp(times * self.volatility ** 2) - 1)
+        variances = (
+            (self.initial**2)
+            * np.exp(2 * self.drift * times)
+            * (np.exp(times * self.volatility**2) - 1)
+        )
         return variances
 
     def _process_stds(self, times=None):
@@ -141,9 +153,8 @@ class GBM(SPAnalytical):
         stds = np.sqrt(variances)
         return stds
 
-
     def get_marginal(self, t):
-        mu_x = np.log(self.initial) + (self.drift - 0.5 * self.volatility ** 2) * t
+        mu_x = np.log(self.initial) + (self.drift - 0.5 * self.volatility**2) * t
         sigma_x = self.volatility * np.sqrt(t)
         marginal = lognorm(s=sigma_x, scale=np.exp(mu_x))
 
