@@ -1,6 +1,7 @@
 """
 BESQ Process
 """
+
 from functools import partial
 from multiprocessing import Pool
 
@@ -9,7 +10,11 @@ from scipy.stats import ncx2
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.processes.base_analytical import SPAnalytical
-from aleatory.utils.utils import get_times, check_positive_integer, sample_besselq_global
+from aleatory.utils.utils import (
+    get_times,
+    check_positive_integer,
+    sample_besselq_global,
+)
 
 
 def _sample_besselq_global(T, initial, dim, n):
@@ -61,17 +66,21 @@ class BESQProcess(SPAnalytical):
         super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
-        self.name = f'$BESQ^{{{self.dim}}}_{{{self.initial}}}$'
+        self.name = f"Squared Bessel Process $BESQ^{{{self.dim}}}_{{{self.initial}}}$"
         self.n = None
         self.times = None
 
     def __str__(self):
         return "BESQ process with dimension {dim} and starting condition {initial} on [0, {T}].".format(
-            T=str(self.T), dim=str(self.dim), initial=str(self.initial))
+            T=str(self.T), dim=str(self.dim), initial=str(self.initial)
+        )
 
     def __repr__(self):
-        return "Squared Bessel Process(dimension={dim}, initial={initial}, T={T})".format(
-            T=str(self.T), dim=str(self.dim), initial=str(self.initial))
+        return (
+            "Squared Bessel Process(dimension={dim}, initial={initial}, T={T})".format(
+                T=str(self.T), dim=str(self.dim), initial=str(self.initial)
+            )
+        )
 
     @property
     def dim(self):
@@ -90,7 +99,9 @@ class BESQProcess(SPAnalytical):
         self.n = n
         self.times = get_times(self.T, n)
         brownian_samples = [self._brownian_motion.sample(n) for _ in range(self.dim)]
-        norm_squared = np.array([np.linalg.norm(coord) ** 2 for coord in zip(*brownian_samples)])
+        norm_squared = np.array(
+            [np.linalg.norm(coord) ** 2 for coord in zip(*brownian_samples)]
+        )
         return norm_squared
 
     def sample(self, n):
@@ -139,7 +150,7 @@ class BESQProcess(SPAnalytical):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        variances = 2.0 * (self.dim + 2.0 * self.initial / times) * times ** 2
+        variances = 2.0 * (self.dim + 2.0 * self.initial / times) * times**2
 
         return variances
 
@@ -149,14 +160,6 @@ class BESQProcess(SPAnalytical):
         variances = self._process_variance(times=times)
         stds = np.sqrt(variances)
         return stds
-
-    # def _process_stds(self):
-    #     stds = np.sqrt(self._process_variance())
-    #     return stds
-    #
-    # def process_stds(self):
-    #     stds = self._process_stds()
-    #     return stds
 
     def get_marginal(self, t):
         marginal = ncx2(df=self.dim, nc=self.initial / t, scale=t)
@@ -169,3 +172,36 @@ class BESQProcess(SPAnalytical):
     def marginal_variance(self, times):
         variances = self._process_variance(times=times)
         return variances
+
+
+# if __name__ == "__main__":
+#     import matplotlib.pyplot as plt
+#
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+#
+#     p1 = BESQProcess()
+#     p2 = BESQProcess(dim=4.0)
+#     p3 = BESQProcess(initial=5.0, dim=2.5)
+#     p4 = BESQProcess(initial=3.0, dim=2.25)
+#     p5 = BESQProcess(initial=1.0, dim=3.0)
+#
+#     p1.plot(n=200, N=5, figsize=(12, 7), style=qs)
+#     p1.draw(n=200, N=200, figsize=(12, 7), style=qs, envelope=True)
+#     for p, cm in [
+#         (p1, "viridis"),
+#         (p2, "PuBuGn"),
+#         (p3, "Oranges"),
+#         (p4, "RdBu"),
+#         (p5, "Purples"),
+#         # (p6, "Oranges"),
+#     ]:
+#
+#         p.draw(
+#             n=200,
+#             N=200,
+#             figsize=(12, 7),
+#             style=qs,
+#             colormap=cm,
+#             envelope=False,
+#         )
