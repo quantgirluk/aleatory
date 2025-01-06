@@ -1,9 +1,10 @@
 """
 Chan-Karolyi-Longstaff-Sanders (CKLS) process generic
 """
+
 from aleatory.processes.base_eu import SPEulerMaruyama
 import numpy as np
-from aleatory.utils.utils import draw_paths
+from aleatory.utils.plotters import draw_paths
 
 
 class CKLSProcessGeneric(SPEulerMaruyama):
@@ -42,7 +43,9 @@ class CKLSProcessGeneric(SPEulerMaruyama):
     :param numpy.random.Generator rng: a custom random number generator
     """
 
-    def __init__(self, alpha=0.5, beta=0.5, sigma=0.1, gamma=1.0, initial=1.0, T=1.0, rng=None):
+    def __init__(
+        self, alpha=0.5, beta=0.5, sigma=0.1, gamma=1.0, initial=1.0, T=1.0, rng=None
+    ):
         super().__init__(T=T, rng=rng)
         self.alpha = alpha
         self.beta = beta
@@ -52,13 +55,22 @@ class CKLSProcessGeneric(SPEulerMaruyama):
         self.n = 1.0
         self.dt = 1.0 * self.T / self.n
         self.times = np.arange(0.0, self.T + self.dt, self.dt)
-        self.name = "Constant Elasticity Variance (CEV) process" if alpha==0.0 else "Chan-Karolyi-Longstaff-Sanders (CKLS) Process"
+        self.name = (
+            f"Constant Elasticity Variance (CEV) process "
+            f"$X(\\mu={self.beta}, \\gamma={self.gamma}, \\sigma={self.sigma})$\n starting at {self.initial}"
+            if alpha == 0.0
+            else f"Chan-Karolyi-Longstaff-Sanders (CKLS) Process"
+            f"\n$X(\\alpha={self.alpha} , \\beta={self.beta}, \\gamma={self.gamma}, \\sigma={self.sigma})$ starting at {self.initial}"
+        )
         self.paths = None
         self._marginals = None
 
         def f(x, _):
-            return self.beta + self.alpha * np.exp(-1.0 * x) - 0.5 * (self.sigma ** 2) * np.exp(
-                2.0 * (self.gamma - 1.0) * x)
+            return (
+                self.beta
+                + self.alpha * np.exp(-1.0 * x)
+                - 0.5 * (self.sigma**2) * np.exp(2.0 * (self.gamma - 1.0) * x)
+            )
 
         def g(x, _):
             return self.sigma * np.exp((self.gamma - 1.0) * x)
@@ -104,16 +116,29 @@ class CKLSProcessGeneric(SPEulerMaruyama):
 
     def __str__(self):
         if self.alpha == 0.0:
-            return ("CKLS process with parameters alpha={alpha}, beta={beta},sigma={sigma}, gamma={gamma}, "
-                    "and initial={initial} on [0, {T}]. Note that this is a CEV process.").format(
-                T=str(self.T), gamma=str(self.gamma), alpha=str(self.alpha), beta=str(self.beta), sigma=str(self.sigma),
-                initial=str(self.initial))
+            return (
+                "CKLS process with parameters alpha={alpha}, beta={beta},sigma={sigma}, gamma={gamma}, "
+                "and initial={initial} on [0, {T}]. Note that this is a CEV process."
+            ).format(
+                T=str(self.T),
+                gamma=str(self.gamma),
+                alpha=str(self.alpha),
+                beta=str(self.beta),
+                sigma=str(self.sigma),
+                initial=str(self.initial),
+            )
 
-        return ("CKLS process with parameters alpha={alpha}, beta={beta},sigma={sigma}, gamma={gamma}, "
-             "and initial={initial} on [0, {T}].").format(
-                T=str(self.T), gamma=str(self.gamma), alpha=str(self.alpha), beta=str(self.beta), sigma=str(self.sigma),
-                initial=str(self.initial))
-
+        return (
+            "CKLS process with parameters alpha={alpha}, beta={beta},sigma={sigma}, gamma={gamma}, "
+            "and initial={initial} on [0, {T}]."
+        ).format(
+            T=str(self.T),
+            gamma=str(self.gamma),
+            alpha=str(self.alpha),
+            beta=str(self.beta),
+            sigma=str(self.sigma),
+            initial=str(self.initial),
+        )
 
     def draw(self, n, N, marginal=True, envelope=False, title=None, **fig_kw):
         self.simulate(n, N)
@@ -129,14 +154,61 @@ class CKLSProcessGeneric(SPEulerMaruyama):
         chart_title = title if title else self.name
 
         if marginal:
-            fig = draw_paths(times=self.times, paths=self.paths, N=N, title=chart_title, KDE=True, marginal=marginal,
-                             expectations=expectations, envelope=envelope, lower=lower, upper=upper,
-                             **fig_kw)
+            fig = draw_paths(
+                times=self.times,
+                paths=self.paths,
+                N=N,
+                title=chart_title,
+                KDE=True,
+                marginal=marginal,
+                expectations=expectations,
+                envelope=envelope,
+                lower=lower,
+                upper=upper,
+                **fig_kw,
+            )
         else:
-            fig = draw_paths(times=self.times, paths=self.paths, N=N, title=chart_title,
-                             expectations=expectations, marginal=marginal, **fig_kw)
+            fig = draw_paths(
+                times=self.times,
+                paths=self.paths,
+                N=N,
+                title=chart_title,
+                expectations=expectations,
+                marginal=marginal,
+                **fig_kw,
+            )
 
         return fig
 
     def sample(self, n):
         return self._sample_em_process(n, log=True)
+
+
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    p1 = CKLSProcessGeneric()
+    p2 = CKLSProcessGeneric(alpha=1.0, beta=0.5, gamma=1.0, sigma=0.2)
+    p3 = CKLSProcessGeneric(alpha=0.5, beta=0.5, gamma=0.5, sigma=0.2)
+    for p, cm in [
+        (p1, "twilight"),
+        (p2, "PuBuGn"),
+        (p3, "Purples"),
+        # (p4, "RdBu"),
+        # (p5, "Purples"),
+        # (p6, "Oranges"),
+    ]:
+
+        p.draw(
+            n=500,
+            N=300,
+            figsize=(12, 7),
+            style=qs,
+            colormap=cm,
+            envelope=False,
+        )
+    p1.plot(n=500, N=10, figsize=(12, 7), style=qs)
+    p1.draw(n=500, N=300, figsize=(12, 7), style=qs, envelope=True)

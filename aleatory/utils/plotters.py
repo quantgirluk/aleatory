@@ -391,6 +391,131 @@ def draw_paths_with_end_point(
     return fig
 
 
+def draw_poisson_like(
+    T,
+    paths,
+    marginalT=None,
+    expectations=None,
+    envelope=False,
+    lower=None,
+    upper=None,
+    style="seaborn-v0_8-whitegrid",
+    colormap="RdYlBu_r",
+    marginal=True,
+    mode="steps",
+    colorspos=None,
+    title=None,
+    **fig_kw,
+):
+
+    times = np.linspace(0.0, T, 200)
+    N = len(paths)
+
+    cm = plt.colormaps[colormap]
+    last_points = [len(path) - 1 for path in paths]
+    n_bins = int(np.sqrt(N))
+    col = np.linspace(0, 1, n_bins, endpoint=True)
+
+    with plt.style.context(style):
+        if marginal:
+            fig = plt.figure(**fig_kw)
+            gs = GridSpec(1, 5)
+            ax1 = fig.add_subplot(gs[:4])
+            ax2 = fig.add_subplot(gs[4:], sharey=ax1)
+
+            n, bins, patches = ax2.hist(
+                last_points, n_bins, orientation="horizontal", density=True
+            )
+            for c, p in zip(col, patches):
+                plt.setp(p, "facecolor", cm(c))
+            my_bins = pd.cut(
+                last_points,
+                bins=bins,
+                labels=range(len(bins) - 1),
+                include_lowest=True,
+            )
+            colors = [col[b] for b in my_bins]
+
+            if marginalT:
+                marginaldist = marginalT
+                x = np.arange(marginaldist.ppf(0.001), marginaldist.ppf(0.999) + 1)
+                ax2.plot(
+                    marginaldist.pmf(x),
+                    x,
+                    "o",
+                    linestyle="",
+                    color="maroon",
+                    markersize=2,
+                    label="$N_T$ pmf",
+                )
+                ax2.axhline(
+                    y=marginaldist.mean(), linestyle="--", lw=1.75, label="$E[N_T]$"
+                )
+                ax2.legend()
+
+            plt.setp(ax2.get_yticklabels(), visible=False)
+            ax2.set_title("$N_T$")
+
+            for i, p in enumerate(paths):
+                counts = np.arange(0, len(p))
+                if mode == "points":
+                    ax1.scatter(p, counts, color=cm(colors[i]), s=10)
+                elif mode == "steps":
+                    ax1.step(
+                        p, counts, color=cm(colors[i]), where="post", linewidth=1.25
+                    )
+                elif mode in ["points+steps", "steps+points"]:
+                    ax1.step(
+                        p, counts, color=cm(colors[i]), where="post", linewidth=1.25
+                    )
+                    ax1.plot(p, counts, "o", color=cm(colors[i]), markersize=6)
+                else:
+                    raise ValueError(
+                        "mode can only take values 'points', 'steps' or 'points+steps'"
+                    )
+
+            if expectations:
+                ax1.plot(times, expectations, "--", lw=1.75, label="$E[N_t]$")
+                ax1.legend()
+            if envelope:
+                ax1.fill_between(times, upper, lower, alpha=0.25, color="silver")
+            plt.subplots_adjust(wspace=0.2, hspace=0.5)
+
+        else:
+            fig, ax1 = plt.subplots(**fig_kw)
+            if colorspos:
+                colors = [path[colorspos] / np.max(np.abs(path)) for path in paths]
+            else:
+                _, bins = np.histogram(last_points, n_bins)
+                my_bins = pd.cut(
+                    last_points,
+                    bins=bins,
+                    labels=range(len(bins) - 1),
+                    include_lowest=True,
+                )
+                colors = [col[b] for b in my_bins]
+
+            for i in range(N):
+                counts = np.arange(0, len(paths[i]))
+                ax1.step(paths[i], counts, color=cm(colors[i]), lw=0.75, where="post")
+
+            if expectations is not None:
+                ax1.plot(times, expectations, "--", lw=1.75, label="$E[N_t]$")
+                ax1.legend()
+
+            if envelope:
+                ax1.fill_between(times, upper, lower, color="lightgray", alpha=0.25)
+
+        fig.suptitle(title)
+        ax1.set_xlim(left=0.0, right=T)
+        ax1.set_title(r"Simulated Paths $N_t, t \leq T$")  # Title
+        ax1.set_xlabel("$t$")
+        ax1.set_ylabel("$N(t)$")
+        plt.show()
+
+    return fig
+
+
 def plot_paths_random_walk(
     *args,
     times,
@@ -433,10 +558,9 @@ def plot_poisson(
 ):
     """
     Simulates and plots paths/trajectories from the instanced stochastic process. Simple plot of times
-    versus process values as lines and/or markers
-    :param int N: number of paths to simulate
     :param int jumps: number of jumps
     :param float T: time T
+    :param list paths : a list containing the simulated paths
     :param str style: style of plot
     :param str mode: type of plot
     :param str title: title of plot
@@ -444,10 +568,6 @@ def plot_poisson(
 
     if jumps and T:
         raise ValueError("Only one must be provided either jumps or T")
-
-    # plot_title = title if title else self.name
-    # self.simulate(N, jumps=jumps, T=T)
-    # paths = self.paths
 
     with plt.style.context(style):
         fig, ax = plt.subplots(**fig_kw)
@@ -474,3 +594,127 @@ def plot_poisson(
         plt.show()
 
     return fig
+
+
+# def draw_poisson(
+#     N,
+#     paths,
+#     T,
+#     expectations=None,
+#     style="seaborn-v0_8-whitegrid",
+#     colormap="RdYlBu_r",
+#     envelope=True,
+#     marginal=True,
+#     marginalT=None,
+#     lower=None,
+#     upper=None,
+#     mode="steps",
+#     title=None,
+#     colorspos=None,
+#     **fig_kw,
+# ):
+#
+#     times = np.linspace(0.0, T, 200)
+#     cm = plt.colormaps[colormap]
+#     last_points = [len(path) - 1 for path in paths]
+#     n_bins = int(np.sqrt(N))
+#     col = np.linspace(0, 1, n_bins, endpoint=True)
+#
+#     with plt.style.context(style):
+#         if marginal:
+#             fig = plt.figure(**fig_kw)
+#             gs = GridSpec(1, 5)
+#             ax1 = fig.add_subplot(gs[:4])
+#             ax2 = fig.add_subplot(gs[4:], sharey=ax1)
+#
+#             n, bins, patches = ax2.hist(
+#                 last_points, n_bins, orientation="horizontal", density=True
+#             )
+#             for c, p in zip(col, patches):
+#                 plt.setp(p, "facecolor", cm(c))
+#             my_bins = pd.cut(
+#                 last_points,
+#                 bins=bins,
+#                 labels=range(len(bins) - 1),
+#                 include_lowest=True,
+#             )
+#             colors = [col[b] for b in my_bins]
+#
+#             if marginal and marginalT:
+#                 marginaldist = marginalT
+#                 x = np.arange(marginaldist.ppf(0.001), marginaldist.ppf(0.999) + 1)
+#                 ax2.plot(
+#                     marginaldist.pmf(x),
+#                     x,
+#                     "o",
+#                     linestyle="",
+#                     color="maroon",
+#                     markersize=2,
+#                     label="$N_T$ pmf",
+#                 )
+#                 ax2.axhline(
+#                     y=marginaldist.mean(), linestyle="--", lw=1.75, label="$E[N_T]$"
+#                 )
+#                 ax2.legend()
+#
+#             plt.setp(ax2.get_yticklabels(), visible=False)
+#             ax2.set_title("$N_T$")
+#
+#             for i, p in enumerate(paths):
+#                 counts = np.arange(0, len(p))
+#                 if mode == "points":
+#                     ax1.scatter(p, counts, color=cm(colors[i]), s=10)
+#                 elif mode == "steps":
+#                     ax1.step(
+#                         p, counts, color=cm(colors[i]), where="post", linewidth=1.25
+#                     )
+#                 elif mode in ["points+steps", "steps+points"]:
+#                     ax1.step(
+#                         p, counts, color=cm(colors[i]), where="post", linewidth=1.25
+#                     )
+#                     ax1.plot(p, counts, "o", color=cm(colors[i]), markersize=6)
+#                 else:
+#                     raise ValueError(
+#                         "mode can only take values 'points', 'steps', 'steps+points' or 'points+steps'"
+#                     )
+#
+#             if expectations:
+#                 ax1.plot(times, expectations, "--", lw=1.75, label="$E[N_t]$")
+#                 ax1.legend()
+#             if envelope and lower and upper:
+#                 ax1.fill_between(times, upper, lower, alpha=0.25, color="silver")
+#             plt.subplots_adjust(wspace=0.2, hspace=0.5)
+#
+#         else:
+#             fig, ax1 = plt.subplots(**fig_kw)
+#             if colorspos:
+#                 colors = [path[colorspos] / np.max(np.abs(path)) for path in paths]
+#             else:
+#                 _, bins = np.histogram(last_points, n_bins)
+#                 my_bins = pd.cut(
+#                     last_points,
+#                     bins=bins,
+#                     labels=range(len(bins) - 1),
+#                     include_lowest=True,
+#                 )
+#                 colors = [col[b] for b in my_bins]
+#
+#             for i in range(N):
+#                 counts = np.arange(0, len(paths[i]))
+#                 ax1.step(paths[i], counts, color=cm(colors[i]), lw=0.75, where="post")
+#
+#             if expectations is not None:
+#                 ax1.plot(times, expectations, "--", lw=1.75, label="$E[N_t]$")
+#                 ax1.legend()
+#
+#             if envelope and lower and upper:
+#                 ax1.fill_between(times, upper, lower, color="lightgray", alpha=0.25)
+#
+#         fig.suptitle(title)
+#         ax1.set_xlim(left=0.0, right=T)
+#         ax1.set_title(r"Simulated Paths $N_t, t \leq T$")  # Title
+#         ax1.set_xlabel("$t$")
+#         ax1.set_ylabel("$N(t)$")
+#         plt.show()
+#
+#     return fig

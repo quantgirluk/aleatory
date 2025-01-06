@@ -1,6 +1,7 @@
 """
 Vasicek Process
 """
+
 from aleatory.processes.base_eu import SPEulerMaruyama
 import numpy as np
 from scipy.stats import norm
@@ -49,7 +50,7 @@ class Vasicek(SPEulerMaruyama):
         self.n = 1.0
         self.dt = 1.0 * self.T / self.n
         self.times = None
-        self.name = "Vasicek Process"
+        self.name = f"Vasicek Process $X(\\theta={self.theta}, \\mu={self.mu}, \\sigma={self.sigma})$"
 
         def f(x, _):
             return self.theta * (self.mu - x)
@@ -72,14 +73,19 @@ class Vasicek(SPEulerMaruyama):
 
     def __str__(self):
         return "Vasicek process with parameters theta={speed}, mu={mean}, sigma={volatility}, initial={initial} on [0, {T}].".format(
-            T=str(self.T), speed=str(self.theta), mean=str(self.mu), volatility=str(self.sigma),
-            initial=str(self.initial))
+            T=str(self.T),
+            speed=str(self.theta),
+            mean=str(self.mu),
+            volatility=str(self.sigma),
+            initial=str(self.initial),
+        )
 
     def _process_expectation(self, times=None):
         if times is None:
             times = self.times
         return self.initial * np.exp((-1.0) * self.theta * times) + self.mu * (
-                np.ones(len(times)) - np.exp((-1.0) * self.theta * times))
+            np.ones(len(times)) - np.exp((-1.0) * self.theta * times)
+        )
 
     def marginal_expectation(self, times=None):
         expectations = self._process_expectation(times=times)
@@ -88,8 +94,11 @@ class Vasicek(SPEulerMaruyama):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        variances = (self.sigma ** 2) * (1.0 / (2.0 * self.theta)) * (
-                np.ones(len(times)) - np.exp(-2.0 * self.theta * times))
+        variances = (
+            (self.sigma**2)
+            * (1.0 / (2.0 * self.theta))
+            * (np.ones(len(times)) - np.exp(-2.0 * self.theta * times))
+        )
         return variances
 
     def marginal_variance(self, times=None):
@@ -105,8 +114,14 @@ class Vasicek(SPEulerMaruyama):
         return stds
 
     def get_marginal(self, t):
-        mu_x = self.initial * np.exp(-1.0 * self.theta * t) + self.mu * (1.0 - np.exp(-1.0 * self.theta * t))
-        variance_x = (self.sigma ** 2) * (1.0 / (2.0 * self.theta)) * (1.0 - np.exp(-2.0 * self.theta * t))
+        mu_x = self.initial * np.exp(-1.0 * self.theta * t) + self.mu * (
+            1.0 - np.exp(-1.0 * self.theta * t)
+        )
+        variance_x = (
+            (self.sigma**2)
+            * (1.0 / (2.0 * self.theta))
+            * (1.0 - np.exp(-2.0 * self.theta * t))
+        )
         sigma_x = np.sqrt(variance_x)
         marginal = norm(loc=mu_x, scale=sigma_x)
 

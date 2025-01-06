@@ -1,7 +1,6 @@
 import numpy as np
 
 from aleatory.processes.base_analytical import SPAnalytical
-from aleatory.processes.analytical.gaussian import GaussianIncrements
 from aleatory.utils.utils import (
     check_positive_integer,
     get_times,
@@ -139,44 +138,44 @@ class VarianceGammaProcess(SPAnalytical):
 #     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
 #     plt.style.use(qs)
 #
-#     for T in [5.0, 10.0, 20.0]:
-#         p = VarianceGammaProcess(T=T, theta=0.0, sigma=1.0)
+#     #     for T in [5.0, 10.0, 20.0]:
+#     #         p = VarianceGammaProcess(T=T, theta=0.0, sigma=1.0)
+#     #
+#     #         for n_grid in [500]:
+#     #             p.draw(n=n_grid, N=200, figsize=(12, 7), style=qs, envelope=True)
+#     # p.draw(n=n_grid, N=200, figsize=(12, 7), style=qs, envelope=True)
+#     #
+#     # end_points = [path[-1] for path in p.paths]
+#     # plt.hist(end_points, density=True)
+#     # plt.show()
+#     # vals = p.marginal_density()
 #
-#         for n_grid in [500]:
-#             p.draw(n=n_grid, N=200, figsize=(12, 7), style=qs, envelope=True)
-# p.draw(n=n_grid, N=200, figsize=(12, 7), style=qs, envelope=True)
-
-# end_points = [path[-1] for path in p.paths]
-# plt.hist(end_points, density=True)
-# plt.show()
-# vals = p.marginal_density()
-
-#
-# p.plot(n=10, N=5, figsize=(10, 6), style=qs)
-# p.plot(
-#     n=20,
-#     N=5,
-#     figsize=(10, 6),
-#     style=qs,
-#     mode="steps+points",
-#     title="Variance Gamma Process Paths",
-# )
-# p.draw(
-#     n=100,
-#     N=100,
-#     figsize=(12, 7),
-#     style=qs,
-#     colormap="viridis",
-#     marginal=False,
-#     mode="steps+points",
-# )
-# p.draw(n=100, N=100, figsize=(12, 7), style=qs, colormap="cool")
-# p.plot(n=20, N=5, figsize=(10, 6), style=qs)
-# p = VarianceGammaProcess(T=100)
-# p.draw(n=100, N=100, figsize=(12, 7), style=qs, colormap="viridis")
-# p = VarianceGammaProcess(theta=1.5, nu=0.5, sigma=2.0, T=20)
-# p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="twilight")
-# p = VarianceGammaProcess(theta=0.0, nu=0.5, sigma=1.0, T=1.0)
-# p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="winter", envelope=True)
-# p = VarianceGammaProcess(theta=-1.0, nu=4.0, sigma=2.0, T=100.0)
-# p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="summer", envelope=True)
+#     p = VarianceGammaProcess()
+#     # p.plot(n=100, N=5, figsize=(10, 6), style=qs)
+#     p.plot(
+#         n=50,
+#         N=5,
+#         figsize=(10, 6),
+#         style=qs,
+#         mode="steps+points",
+#         title="Variance Gamma Process Paths",
+#     )
+#     p.draw(
+#         n=50,
+#         N=100,
+#         figsize=(12, 7),
+#         style=qs,
+#         colormap="viridis",
+#         marginal=False,
+#         mode="steps+points",
+#     )
+#     p.draw(n=50, N=100, figsize=(12, 7), style=qs, colormap="cool")
+#     p.plot(n=50, N=5, figsize=(10, 6), style=qs)
+#     p = VarianceGammaProcess(T=100)
+#     p.draw(n=100, N=100, figsize=(12, 7), style=qs, colormap="viridis")
+#     p = VarianceGammaProcess(theta=1.5, nu=0.5, sigma=2.0, T=20)
+#     p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="twilight")
+#     p = VarianceGammaProcess(theta=0.0, nu=0.5, sigma=1.0, T=1.0)
+#     p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="winter", envelope=False)
+#     p = VarianceGammaProcess(theta=-1.0, nu=4.0, sigma=2.0, T=100.0)
+#     p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="summer", envelope=False)

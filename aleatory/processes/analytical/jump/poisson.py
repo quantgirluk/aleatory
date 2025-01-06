@@ -27,17 +27,17 @@ class PoissonProcess(BaseProcess):
 
     def __init__(self, rate=1.0, rng=None):
         super().__init__(rng=rng)
-        self.name = 'Poisson Process'
         self.rate = rate
+        self.name = f"Poisson Process $N(\\lambda={self.rate})$"
         self.T = None
         self.N = None
         self.paths = None
 
     def __str__(self):
-        return "Poisson Process with intensity rate r={rate}.".format(rate=str(self.rate))
+        return f"Poisson Process with intensity rate {self.rate}"
 
     def __repr__(self):
-        return "PoissonProcess(rate={r})".format(r=str(self.rate))
+        return f"PoissonProcess(rate={self.rate})"
 
     @property
     def rate(self):
@@ -55,15 +55,14 @@ class PoissonProcess(BaseProcess):
             raise ValueError("Only one must be provided either jumps or T")
         elif jumps:
             check_positive_integer(jumps)
-
             exponential_times = self.rng.exponential(exp_mean, size=jumps)
             arrival_times = np.cumsum(exponential_times)
             arrival_times = np.insert(arrival_times, 0, [0])
             return arrival_times
         elif T:
             check_positive_number(T, "Time")
-            t = 0.
-            arrival_times = [0.]
+            t = 0.0
+            arrival_times = [0.0]
             while t < T:
                 t += self.rng.exponential(scale=exp_mean)
                 arrival_times.append(t)
@@ -100,7 +99,16 @@ class PoissonProcess(BaseProcess):
         self.paths = [self.sample(jumps=jumps, T=T) for _ in range(N)]
         return self.paths
 
-    def plot(self, N, jumps=None, T=None, style="seaborn-v0_8-whitegrid", mode="steps", title=None, **fig_kw):
+    def plot(
+        self,
+        N,
+        jumps=None,
+        T=None,
+        style="seaborn-v0_8-whitegrid",
+        mode="steps",
+        title=None,
+        **fig_kw,
+    ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process. Simple plot of times
         versus process values as lines and/or markers
@@ -123,20 +131,20 @@ class PoissonProcess(BaseProcess):
             fig, ax = plt.subplots(**fig_kw)
             for p in paths:
                 counts = np.arange(0, len(p))
-                if mode == 'points':
+                if mode == "points":
                     ax.scatter(p, counts, s=10)
-                elif mode == 'steps':
-                    ax.step(p, counts, where='post', linewidth=1.25)
-                elif mode == 'linear':
+                elif mode == "steps":
+                    ax.step(p, counts, where="post", linewidth=1.25)
+                elif mode == "linear":
                     ax.plot(p, counts)
-                elif mode == 'points+steps':
-                    ax.step(p, counts, where='post', alpha=0.5)
+                elif mode == "points+steps":
+                    ax.step(p, counts, where="post", alpha=0.5)
                     color = plt.gca().lines[-1].get_color()
-                    ax.plot(p, counts, 'o', color=color, markersize=6)
+                    ax.plot(p, counts, "o", color=color, markersize=6)
 
             ax.set_title(plot_title)
-            ax.set_xlabel('$t$')
-            ax.set_ylabel('$N(t)$')
+            ax.set_xlabel("$t$")
+            ax.set_ylabel("$N(t)$")
             if T is not None:
                 ax.set_xlim(right=T)
             if jumps is not None:
@@ -145,8 +153,19 @@ class PoissonProcess(BaseProcess):
 
         return fig
 
-    def draw(self, N, T=None, style="seaborn-v0_8-whitegrid", colormap="RdYlBu_r", envelope=True,
-             marginal=True, mode="steps", colorspos=None, title=None, **fig_kw):
+    def draw(
+        self,
+        N,
+        T=None,
+        style="seaborn-v0_8-whitegrid",
+        colormap="RdYlBu_r",
+        envelope=True,
+        marginal=True,
+        mode="steps",
+        colorspos=None,
+        title=None,
+        **fig_kw,
+    ):
 
         title = title if title else self.name
         self.simulate(N, T=T)
@@ -172,38 +191,61 @@ class PoissonProcess(BaseProcess):
                 ax1 = fig.add_subplot(gs[:4])
                 ax2 = fig.add_subplot(gs[4:], sharey=ax1)
 
-                n, bins, patches = ax2.hist(last_points, n_bins, orientation='horizontal', density=True)
+                n, bins, patches = ax2.hist(
+                    last_points, n_bins, orientation="horizontal", density=True
+                )
                 for c, p in zip(col, patches):
-                    plt.setp(p, 'facecolor', cm(c))
-                my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
+                    plt.setp(p, "facecolor", cm(c))
+                my_bins = pd.cut(
+                    last_points,
+                    bins=bins,
+                    labels=range(len(bins) - 1),
+                    include_lowest=True,
+                )
                 colors = [col[b] for b in my_bins]
 
                 if marginal and marginalT:
                     marginaldist = marginalT
                     x = np.arange(marginaldist.ppf(0.001), marginaldist.ppf(0.999) + 1)
-                    ax2.plot(marginaldist.pmf(x), x, 'o', linestyle='', color="maroon", markersize=2, label='$N_T$ pmf')
-                    ax2.axhline(y=marginaldist.mean(), linestyle='--', lw=1.75, label='$E[N_T]$')
+                    ax2.plot(
+                        marginaldist.pmf(x),
+                        x,
+                        "o",
+                        linestyle="",
+                        color="maroon",
+                        markersize=2,
+                        label="$N_T$ pmf",
+                    )
+                    ax2.axhline(
+                        y=marginaldist.mean(), linestyle="--", lw=1.75, label="$E[N_T]$"
+                    )
                     ax2.legend()
 
                 plt.setp(ax2.get_yticklabels(), visible=False)
-                ax2.set_title('$N_T$')
+                ax2.set_title("$N_T$")
 
                 for i, p in enumerate(paths):
                     counts = np.arange(0, len(p))
-                    if mode == 'points':
+                    if mode == "points":
                         ax1.scatter(p, counts, color=cm(colors[i]), s=10)
-                    elif mode == 'steps':
-                        ax1.step(p, counts, color=cm(colors[i]), where='post', linewidth=1.25)
-                    elif mode == 'points+steps':
-                        ax1.step(p, counts, color=cm(colors[i]), where='post', linewidth=1.25)
-                        ax1.plot(p, counts, 'o', color=cm(colors[i]), markersize=6)
+                    elif mode == "steps":
+                        ax1.step(
+                            p, counts, color=cm(colors[i]), where="post", linewidth=1.25
+                        )
+                    elif mode == "points+steps":
+                        ax1.step(
+                            p, counts, color=cm(colors[i]), where="post", linewidth=1.25
+                        )
+                        ax1.plot(p, counts, "o", color=cm(colors[i]), markersize=6)
                     else:
-                        raise ValueError("mode can only take values 'points', 'steps' or 'points+steps'")
+                        raise ValueError(
+                            "mode can only take values 'points', 'steps' or 'points+steps'"
+                        )
                 if expectations is not None:
-                    ax1.plot(times, expectations, '--', lw=1.75, label='$E[N_t]$')
+                    ax1.plot(times, expectations, "--", lw=1.75, label="$E[N_t]$")
                     ax1.legend()
                 if envelope:
-                    ax1.fill_between(times, upper, lower, alpha=0.25, color='silver')
+                    ax1.fill_between(times, upper, lower, alpha=0.25, color="silver")
                 plt.subplots_adjust(wspace=0.2, hspace=0.5)
 
             else:
@@ -212,25 +254,37 @@ class PoissonProcess(BaseProcess):
                     colors = [path[colorspos] / np.max(np.abs(path)) for path in paths]
                 else:
                     _, bins = np.histogram(last_points, n_bins)
-                    my_bins = pd.cut(last_points, bins=bins, labels=range(len(bins) - 1), include_lowest=True)
+                    my_bins = pd.cut(
+                        last_points,
+                        bins=bins,
+                        labels=range(len(bins) - 1),
+                        include_lowest=True,
+                    )
                     colors = [col[b] for b in my_bins]
 
                 for i in range(N):
                     counts = np.arange(0, len(paths[i]))
-                    ax1.step(paths[i], counts, color=cm(colors[i]), lw=0.75, where='post')
+                    ax1.step(
+                        paths[i], counts, color=cm(colors[i]), lw=0.75, where="post"
+                    )
 
                 if expectations is not None:
-                    ax1.plot(times, expectations, '--', lw=1.75, label='$E[N_t]$')
+                    ax1.plot(times, expectations, "--", lw=1.75, label="$E[N_t]$")
                     ax1.legend()
                 if envelope:
-                    ax1.fill_between(times, upper, lower, color='lightgray', alpha=0.25)
+                    ax1.fill_between(times, upper, lower, color="lightgray", alpha=0.25)
 
             fig.suptitle(title)
             ax1.set_xlim(right=T)
-            ax1.set_title(r'Simulated Paths $N_t, t \leq T$')  # Title
-            ax1.set_xlabel('$t$')
-            ax1.set_ylabel('$N(t)$')
+            ax1.set_title(r"Simulated Paths $N_t, t \leq T$")  # Title
+            ax1.set_xlabel("$t$")
+            ax1.set_ylabel("$N(t)$")
             plt.show()
 
         return fig
 
+
+# if __name__ == "__main__":
+#
+#     p = PoissonProcess()
+#     p.plot(N=5, T=10)
