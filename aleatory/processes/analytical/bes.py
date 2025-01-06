@@ -1,6 +1,7 @@
 """
 Bessel Process BES
 """
+
 import math
 from functools import partial
 from multiprocessing import Pool
@@ -63,17 +64,19 @@ class BESProcess(SPAnalytical):
         super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
-        self.name = f'$BES^{{{self.dim}}}_{{{self.initial}}}$'
+        self.name = f"Bessel process $BES^{{{self.dim}}}_{{{self.initial}}}$"
         self.n = None
         self.times = None
 
     def __str__(self):
         return "Bessel process with dimension {dim} and starting condition {initial} on [0, {T}].".format(
-            T=str(self.T), dim=str(self.dim), initial=str(self.initial))
+            T=str(self.T), dim=str(self.dim), initial=str(self.initial)
+        )
 
     def __repr__(self):
         return "BESProcess(dimension={dim}, initial={initial}, T={T})".format(
-            T=str(self.T), dim=str(self.dim), initial=str(self.initial))
+            T=str(self.T), dim=str(self.dim), initial=str(self.initial)
+        )
 
     @property
     def dim(self):
@@ -143,7 +146,6 @@ class BESProcess(SPAnalytical):
             self.paths = results
             return self.paths
 
-
     def _process_expectation(self, times=None):
         # TODO: Add the case when times is zero, at the moment this fails because nc required division by t
         if times is None:
@@ -152,13 +154,19 @@ class BESProcess(SPAnalytical):
         alpha = (self.dim / 2.0) - 1.0
 
         if np.isscalar(times):
-            nc = (self.initial ** 2) / times
-            expectations = np.sqrt(times) * math.sqrt(math.pi / 2.0) * eval_genlaguerre(0.5, alpha,
-                                                                                        (-1.0 / 2.0) * nc)
+            nc = (self.initial**2) / times
+            expectations = (
+                np.sqrt(times)
+                * math.sqrt(math.pi / 2.0)
+                * eval_genlaguerre(0.5, alpha, (-1.0 / 2.0) * nc)
+            )
         else:
-            nc = (self.initial ** 2) / times[1:]
-            expectations = np.sqrt(times[1:]) * math.sqrt(math.pi / 2.0) * eval_genlaguerre(0.5, alpha,
-                                                                                            (-1.0 / 2.0) * nc)
+            nc = (self.initial**2) / times[1:]
+            expectations = (
+                np.sqrt(times[1:])
+                * math.sqrt(math.pi / 2.0)
+                * eval_genlaguerre(0.5, alpha, (-1.0 / 2.0) * nc)
+            )
             expectations = np.insert(expectations, 0, self.initial)
         return expectations
 
@@ -166,7 +174,7 @@ class BESProcess(SPAnalytical):
         if times is None:
             times = self.times
         expectations = self._process_expectation(times)
-        variances = self.dim * times + self.initial ** 2 - expectations ** 2
+        variances = self.dim * times + self.initial**2 - expectations**2
         return variances
 
     def _process_stds(self, times=None):
@@ -187,3 +195,36 @@ class BESProcess(SPAnalytical):
     def marginal_variance(self, times):
         variances = self._process_variance(times=times)
         return variances
+
+
+# if __name__ == "__main__":
+#     import matplotlib.pyplot as plt
+#
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+#
+#     p1 = BESProcess()
+#     p2 = BESProcess(dim=4.0)
+#     p3 = BESProcess(initial=5.0, dim=2.5)
+#     p4 = BESProcess(initial=3.0, dim=1.25)
+#     p5 = BESProcess(initial=1.0, dim=3.0)
+#
+#     p1.plot(n=200, N=5, figsize=(12, 7), style=qs)
+#     p1.draw(n=200, N=200, figsize=(12, 7), style=qs, envelope=True)
+#     for p, cm in [
+#         (p1, "twilight"),
+#         (p2, "PuBuGn"),
+#         (p3, "Oranges"),
+#         (p4, "RdBu"),
+#         (p5, "Purples"),
+#         # (p6, "Oranges"),
+#     ]:
+#
+#         p.draw(
+#             n=200,
+#             N=200,
+#             figsize=(12, 7),
+#             style=qs,
+#             colormap=cm,
+#             envelope=False,
+#         )
