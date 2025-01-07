@@ -1,5 +1,5 @@
 import numpy as np
-from aleatory.processes.analytical.jump.poisson_nonhomogeneous import (
+from aleatory.processes.jump.poisson_nonhomogeneous import (
     InhomogeneousPoissonProcess,
 )
 
