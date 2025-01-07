@@ -2,7 +2,7 @@
 Constant Elasticity Variance Process
 """
 
-from aleatory.processes import BrownianMotion, Vasicek, CIRProcess, GBM
+from aleatory.processes import BrownianMotion, Vasicek, GBM
 from aleatory.processes.euler_maruyama.ckls_process_generic import CKLSProcessGeneric
 
 
