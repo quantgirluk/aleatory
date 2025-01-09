@@ -1,3 +1,5 @@
+"""Fractional Brownian Motion"""
+
 from functools import lru_cache
 
 import numpy as np
@@ -16,6 +18,25 @@ def _fgn_dh_sqrt_eigenvalues(hurst, n):
 
 
 class fBM(SPAnalytical):
+    r"""fractional Brownian motion
+
+    .. image:: _static/fractional_brownian_motion_draw.png
+
+    A fractional Brownian motion (fBM) is a continuous-time Gaussian process :math:`B_H(t)` on
+    :math:`[0,T]` that starts at zero, has expectation zero for all :math:`t \in [0,T]` and has
+    the following covariance function:
+
+    .. math::
+
+        E\left[B_H(t) B_H(s) \right] = \frac{1}{2}(|t|^{2H}+ |s|^{2H}- |t-s|^{2H}),
+
+    where :math:`H` is a real number in (0,1), called the Hurst or Hurst parameter.
+
+    :parameter float hurst: the Hurst parameter
+    :parameter float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
+    :parameter numpy.random.Generator rng: a custom random number generator
+
+    """
 
     def __init__(self, hurst=0.5, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
@@ -81,12 +102,16 @@ class fBM(SPAnalytical):
         return marginal
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    p = fBM(hurst=0.25, T=10.0)
+    p.plot(n=1000, N=4, figsize=(12, 7), style=qs)
+    p.draw(n=1000, N=200, figsize=(12, 7), style=qs, colormap="viridis")
 #
 #     p1 = fBM(T=10.0)
 #     p2 = fBM(hurst=0.25, T=10.0)
