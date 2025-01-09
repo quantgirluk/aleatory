@@ -10,8 +10,8 @@
 ## Overview
 
 The **_aleatory_** (/ˈeɪliətəri/) Python library provides functionality for simulating and visualising
-stochastic processes. More precisely, it introduces objects representing a number of continuous-time
-stochastic processes $X = (X_t : t\geq 0)$ and provides methods to:
+stochastic processes. More precisely, it introduces objects representing a number of 
+stochastic processes and provides methods to:
 
 - generate realizations/trajectories from each process —over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
@@ -23,19 +23,30 @@ stochastic processes $X = (X_t : t\geq 0)$ and provides methods to:
 
 Currently, `aleatory` supports the following 13 processes:
 
-- Brownian Motion
+- Arithmetic Brownian Motion
+- Bessel process
 - Brownian Bridge
 - Brownian Excursion
 - Brownian Meander
-- Geometric Brownian Motion (GBM) process
-- Ornstein–Uhlenbeck (OU) process
-- Vasicek process
-- Cox–Ingersoll–Ross (CIR) process
+- Brownian Motion
 - Constant Elasticity Variance (CEV) process
+- Cox–Ingersoll–Ross (CIR) process
 - Chan-Karolyi-Longstaff-Sanders (CKLS) process
-- Bessel (BES) process
-- Squared Bessel (BESQ) process
+- Fractional Brownian Motion
+- Galton-Watson with Poisson branching
+- Gamma process
+- General Random Walk
+- Geometric Brownian Motion
+- Hawkes process
+- Inverse Gaussian process
+- Inhomogeneous Poisson process
+- Mixed Poisson process
+- Ornstein–Uhlenbeck (OU) process
 - Poisson process
+- Random Walk
+- Squared Bessel processes
+- Vasicek process
+- Variance-Gamma process
 
 ## Installation
 
