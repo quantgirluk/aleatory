@@ -14,7 +14,7 @@ class BrownianMotion(SPAnalytical):
     .. image:: _static/brownian_motion_drawn.png
 
 
-    A standard Brownian motion    :math:`\{W_t : t \geq 0\}` is defined by the following properties:
+    A standard Brownian motion :math:`\{W_t : t \geq 0\}` is defined by the following properties:
 
     1. Starts at zero, i.e. :math:`W(0) = 0`
     2. Independent increments
