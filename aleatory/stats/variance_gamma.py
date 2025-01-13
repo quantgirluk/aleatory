@@ -19,9 +19,7 @@ def _vg_log_pdf(x, r, theta, sigma):
 def _vg_pdf(x, r, theta, sigma):
     f1 = -np.log(sigma * np.sqrt(np.pi) * gamma(0.5 * r))
     f2 = (theta * x) / sigma**2
-
     # f30 = (np.abs(x) / (2.0 * np.sqrt(theta**2 + sigma**2))) ** (0.5 * (r - 1.0))
-
     f3 = (0.5 * (r - 1.0)) * (
         np.log(np.abs(x)) - np.log((2.0 * np.sqrt(theta**2 + sigma**2)))
     )
