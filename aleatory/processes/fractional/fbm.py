@@ -110,8 +110,8 @@ if __name__ == "__main__":
     plt.style.use(qs)
 
     p = fBM(hurst=0.25, T=10.0)
-    p.plot(n=1000, N=4, figsize=(12, 7), style=qs)
-    p.draw(n=1000, N=200, figsize=(12, 7), style=qs, colormap="viridis")
+    # p.plot(n=1000, N=4, figsize=(12, 7), style=qs)
+    p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="viridis")
 #
 #     p1 = fBM(T=10.0)
 #     p2 = fBM(hurst=0.25, T=10.0)
