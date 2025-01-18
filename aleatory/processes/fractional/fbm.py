@@ -109,39 +109,6 @@ if __name__ == "__main__":
     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
     plt.style.use(qs)
 
-    p = fBM(hurst=0.25, T=10.0)
-    # p.plot(n=1000, N=4, figsize=(12, 7), style=qs)
-    p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="viridis")
-#
-#     p1 = fBM(T=10.0)
-#     p2 = fBM(hurst=0.25, T=10.0)
-#     p3 = fBM(hurst=0.75, T=10.0)
-#     p4 = fBM(hurst=0.15, T=10.0)
-#
-#     for p, cm in [
-#         (p1, "twilight"),
-#         (p2, "Purples"),
-#         (p3, "PuOr"),
-#         (p4, "Blues"),
-#     ]:
-#
-#         p.draw(
-#             n=1000,
-#             N=300,
-#             figsize=(12, 7),
-#             style=qs,
-#             colormap=cm,
-#             #     # orientation="vertical",
-#         )
-# p.plot(
-#     n=1000,
-#     N=5,
-#     figsize=(12, 7),
-#     style=qs,
-#     # colormap=cm,
-#     # orientation="vertical",
-#     # mode="steps+points",
-#     # envelope=False,
-# )
-
-# p.plot(N=10, n=100)
+    p = fBM(hurst=0.25, T=1.0)
+    p.plot(n=500, N=4, figsize=(12, 7), style=qs)
+    p.draw(n=500, N=200, figsize=(12, 7), style=qs, colormap="viridis")
