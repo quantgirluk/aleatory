@@ -48,14 +48,14 @@ class fBM(SPAnalytical):
 
     def _davies_harte_algorithm(self, n):
         """
-        Generate a fractional Gaussian noise using the Davies Harte algorithm.
+        Generate a fractional Gaussian noise sample using the Davies Harte algorithm.
         Davies, Robert B., and D. S. Harte. "Tests for Hurst effect."
         https://robertnz.net/pdf/hursteffect.pdf
         """
 
         # For scaling to interval [0, T]
-        increment = self.T / n
-        scale = increment**self.hurst
+        dt = self.T / n
+        scale = dt**self.hurst
 
         # If H = 0.5, then generate a standard Brownian motion, otherwise
         # proceed with the Davies Harte method
