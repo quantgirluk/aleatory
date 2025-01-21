@@ -5,6 +5,20 @@ import numpy as np
 
 
 class InverseGaussian(SPAnalytical):
+    r"""Inverse Gaussian process
+
+    .. image:: _static/inverse_gaussian_process_draw.png
+
+    An Inverse Gaussian process is a stochastic process :math:`\{X(t),t\geq 0\}` where:
+
+    - :math:`X(0)=0`,
+    - the increments :math:`X(t)−X(s)` (for all :math:`t>s`) are independent and follow the Inverse Gaussian distribution with mean :math:`\mu(t-s)` and scale parameter :math:`\eta`.
+
+    :parameter double mu: the :math:`\mu>0` which defines the mean of the increments of the Inverse Gaussian process.
+    :parameter double scale: the :math:`\eta>0` which defines the scale of the increments of the Inverse Gaussian process
+    :parameter numpy.random.Generator rng: a custom random number generator
+
+    """
 
     def __init__(self, mu=1.0, scale=1.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
@@ -95,32 +109,32 @@ class InverseGaussian(SPAnalytical):
         )
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     p1 = InverseGaussian(T=3.0)
-#     p2 = InverseGaussian(mu=2.0, scale=2.0, T=3.0)
-#     p3 = InverseGaussian(scale=3.0, T=3.0)
-#     p4 = InverseGaussian(scale=0.5, T=3.0)
-#
-#     for p, cm in [
-#         (p1, "Spectral"),
-#         (p2, "Purples"),
-#         (p3, "Oranges"),
-#         (p4, "Blues"),
-#     ]:
-#
-#         p.draw(
-#             n=300,
-#             N=500,
-#             figsize=(12, 7),
-#             style=qs,
-#             colormap=cm,
-#             # orientation="vertical",
-#             # mode="steps+points",
-#             envelope=False,
-#         )
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    p1 = InverseGaussian(T=3.0)
+    p2 = InverseGaussian(mu=2.0, scale=2.0, T=3.0)
+    p3 = InverseGaussian(scale=3.0, T=3.0)
+    p4 = InverseGaussian(scale=0.5, T=3.0)
+
+    for p, cm in [
+        (p1, "Spectral"),
+        (p2, "Purples"),
+        (p3, "Oranges"),
+        (p4, "Blues"),
+    ]:
+
+        p.draw(
+            n=300,
+            N=500,
+            figsize=(12, 7),
+            style=qs,
+            colormap=cm,
+            # orientation="vertical",
+            # mode="steps+points",
+            envelope=False,
+        )

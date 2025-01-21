@@ -9,16 +9,21 @@ from aleatory.utils.plotters import plot_poisson, draw_poisson_like
 class InhomogeneousPoissonProcess(BaseProcess):
     r"""Inhomogeneous Poisson Process
 
-        .. image:: _static/poisson_process_draw.png
+        .. image:: _static/poisson_non_homogeneous_draw.png
 
     An inhomogeneous Poisson point process is a type of random mathematical object that consists of points randomly
     located on a mathematical space with the essential feature that the points occur independently of one another.
 
-    A Poisson process :math:`{N(t) : t\geq 0}` with intensity rate :math:`\lambda(t)`, is defined by the
+    More precisely, let :math:`\lambda(t):[0,\infty) \mapsto :[0,\infty)` be an integrable function. A inhomogeneou (or
+    non-homogeneous) Poisson process :math:`\{N(t) : t\geq 0\}` with intensity rate :math:`\lambda(t)`, is defined by the
     following properties:
 
-    -  :math:`N(t)` has a Poisson distribution with parameter :math:`\Lambda t`, for each :math:`t> 0`.
-    -  It has independent increments
+    - :math:`N(0)=0`,
+    - :math:`N(t)` has independent increments,
+    - :math:`N(t)` has a Poisson distribution with parameter :math:`\Lambda (t) = \int_0^t \lambda(s)ds`, for each :math:`t> 0`.
+
+    :parameter callable intensity: a callable object which defines the intensity of the Poisson process
+    :parameter numpy.random.Generator rng: a custom random number generator
 
     """
 
@@ -134,61 +139,61 @@ class InhomogeneousPoissonProcess(BaseProcess):
         return fig
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     def myfunction1(s):
-#         return s
-#
-#     p1 = InhomogeneousPoissonProcess(intensity=myfunction1)
-#     title1 = f"Inhomogeneous Poisson Process $\\lambda(t)=t$"
-#
-#     def myfunction2(s):
-#         return s**2
-#
-#     p2 = InhomogeneousPoissonProcess(intensity=myfunction2)
-#     title2 = f"Inhomogeneous Poisson Process $\\lambda(t)=t^2$"
-#
-#     def myfunction3(s):
-#         return 3 * np.exp(s)  # Example: periodic intensity
-#         # return 3 * np.sin(2 * np.pi * s)  # Example: periodic intensity
-#
-#     p3 = InhomogeneousPoissonProcess(intensity=myfunction3)
-#     title3 = f"Inhomogeneous Poisson Process $\\lambda(t)=3 e^t$"
-#
-#     def myfunction4(s):
-#         return 5 + 2.0 * np.sin(2 * np.pi * s)  # Example: periodic intensity
-#
-#     p4 = InhomogeneousPoissonProcess(intensity=myfunction4)
-#     title4 = f"Inhomogeneous Poisson Process $\\lambda(t)=5 + 2\\sin(2\\pi t)$"
-#
-#     def myfunction5(s):
-#         return (1.0 / (s + 1.0)) + 3.0  # Example: periodic intensity
-#
-#     p5 = InhomogeneousPoissonProcess(intensity=myfunction5)
-#     title5 = "Inhomogeneous Poisson Process $\\lambda(t)=\\frac{1}{t+10} + 3$"
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#
-#     plt.style.use(qs)
-#
-#     for p, cm, t in [
-#         (p1, "twilight", title1),
-#         (p2, "RdPu", title2),
-#         (p3, "viridis", title3),
-#         (p4, "Blues", title4),
-#         (p5, "OrRd", title5),
-#     ]:
-#
-#         p.draw(
-#             N=100,
-#             T=5.0,
-#             figsize=(12, 7),
-#             style=qs,
-#             colormap=cm,
-#             envelope=False,
-#             title=t,
-#         )
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    def myfunction1(s):
+        return s
+
+    p1 = InhomogeneousPoissonProcess(intensity=myfunction1)
+    title1 = f"Inhomogeneous Poisson Process $\\lambda(t)=t$"
+
+    def myfunction2(s):
+        return s**2
+
+    p2 = InhomogeneousPoissonProcess(intensity=myfunction2)
+    title2 = f"Inhomogeneous Poisson Process $\\lambda(t)=t^2$"
+
+    def myfunction3(s):
+        return 3 * np.exp(s)  # Example: periodic intensity
+        # return 3 * np.sin(2 * np.pi * s)  # Example: periodic intensity
+
+    p3 = InhomogeneousPoissonProcess(intensity=myfunction3)
+    title3 = f"Inhomogeneous Poisson Process $\\lambda(t)=3 e^t$"
+
+    def myfunction4(s):
+        return 5 + 2.0 * np.sin(2 * np.pi * s)  # Example: periodic intensity
+
+    p4 = InhomogeneousPoissonProcess(intensity=myfunction4)
+    title4 = f"Inhomogeneous Poisson Process $\\lambda(t)=5 + 2\\sin(2\\pi t)$"
+
+    def myfunction5(s):
+        return (1.0 / (s + 1.0)) + 3.0  # Example: periodic intensity
+
+    p5 = InhomogeneousPoissonProcess(intensity=myfunction5)
+    title5 = "Inhomogeneous Poisson Process $\\lambda(t)=\\frac{1}{t+10} + 3$"
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+
+    plt.style.use(qs)
+
+    for p, cm, t in [
+        (p1, "twilight", title1),
+        (p2, "RdPu", title2),
+        (p3, "viridis", title3),
+        (p4, "Blues", title4),
+        (p5, "OrRd", title5),
+    ]:
+
+        p.draw(
+            N=100,
+            T=5.0,
+            figsize=(12, 7),
+            style=qs,
+            colormap=cm,
+            envelope=False,
+            title=t,
+        )
 #
 #     p1.plot(N=5, T=5.0, figsize=(12, 7), style=qs, title=title1)

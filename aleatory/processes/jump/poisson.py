@@ -18,10 +18,14 @@ class PoissonProcess(BaseProcess):
     A Poisson point process is a type of random mathematical object that consists of points randomly located on
     a mathematical space with the essential feature that the points occur independently of one another.
 
-    A Poisson process :math:`{N(t) : t\geq 0}` with intensity rate :math:`\lambda>0`, is defined by the following properties:
+    A Poisson process :math:`\{N(t) : t\geq 0\}` with intensity rate :math:`\lambda>0`, is defined by the following properties:
 
-    -  :math:`N(t)` has a Poisson distribution with parameter :math:`\lambda t`, for each :math:`t> 0`.
-    -  It has independent increments
+    - :math:`N(0)=0`,
+    - :math:`N(t)` has a Poisson distribution with parameter :math:`\lambda t`, for each :math:`t> 0`,
+    -  It has independent increments.
+
+    :parameter float rate: the intensity rate :math:`\lambda>0`,
+    :parameter numpy.random.Generator rng: a custom random number generator
 
     """
 

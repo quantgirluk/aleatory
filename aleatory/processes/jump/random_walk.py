@@ -128,32 +128,60 @@ class SimpleRandomWalk(SPAnalytical, ABC):
 
 
 class RandomWalk(SimpleRandomWalk):
+    r"""Simple Random Walk
+
+      .. image:: _static/simple_random_walk_draw.png
+
+    Let :math:`\{Z_i, i \geq 1\}` be a sequence of real-valued independent an identically
+    distributed (i.i.d.) random variables defined on a probability
+    space :math:`(\Omega, \mathcal{F}, \mathbb{P})`, such that
+
+    .. math::
+        \mathbb{P}(Z_1 = 1) = p,
+    and
+
+    .. math::
+        \mathbb{P}(Z_1 = -1) = 1-p,
+
+    Then, the stochastic process :math:`\{X_n , n\geq 0\}`,
+    defined as :math:`X_0 =0`, and
+
+    .. math::
+
+        X_n = \sum_{i=1}^n Z_i, \qquad \forall n\geq 1,
+
+    is called a Simple Random Walk.
+
+    :parameter double p: the probability :math:`p\in(0,1)` of $Z_i$ taking the value 1 as per above definition.
+    :parameter numpy.random.Generator rng: a custom random number generator
+
+    """
 
     def __init__(self, rng=None):
 
         super().__init__(p=0.5, rng=rng)
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     for prob in [0.25, 0.5, 0.75]:
-#         p = SimpleRandomWalk(p=prob)
-#
-#         p.plot(
-#             n=10,
-#             N=10,
-#             figsize=(12, 7),
-#             mode="steps+points",
-#             style=qs,
-#         )
-#         p.draw(
-#             n=100,
-#             N=200,
-#             figsize=(12, 7),
-#             style=qs,
-#         )
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    for prob in [0.25, 0.5, 0.75]:
+        p = SimpleRandomWalk(p=prob)
+
+        p.plot(
+            n=10,
+            N=10,
+            figsize=(12, 7),
+            mode="steps+points",
+            style=qs,
+        )
+        p.draw(
+            n=100,
+            N=200,
+            figsize=(12, 7),
+            style=qs,
+        )

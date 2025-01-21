@@ -11,14 +11,27 @@ from aleatory.utils.plotters import plot_poisson, draw_poisson_like
 class MixedPoissonProcess(BaseProcess):
     r"""Mixed Poisson Process
 
+    .. image:: _static/mixed_poisson_draw.png
 
-    A Mixed Poisson point process is a type of random mathematical object that consists of points randomly located on
-    a mathematical space with the essential feature that the points occur independently of one another.
+    In probability theory, a mixed Poisson process is a special point process that is a generalization of a
+    Poisson process. Mixed Poisson processes are simple example for Cox processes.
 
-    A Poisson process :math:`{N(t) : t\geq 0}` with intensity rate :math:`\lambda>0`, is defined by the following properties:
+    A Mixed Poisson process (MPP) :math:`\{N(t), t\in [0,\infty)\}` is a counting process with counting distribution of the form:
 
-    -  :math:`N(t)` has a Poisson distribution with parameter :math:`\lambda t`, for each :math:`t> 0`.
-    -  It has independent increments
+    .. math::
+        P(N(t)= n) = \int_0^{\infty} \frac{1}{n!} e^{-\lambda t} (\lambda t)^n d \Lambda(\lambda), \qquad n\in \mathbb{N},
+
+    where :math:`\Lambda` is the structure distribution given by
+
+    .. math::
+        \Lambda(\lambda) = P(\Lambda \leq \lambda)
+
+    with :math:`\Lambda(0)=0`. This type of distribution is known as mixed Poisson distribution which gives the name to the processes.
+
+    :parameter callable intensity: a callable function which defines the structure distribution :math:`\Lambda`
+    :parameter intensity_args: the arguments to be passed to the intensity function
+    :parameter intensity_kwargs: the keyword arguments to be passed to the intensity function
+    :parameter numpy.random.Generator rng: a custom random number generator
 
     """
 
@@ -80,11 +93,9 @@ class MixedPoissonProcess(BaseProcess):
         It requires either the number of jumps (`jumps`) or the  time (`T`)
         for the simulation to end.
 
-        - If `jumps` is provided, the function returns :math:`N` paths each one with exactly
-            that number of jumps.
+        - If `jumps` is provided, the function returns :math:`N` paths each one with exactly that number of jumps.
 
-        - If `T` is provided, the function returns :math:`N` paths over the time :math:`[0,T]`. Note
-            that in this case each path can have a different number of jumps.
+        - If `T` is provided, the function returns :math:`N` paths over the time :math:`[0,T]`. Note that in this case each path can have a different number of jumps.
 
         :param int N: number of paths to simulate
         :param int jumps: number of jumps
@@ -158,47 +169,47 @@ class MixedPoissonProcess(BaseProcess):
         return fig
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#     from scipy.stats import gamma, chi2
-#
-#     def intensity_gamma(a=1.0):
-#         g = gamma(a=a)
-#         return g.rvs()
-#
-#     p1 = MixedPoissonProcess(intensity=intensity_gamma)
-#     t1 = "Mixed Poisson Process with $\\Lambda \sim \Gamma(1.0, 1.0)$"
-#     p2 = MixedPoissonProcess(intensity=intensity_gamma, intensity_kwargs={"a": 3.0})
-#     t2 = "Mixed Poisson Process with $\\Lambda \sim \Gamma(3.0, 1.0)$"
-#
-#     def intensity_chi2(df=3.0):
-#         rv = chi2(df=df)
-#         return rv.rvs()
-#
-#     p3 = MixedPoissonProcess(intensity=intensity_chi2)
-#     t3 = "Mixed Poisson Process with $\\Lambda \sim \\chi^2(3.0)$"
-#     p4 = MixedPoissonProcess(intensity=intensity_chi2, intensity_kwargs={"df": 20})
-#     t4 = "Mixed Poisson Process with $\\Lambda \sim \\chi^2(20.0)$"
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     for p, cm, t in [
-#         (p1, "terrain", t1),
-#         (p2, "RdPu", t2),
-#         (p3, "plasma", t3),
-#         (p4, "Blues", t4),
-#     ]:
-#
-#         p.draw(
-#             N=300,
-#             T=5.0,
-#             figsize=(12, 7),
-#             style=qs,
-#             colormap=cm,
-#             envelope=False,
-#             title=t,
-#         )
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+    from scipy.stats import gamma, chi2
+
+    def intensity_gamma(a=1.0):
+        g = gamma(a=a)
+        return g.rvs()
+
+    p1 = MixedPoissonProcess(intensity=intensity_gamma)
+    t1 = "Mixed Poisson Process with $\\Lambda \sim \Gamma(1.0, 1.0)$"
+    p2 = MixedPoissonProcess(intensity=intensity_gamma, intensity_kwargs={"a": 3.0})
+    t2 = "Mixed Poisson Process with $\\Lambda \sim \Gamma(3.0, 1.0)$"
+
+    def intensity_chi2(df=3.0):
+        rv = chi2(df=df)
+        return rv.rvs()
+
+    p3 = MixedPoissonProcess(intensity=intensity_chi2)
+    t3 = "Mixed Poisson Process with $\\Lambda \sim \\chi^2(3.0)$"
+    p4 = MixedPoissonProcess(intensity=intensity_chi2, intensity_kwargs={"df": 20})
+    t4 = "Mixed Poisson Process with $\\Lambda \sim \\chi^2(20.0)$"
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    for p, cm, t in [
+        (p1, "terrain", t1),
+        (p2, "RdPu", t2),
+        (p3, "plasma", t3),
+        (p4, "Blues", t4),
+    ]:
+
+        p.draw(
+            N=300,
+            T=5.0,
+            figsize=(12, 7),
+            style=qs,
+            colormap=cm,
+            envelope=False,
+            title=t,
+        )
 #
 #     p1.plot(N=10, T=10, figsize=(12, 7), style=qs, title=t1)
