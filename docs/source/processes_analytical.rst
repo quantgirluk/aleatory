@@ -13,7 +13,6 @@ analytical form.
 * :py:class:`aleatory.processes.GBM`
 * :py:class:`aleatory.processes.BESProcess`
 * :py:class:`aleatory.processes.BESQProcess`
-* :py:class:`aleatory.processes.PoissonProcess`
 
 
 
@@ -38,5 +37,3 @@ analytical form.
 .. autoclass:: aleatory.processes.BESQProcess
     :members: T, sample, simulate, plot, draw
 
-.. autoclass:: aleatory.processes.PoissonProcess
-    :members: sample, simulate, plot, draw
