@@ -1,5 +1,5 @@
 """
-Random Walk
+General Random Walk
 """
 
 from aleatory.processes.base_analytical import SPAnalytical
@@ -13,6 +13,29 @@ import numpy as np
 
 
 class GeneralRandomWalk(SPAnalytical, ABC):
+    r"""General Random Walk
+
+        .. image:: _static/gen_random_walk_draw.png
+
+    Let :math:`\{Z_i, i \geq 1\}` be a sequence of real-valued independent an identically
+    distributed (i.i.d.) random variables defined on a probability
+    space :math:`(\Omega, \mathcal{F}, \mathbb{P})`. Then, the stochastic process :math:`\{X_n , n\geq 0\}`,
+    defined as :math:`X_0 =0`, and
+
+    .. math::
+
+        X_n = \sum_{i=1}^n Z_i, \qquad \forall n\geq 1,
+
+    is called random walk, or more precisely one-dimensional random walked based on :math:`\{Z_i, i \geq 1\}`.
+
+
+    :parameter step_dist: an object representing the random variable :math:`Z_i` above (e.g.scipy.stats.norm)
+    :parameter step_args: arguments (if any) to pass to the chosen step distribution
+    :parameter step_kwargs: keyword arguments (if any) to pass to the chosen step distribution
+    :parameter bool normalised: normalised or not
+    :parameter numpy.random.Generator rng: a custom random number generator
+
+    """
 
     def __init__(
         self,
@@ -153,29 +176,29 @@ if __name__ == "__main__":
         mode="steps+points",
         style=qs,
     )
-    p.draw(
-        n=100,
-        N=200,
-        figsize=(12, 7),
-        title="Random Walk with Normalised Exponential Steps",
-        style=qs,
-        colormap="viridis",
-    )
-
-    p = GeneralRandomWalk(step_dist=binom(n=10, p=0.2), normalised=True)
-    p.plot(
-        n=10,
-        N=200,
-        figsize=(12, 7),
-        title="Random Walk Normalised Binomial Steps",
-        mode="steps+points",
-        style=qs,
-    )
-    p.draw(
-        n=20,
-        N=200,
-        figsize=(12, 7),
-        title="Random Walk Normalised Binomial Steps",
-        style=qs,
-        colormap="magma",
-    )
+    # p.draw(
+    #     n=100,
+    #     N=200,
+    #     figsize=(12, 7),
+    #     title="Random Walk with Normalised Exponential Steps",
+    #     style=qs,
+    #     colormap="viridis",
+    # )
+    #
+    # p = GeneralRandomWalk(step_dist=binom(n=10, p=0.2), normalised=True)
+    # p.plot(
+    #     n=10,
+    #     N=200,
+    #     figsize=(12, 7),
+    #     title="Random Walk Normalised Binomial Steps",
+    #     mode="steps+points",
+    #     style=qs,
+    # )
+    # p.draw(
+    #     n=20,
+    #     N=200,
+    #     figsize=(12, 7),
+    #     title="Random Walk Normalised Binomial Steps",
+    #     style=qs,
+    #     colormap="magma",
+    # )
