@@ -5,6 +5,36 @@ from aleatory.processes.jump.poisson_nonhomogeneous import (
 
 
 class HawkesProcess(InhomogeneousPoissonProcess):
+    r"""Hawkes process
+
+        .. image:: _static/hawkes_draw.png
+
+
+    A Hawkes process is a counting process :math:`N(t)` whose conditional intensity process is given by
+
+    .. math::
+        \lambda^{\ast}(t) = \mu + \sum_{T_i <t} \phi(t-T_i), \qquad t\geq 0,
+
+    where
+
+    - :math:`\mu>0` is the baseline intensity (rate of events in the absence of previous events) or background arrival rate
+
+    - :math:`\phi: \mathbb{R}^{+}\rightarrow \mathbb{R}`, is the excitation function or triggering kernel, a non-negative function representing the influence of past events, and
+
+    - :math:`T_i`, are the times of prior events.
+
+    In particular, we assume
+
+    .. math::
+        \phi(t) = \alpha \exp(-\beta t)
+
+    i.e. an exponentially decaying excitation function.
+
+    :parameter double mu: the baseline intensity
+    :parameter double alpha: the :math:`\alpha>0` in the excitation function above
+    :parameter double beta: the :math:`\beta>0` in the excitation function above
+    :parameter numpy.random.Generator rng: a custom random number generator
+    """
 
     def __init__(self, mu=1.0, alpha=1.0, beta=1.0, rng=None):
 
@@ -96,11 +126,8 @@ class HawkesProcess(InhomogeneousPoissonProcess):
     def simulate(self, N, T=1.0):
         """
         Simulate paths/trajectories from the instanced stochastic process.
-        It requires either the number of jumps (`jumps`) or the  time (`T`)
-        for the simulation to end.
-
-        - If `T` is provided, the function returns :math:`N` paths over the time :math:`[0,T]`. Note
-            that in this case each path can have a different number of jumps.
+        The function returns :math:`N` paths over the time :math:`[0,T]`. Note
+        each path can have a different number of jumps.
 
         :param int N: number of paths to simulate
         :param float T: time horizon for the simulation
@@ -112,14 +139,25 @@ class HawkesProcess(InhomogeneousPoissonProcess):
         return self.paths
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     p1 = HawkesProcess(mu=0.5, alpha=1.0, beta=2.0)
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    p = HawkesProcess(mu=0.5, alpha=1.0, beta=2.0)
+    p.draw(
+        N=200,
+        T=10.0,
+        figsize=(12, 7),
+        style=qs,
+        colormap="terrain",
+        mode="steps+points",
+        envelope=False,
+    )
+
+
 #     p2 = HawkesProcess(mu=1.0, alpha=1.0, beta=2.0)
 #     p3 = HawkesProcess(mu=1.0, alpha=0.5, beta=0.5)
 #     p4 = HawkesProcess(mu=0.25, alpha=1.0, beta=0.5)
