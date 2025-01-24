@@ -24,10 +24,14 @@ def _sample_besselq_global(T, initial, dim, n):
 
 
 class BESQProcess(SPAnalytical):
-    r"""Squared Bessel process
+    r"""
+    Squared Bessel process
+    ======================
 
-    .. image:: _static/besq_process_drawn.png
+    .. image:: ../_static/besq_process_drawn.png
 
+    Definition
+    ----------
 
     A squared Bessel process :math:`BESQ^{n}_{0}`, for :math:`n` integer is a continuous stochastic process
     :math:`\{X(t) : t \geq  0\}` which is characterised as the squared Euclidian norm of an :math:`n`-dimensional
@@ -53,16 +57,18 @@ class BESQProcess(SPAnalytical):
     - :math:`\delta` is a positive real
     - :math:`W_t` is a standard Brownian Motion.
 
-
-    :param double dim: the dimension of the process :math:`n`
-    :param double initial: the initial point of the process :math:`x_0`
-    :param double T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
-
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
     def __init__(self, dim=1.0, initial=0.0, T=1.0, rng=None):
+        """
+        :param double dim: the dimension of the process :math:`n`
+        :param double initial: the initial point of the process :math:`x_0`
+        :param double T: the right hand endpoint of the time interval :math:`[0,T]`
+            for the process
+        :param numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
