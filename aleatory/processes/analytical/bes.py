@@ -21,10 +21,14 @@ def _sample_bessel_global(T, initial, dim, n):
 
 
 class BESProcess(SPAnalytical):
-    r"""Bessel process
+    r"""
+    Bessel process
+    ==============
 
-    .. image:: _static/bes_process_drawn.png
+    .. image:: ../_static/bes_process_drawn.png
 
+    Notes
+    -----
 
     A Bessel process :math:`BES^{n}_{0},` for :math:`n\geq 2` integer is a continuous stochastic process
     :math:`\{X(t) : t \geq  0\}` characterised as the Euclidian norm of an :math:`n`-dimensional
@@ -51,16 +55,19 @@ class BESProcess(SPAnalytical):
     - :math:`\delta` is a positive real
     - :math:`W_t` is a standard one-dimensional Brownian Motion.
 
-
-    :param double dim: the dimension of the process :math:`n`
-    :param double initial: the initial point of the process :math:`x_0`
-    :param double T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, dim=1.0, initial=0.0, T=1.0, rng=None):
+        """
+        :param double dim: the dimension of the process :math:`n`
+        :param double initial: the initial point of the process :math:`x_0`
+        :param double T: the right hand endpoint of the time interval :math:`[0,T]`
+            for the process
+        :param numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(T=T, rng=rng, initial=initial)
         self.dim = dim
         self._brownian_motion = BrownianMotion(T=T, rng=rng)
@@ -197,34 +204,34 @@ class BESProcess(SPAnalytical):
         return variances
 
 
-# if __name__ == "__main__":
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     p1 = BESProcess()
-#     p2 = BESProcess(dim=4.0)
-#     p3 = BESProcess(initial=5.0, dim=2.5)
-#     p4 = BESProcess(initial=3.0, dim=1.25)
-#     p5 = BESProcess(initial=1.0, dim=3.0)
-#
-#     p1.plot(n=200, N=5, figsize=(12, 7), style=qs)
-#     p1.draw(n=200, N=200, figsize=(12, 7), style=qs, envelope=True)
-#     for p, cm in [
-#         (p1, "twilight"),
-#         (p2, "PuBuGn"),
-#         (p3, "Oranges"),
-#         (p4, "RdBu"),
-#         (p5, "Purples"),
-#         # (p6, "Oranges"),
-#     ]:
-#
-#         p.draw(
-#             n=200,
-#             N=200,
-#             figsize=(12, 7),
-#             style=qs,
-#             colormap=cm,
-#             envelope=False,
-#         )
+if __name__ == "__main__":
+    # import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    # plt.style.use(qs)
+
+    p1 = BESProcess()
+    p2 = BESProcess(dim=4.0)
+    p3 = BESProcess(initial=5.0, dim=2.5)
+    p4 = BESProcess(initial=3.0, dim=1.25)
+    p5 = BESProcess(initial=1.0, dim=3.0)
+
+    p1.plot(n=200, N=5, figsize=(12, 7), style=qs)
+    p1.draw(n=200, N=200, figsize=(12, 7), style=qs, envelope=True)
+    for p, cm in [
+        (p1, "twilight"),
+        (p2, "PuBuGn"),
+        (p3, "Oranges"),
+        (p4, "RdBu"),
+        (p5, "Purples"),
+        # (p6, "Oranges"),
+    ]:
+
+        p.draw(
+            n=200,
+            N=200,
+            figsize=(12, 7),
+            style=qs,
+            colormap=cm,
+            envelope=False,
+        )
