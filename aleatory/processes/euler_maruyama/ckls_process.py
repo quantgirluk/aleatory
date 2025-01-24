@@ -5,12 +5,14 @@ from aleatory.processes import BrownianMotion, Vasicek, CIRProcess, GBM
 
 
 class CKLSProcess(CKLSProcessGeneric):
-
     r"""
     Chan-Karolyi-Longstaff-Sanders (CKLS) process
+    =============================================
 
-    .. image:: _static/ckls_process_draw.png
+    .. image:: ../_static/ckls_process_draw.png
 
+    Notes
+    -----
 
     A CKLS process  :math:`X = \{X : t \geq  0\}` is characterised by the following
     Stochastic Differential Equation
@@ -27,41 +29,49 @@ class CKLSProcess(CKLSProcessGeneric):
     - :math:`\gamma\geq 0` is the elasticity term
     - :math:`W_t` is a standard Brownian Motion.
 
-    Reference: CHAN, K.C., KAROLYI, G.A., LONGSTAFF, F.A. and SANDERS, A.B. (1992),
+    References
+    ----------
+
+    - CHAN, K.C., KAROLYI, G.A., LONGSTAFF, F.A. and SANDERS, A.B. (1992),
     An Empirical Comparison of Alternative Models of the Short-Term Interest Rate. The Journal of Finance,
     47: 1209-1227. https://doi.org/10.1111/j.1540-6261.1992.tb04011.x
 
-
-    :param float alpha: the parameter :math:`\alpha` in the above SDE
-    :param float beta: the parameter :math:`\beta` in the above SDE
-    :param float sigma: the parameter :math:`\sigma>0` in the above SDE
-    :param float gamma: the parameter :math:`\gamma\geq 0` in the above SDE
-    :param float initial: the initial condition :math:`x_0` in the above SDE
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
+
     def __new__(cls, *args, **kwargs):
-        alpha = kwargs['alpha'] if  'alpha' in kwargs else 0.5
-        beta = kwargs['beta'] if 'beta' in kwargs else 0.5
-        sigma = kwargs['sigma'] if 'sigma' in kwargs else 0.1
-        gamma = kwargs['gamma'] if 'gamma' in kwargs else 1.5
-        initial = kwargs['initial'] if 'initial' in kwargs else 1.0
-        T = kwargs['T'] if 'T' in kwargs else 1.0
-        rng = kwargs['rng'] if 'rng' in kwargs else None
+        alpha = kwargs["alpha"] if "alpha" in kwargs else 0.5
+        beta = kwargs["beta"] if "beta" in kwargs else 0.5
+        sigma = kwargs["sigma"] if "sigma" in kwargs else 0.1
+        gamma = kwargs["gamma"] if "gamma" in kwargs else 1.5
+        initial = kwargs["initial"] if "initial" in kwargs else 1.0
+        T = kwargs["T"] if "T" in kwargs else 1.0
+        rng = kwargs["rng"] if "rng" in kwargs else None
         if beta == 0.0 and gamma == 0:
             return BrownianMotion(drift=alpha, scale=sigma, T=T, rng=rng)
-        elif gamma == 0 and beta<0:
+        elif gamma == 0 and beta < 0:
             theta = -1.0 * beta
             mu = -1.0 * alpha / beta
-            return Vasicek(theta=theta, mu=mu, sigma=sigma, initial=initial, T=T, rng=rng)
+            return Vasicek(
+                theta=theta, mu=mu, sigma=sigma, initial=initial, T=T, rng=rng
+            )
         elif gamma == 0.5:
             theta = -1.0 * beta
             mu = -1.0 * alpha / beta
-            return CIRProcess(theta=theta, mu=mu, sigma=sigma, initial=initial, T=T, rng=rng)
+            return CIRProcess(
+                theta=theta, mu=mu, sigma=sigma, initial=initial, T=T, rng=rng
+            )
         elif alpha == 0.0 and gamma == 1.0:
             return GBM(drift=beta, volatility=sigma, initial=initial, T=T, rng=rng)
         else:
-            return CKLSProcessGeneric(alpha=alpha, beta=beta, sigma=sigma, gamma=gamma, initial=initial, T=T, rng=rng)
-
+            return CKLSProcessGeneric(
+                alpha=alpha,
+                beta=beta,
+                sigma=sigma,
+                gamma=gamma,
+                initial=initial,
+                T=T,
+                rng=rng,
+            )

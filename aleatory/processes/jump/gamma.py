@@ -11,9 +11,14 @@ from aleatory.processes.analytical.increments import GammaIncrements
 
 
 class GammaProcess(SPAnalytical):
-    r"""Gamma process
+    r"""
+    Gamma process
+    =============
 
-    .. image:: _static/gamma_process_draw.png
+    .. image:: ../_static/gamma_process_draw.png
+
+    Notes
+    -----
 
     The gamma process :math:`X = \{ X(t; \mu,\nu) : t \geq 0\}` with mean parameter
     :math:`\mu` and variance parameter :math:`\nu` is a continuous-time process with stationary,
@@ -24,12 +29,17 @@ class GammaProcess(SPAnalytical):
 
     for any :math:`h > 0`.
 
-    :parameter float mu: the parameter :math:`\mu` in the above definition
-    :parameter float nu: the parameter :math:`\nu` in the above definition
-
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
-    def __init__(self, mu=1.0, nu=1.0, T=1.0, rng=None):
+    def __init__(self, mu=1.0, nu=1.0, T=10.0, rng=None):
+        """
+
+        :parameter float mu: the parameter :math:`\mu` in the above definition
+        :parameter float nu: the parameter :math:`\nu` in the above definition
+
+        """
         super().__init__(T=T, rng=rng, initial=0.0)
         self.mu = mu
         self.nu = nu
@@ -138,7 +148,7 @@ class GammaProcess(SPAnalytical):
         :return:
 
         """
-        self._plot_process(n=n, N=N, mode=mode, title=title, **fig_kw)
+        return self._plot_process(n=n, N=N, mode=mode, title=title, **fig_kw)
 
     def draw(
         self, n, N, marginal=True, envelope=False, mode="steps", title=None, **fig_kw
@@ -170,7 +180,7 @@ if __name__ == "__main__":
 
     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
     plt.style.use(qs)
-    p = GammaProcess(T=10.0)
+    p = GammaProcess()
     p.plot(n=100, N=5, figsize=(12, 8), style=qs)
     p.draw(n=100, N=200, figsize=(12, 8), style=qs)
 

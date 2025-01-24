@@ -9,10 +9,16 @@ from aleatory.utils.utils import check_positive_number, check_numeric, get_times
 
 
 class BrownianMotion(SPAnalytical):
-    r"""Brownian motion
+    r"""
+    Brownian Motion
+    ===============
 
-    .. image:: _static/brownian_motion_drawn.png
+    A one-dimensional standard Brownian motion object.
 
+    .. image:: ../_static/brownian_motion_drawn.png
+
+    Notes
+    -----
 
     A standard Brownian motion :math:`\{W_t : t \geq 0\}` is defined by the following properties:
 
@@ -43,16 +49,37 @@ class BrownianMotion(SPAnalytical):
 
     and each :math:`X_t \sim N(\mu t, \sigma^2 t)`.
 
+    Examples
+    --------
 
-    :parameter float drift: the parameter :math:`\mu` in the above SDE
-    :parameter float scale: the parameter :math:`\sigma>0` in the above SDE
-    :parameter float initial: the initial condition :math:`x_0` in the above SDE
-    :parameter float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
-    :parameter numpy.random.Generator rng: a custom random number generator
+    .. highlight:: python
+    .. code-block:: python
+
+        from aleatory.processes import BrownianMotion
+        process = BrownianMotion()
+        fig = process.plot(n=100, N=5, figsize=(12, 7))
+        fig.show()
+
+
+    .. code-block:: python
+
+        from aleatory.processes import BrownianMotion
+        process = BrownianMotion()
+        fig = process.draw(n=100, N=100, figsize=(12, 7))
+        fig.show()
+
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, drift=0.0, scale=1.0, initial=0.0, T=1.0, rng=None):
+        """
+        :param double drift: the drift parameter :math:`\mu` in the above SDE
+        :param double scale: the scale parameter :math:`\sigma` in the above SDE
+        :param double initial: the initial condition :math:`x_0` in the above SDE
+        :param double T: the endpoint of the time interval :math:`[0,T]` over which the process is defined
+        """
         super().__init__(T=T, rng=rng, initial=0.0)
         self.drift = drift
         self.scale = scale

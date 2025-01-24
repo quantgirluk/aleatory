@@ -12,20 +12,28 @@ from scipy.stats import chi
 class BrownianExcursion(BrownianBridge):
     r"""
     Brownian Excursion
+    ==================
 
-    .. image:: _static/brownian_excursion_drawn.png
+    .. image:: ../_static/brownian_excursion_drawn.png
+
+    Notes
+    _____
 
     A Brownian excursion process, is a Wiener process (or Brownian motion) conditioned
     to be positive and to take the value 0 at time 1. Alternatively, it can be defined as a Brownian
     Bridge process conditioned to be positive.
 
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
 
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
     def __init__(self, T=1.0, rng=None):
+        """
+        :param float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
+        :param numpy.random.Generator rng: a custom random number generator
+
+        """
         super().__init__(T=T, rng=rng)
         if self.T == 1.0:
             self.name = "Brownian Excursion"

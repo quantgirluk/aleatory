@@ -14,8 +14,12 @@ from aleatory.utils.utils import check_positive_integer, get_times
 class BrownianBridge(BrownianMotion):
     r"""
     Brownian Bridge
+    ===============
 
-    .. image:: _static/brownian_bridge_drawn.png
+    .. image:: ../_static/brownian_bridge_drawn.png
+
+    Definition
+    ----------
 
     A Brownian bridge is a continuous-time stochastic process  :math:`\{B_t : t \geq 0\}`
     whose probability distribution is the conditional probability distribution of a
@@ -29,23 +33,18 @@ class BrownianBridge(BrownianMotion):
 
     More generally, a Brownian Bridge is  subject to the conditions :math:`W(0) = a` and :math:`W(T) = b`.
 
-
-    :param float initial: initial condition
-    :param float end: end condition
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
-
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
     def __init__(self, initial=0.0, end=0.0, T=1.0, rng=None):
         """
-        Parameters
+
         :param float initial: initial condition
         :param float end: end condition
-        :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
+        :param float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
         :param numpy.random.Generator rng: a custom random number generator
+
         """
         super().__init__(T=T, rng=rng)
         self.initial = initial

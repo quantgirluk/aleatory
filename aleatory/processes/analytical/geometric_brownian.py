@@ -16,10 +16,16 @@ from aleatory.utils.utils import (
 
 
 class GBM(SPAnalytical):
-    r"""Geometric Brownian Motion
+    r"""
+    Geometric Brownian Motion
+    =========================
 
-    .. image:: _static/geometric_brownian_motion_drawn.png
+    A Geometric Brownian Motion object.
 
+    .. image:: ../_static/geometric_brownian_motion_drawn.png
+
+    Notes
+    -----
 
     A Geometric Brownian Motion :math:`\{X(t) : t \geq  0\}` is characterised by
     the following SDE.
@@ -41,21 +47,35 @@ class GBM(SPAnalytical):
 
         X_t = x_0\exp\left((\mu + \frac{\sigma^2}{2} )t +\sigma W_t\right)
 
-
-
-
     and each :math:`X_t` follows a log-normal distribution.
 
-    :param float drift: the parameter :math:`\mu` in the above SDE
-    :param float volatility: the parameter :math:`\sigma>0` in the above SDE
-    :param float initial: the initial condition :math:`x_0` in the above SDE
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
+    Examples
+    --------
+
+    .. highlight:: python
+    .. code-block:: python
+
+        from aleatory.processes import GBM
+        process = GBM()
+        fig = process.draw(n=100, N=5, figsize=(12, 7))
+        fig.show()
+
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, drift=1.0, volatility=0.5, initial=1.0, T=1.0, rng=None):
+        """
+        :param float drift: the parameter :math:`\mu` in the above SDE
+        :param float volatility: the parameter :math:`\sigma>0` in the above SDE
+        :param float initial: the initial condition :math:`x_0` in the above SDE
+        :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+            for the process
+        :param numpy.random.Generator rng: a custom random number generator
+
+        """
+
         super().__init__(T=T, rng=rng, initial=initial)
         self.drift = drift
         self.volatility = volatility

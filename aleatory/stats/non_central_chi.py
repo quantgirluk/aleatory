@@ -90,6 +90,7 @@ class ncx_gen(rv_continuous):
     %(after_notes)s
 
     %(example)s
+
     """
 
     def _argcheck(self, df, nc):
@@ -114,17 +115,14 @@ class ncx_gen(rv_continuous):
 
     def _stats(self, df, nc):
         alpha = (df / 2.0) - 1.0
-        mu = np.sqrt(np.pi / 2.0) * eval_genlaguerre(0.5, alpha, -0.5 * nc ** 2)
-        variance = df + nc ** 2 - mu ** 2
-        m3 = 3.0 * np.sqrt(np.pi / 2.0) * eval_genlaguerre(1.5, alpha, -0.5 * nc ** 2)
-        skewness = (m3 - 3.0 * mu * variance - mu ** 3) / (np.sqrt(variance) ** 3)
-        m4 = (df + nc ** 2) ** 2 + 2.0 * (df + 2.0 * nc ** 2)
-        kurtosis = m4 / (variance ** 2)
+        mu = np.sqrt(np.pi / 2.0) * eval_genlaguerre(0.5, alpha, -0.5 * nc**2)
+        variance = df + nc**2 - mu**2
+        m3 = 3.0 * np.sqrt(np.pi / 2.0) * eval_genlaguerre(1.5, alpha, -0.5 * nc**2)
+        skewness = (m3 - 3.0 * mu * variance - mu**3) / (np.sqrt(variance) ** 3)
+        m4 = (df + nc**2) ** 2 + 2.0 * (df + 2.0 * nc**2)
+        kurtosis = m4 / (variance**2)
 
-        return (mu,
-                variance,
-                skewness,
-                kurtosis)
+        return (mu, variance, skewness, kurtosis)
 
 
-ncx = ncx_gen(a=0.0, name='ncx')
+ncx = ncx_gen(a=0.0, name="ncx")

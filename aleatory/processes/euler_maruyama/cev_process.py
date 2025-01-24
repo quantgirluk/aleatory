@@ -8,10 +8,13 @@ from aleatory.processes.euler_maruyama.ckls_process_generic import CKLSProcessGe
 
 class CEVProcess(CKLSProcessGeneric):
     r"""
-    CEV or constant elasticity of variance process
+    Constant Elasticity of Variance (CEV) process
+    =============================================
 
-    .. image:: _static/cev_process_drawn.png
+    .. image:: ../_static/cev_process_drawn.png
 
+    Notes
+    -----
 
     A CEV process  :math:`X = \{X : t \geq  0\}` is characterised by the following
     Stochastic Differential Equation
@@ -26,6 +29,9 @@ class CEVProcess(CKLSProcessGeneric):
     - :math:`\sigma>0` is the scale of the volatility
     - :math:`\gamma\geq 0` is the elasticity term
     - :math:`W_t` is a standard Brownian Motion.
+
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
     def __new__(cls, *args, **kwargs):

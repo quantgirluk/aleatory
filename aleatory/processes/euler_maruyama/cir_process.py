@@ -5,9 +5,13 @@ from scipy.stats import ncx2
 
 class CIRProcess(SPEulerMaruyama):
     r"""
-    Cox–Ingersoll–Ross Process
+    Cox–Ingersoll–Ross (CIR) Process
+    ================================
 
-    .. image:: _static/cir_process_drawn.png
+    .. image:: ../_static/cir_process_drawn.png
+
+    Notes
+    -----
 
     A Cox–Ingersoll–Ross process :math:`X = \{X : t \geq  0\}` is characterised by the following
     Stochastic Differential Equation
@@ -24,20 +28,24 @@ class CIRProcess(SPEulerMaruyama):
     - :math:`W_t` is a standard Brownian Motion.
 
 
-    Each :math:`X_t` follows a non-central chi-square distribution.
+    It can be seen that each :math:`X_t` follows a non-central chi-square distribution.
 
-
-    :param float theta: the parameter :math:`\theta` in the above SDE
-    :param float mu: the parameter :math:`\mu` in the above SDE
-    :param float sigma: the parameter :math:`\sigma>0` in the above SDE
-    :param float initial: the initial condition :math:`x_0` in the above SDE
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, theta=1.0, mu=2.0, sigma=0.5, initial=5.0, T=1.0, rng=None):
+        """
+        :param float theta: the parameter :math:`\theta` in the above SDE
+        :param float mu: the parameter :math:`\mu` in the above SDE
+        :param float sigma: the parameter :math:`\sigma>0` in the above SDE
+        :param float initial: the initial condition :math:`x_0` in the above SDE
+        :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+            for the process
+        :param numpy.random.Generator rng: a custom random number generator
+        """
+
         super().__init__(T=T, rng=rng, initial=initial)
         self.theta = theta
         self.mu = mu

@@ -18,9 +18,14 @@ def _fgn_dh_sqrt_eigenvalues(hurst, n):
 
 
 class fBM(SPAnalytical):
-    r"""fractional Brownian motion
+    r"""
+    Fractional Brownian motion
+    ==========================
 
-    .. image:: _static/fractional_brownian_motion_draw.png
+    .. image:: ../_static/fractional_brownian_motion_draw.png
+
+    Notes
+    _____
 
     A fractional Brownian motion (fBM) is a continuous-time Gaussian process :math:`B_H(t)` on
     :math:`[0,T]` that starts at zero, has expectation zero for all :math:`t \in [0,T]` and has
@@ -32,13 +37,18 @@ class fBM(SPAnalytical):
 
     where :math:`H` is a real number in (0,1), called the Hurst or Hurst parameter.
 
-    :parameter float hurst: the Hurst parameter
-    :parameter float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
-    :parameter numpy.random.Generator rng: a custom random number generator
+
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, hurst=0.5, T=1.0, rng=None):
+        """
+        :parameter float hurst: the Hurst parameter
+        :parameter float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(T=T, rng=rng)
         self.hurst = hurst
         self.name = f"Fractional Brownian Motion $X = B_{{{self.hurst}}}(t)$"

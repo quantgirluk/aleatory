@@ -14,9 +14,13 @@ from aleatory.utils.plotters import draw_paths, draw_paths_with_end_point
 class BrownianMeander(BrownianMotion):
     r"""
     Brownian Meander
+    ================
 
-    .. image:: _static/brownian_meander_drawn.png
-    .. image:: _static/tied_brownian_meander_drawn.png
+    .. image:: ../_static/brownian_meander_drawn.png
+    .. image:: ../_static/tied_brownian_meander_drawn.png
+
+    Notes
+    -----
 
     Let :math:`\{W_t : t \geq 0\}` be a standard Brownian motion and
 
@@ -29,15 +33,19 @@ class BrownianMeander(BrownianMotion):
     .. math::
         W_t^{+} = \frac{1}{\sqrt{1-\tau}} |W(\tau  + t (1-\tau))|, \ \ \ \   t\in (0,1].
 
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param bool fixed_end: flag to indicate if the process has a fixed end point. Defaults to `False`
-    :param float end: end point for the Meander, in the case of `fixed_end` equal `True`
-    :param numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, T=1.0, fixed_end=False, end=None, rng=None):
+        """
+        :param float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
+        :param bool fixed_end: flag to indicate if the process has a fixed end point. Defaults to `False`
+        :param float end: end point for the Meander, in the case of `fixed_end` equal `True`
+        :param numpy.random.Generator rng: a custom random number generator
+
+        """
         super().__init__(T=T, rng=rng)
 
         self.fixed_end = fixed_end

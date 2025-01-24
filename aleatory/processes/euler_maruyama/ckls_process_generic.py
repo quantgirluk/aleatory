@@ -10,6 +10,7 @@ from aleatory.utils.plotters import draw_paths
 class CKLSProcessGeneric(SPEulerMaruyama):
     r"""
     Chan-Karolyi-Longstaff-Sanders (CKLS) process
+    =============================================
 
     .. image:: _static/ckls_process_draw.png
 
@@ -32,20 +33,21 @@ class CKLSProcessGeneric(SPEulerMaruyama):
     Reference: CHAN, K.C., KAROLYI, G.A., LONGSTAFF, F.A. and SANDERS, A.B. (1992),
     An Empirical Comparison of Alternative Models of the Short-Term Interest Rate. The Journal of Finance,
     47: 1209-1227. https://doi.org/10.1111/j.1540-6261.1992.tb04011.x
-
-    :param float alpha: the parameter :math:`\alpha` in the above SDE
-    :param float beta: the parameter :math:`\beta` in the above SDE
-    :param float sigma: the parameter :math:`\sigma>0` in the above SDE
-    :param float gamma: the parameter :math:`\gamma` in the above SDE
-    :param float initial: the initial condition :math:`x_0` in the above SDE
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
     """
 
     def __init__(
         self, alpha=0.5, beta=0.5, sigma=0.1, gamma=1.0, initial=1.0, T=1.0, rng=None
     ):
+        """
+        :param float alpha: the parameter :math:`\alpha` in the above SDE
+        :param float beta: the parameter :math:`\beta` in the above SDE
+        :param float sigma: the parameter :math:`\sigma>0` in the above SDE
+        :param float gamma: the parameter :math:`\gamma` in the above SDE
+        :param float initial: the initial condition :math:`x_0` in the above SDE
+        :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+            for the process
+        :param numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(T=T, rng=rng)
         self.alpha = alpha
         self.beta = beta

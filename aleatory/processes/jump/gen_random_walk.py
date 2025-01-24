@@ -13,9 +13,14 @@ import numpy as np
 
 
 class GeneralRandomWalk(SPAnalytical, ABC):
-    r"""General Random Walk
+    r"""
+    General Random Walk
+    ===================
 
-        .. image:: _static/gen_random_walk_draw.png
+    .. image:: ../_static/gen_random_walk_draw.png
+
+    Notes
+    -----
 
     Let :math:`\{Z_i, i \geq 1\}` be a sequence of real-valued independent an identically
     distributed (i.i.d.) random variables defined on a probability
@@ -28,13 +33,8 @@ class GeneralRandomWalk(SPAnalytical, ABC):
 
     is called random walk, or more precisely one-dimensional random walked based on :math:`\{Z_i, i \geq 1\}`.
 
-
-    :parameter step_dist: an object representing the random variable :math:`Z_i` above (e.g.scipy.stats.norm)
-    :parameter step_args: arguments (if any) to pass to the chosen step distribution
-    :parameter step_kwargs: keyword arguments (if any) to pass to the chosen step distribution
-    :parameter bool normalised: normalised or not
-    :parameter numpy.random.Generator rng: a custom random number generator
-
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
     def __init__(
@@ -45,6 +45,13 @@ class GeneralRandomWalk(SPAnalytical, ABC):
         normalised=False,
         rng=None,
     ):
+        """
+        :parameter step_dist: an object representing the random variable :math:`Z_i` above (e.g.scipy.stats.norm)
+        :parameter step_args: arguments (if any) to pass to the chosen step distribution
+        :parameter step_kwargs: keyword arguments (if any) to pass to the chosen step distribution
+        :parameter bool normalised: normalised or not
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(rng=rng)
         self.step_dist = step_dist
         self.step_args = step_args if step_args is not None else tuple()
