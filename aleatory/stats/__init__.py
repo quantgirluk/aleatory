@@ -1,18 +1,15 @@
 """
-.. _statsref:
-
-==============================================
-Statistical functions (:mod:`aleatory.stats`)
-==============================================
+=========================
+Probability Distributions
+=========================
 
 .. currentmodule:: aleatory.stats
 
-This module contains the implementation of the following probability distributions:
-    -  Non-Central Chi
-    - Variance-Gamma
+
+The :py:mod:`aleatory.stats` module contains the implementation of the following probability distributions:
 
 .. autosummary::
-   :toctree: non_central_chi/
+   :toctree: stats/
 
    ncx      -- Non-central chi
    vg       -- Variance-Gamma
