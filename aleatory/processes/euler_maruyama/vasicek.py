@@ -10,9 +10,12 @@ from scipy.stats import norm
 class Vasicek(SPEulerMaruyama):
     r"""
     Vasicek Process
+    ===============
 
-    .. image:: _static/vasicek_process_drawn.png
+    .. image:: ../_static/vasicek_process_drawn.png
 
+    Notes
+    -----
 
     A Vasicek process :math:`X = \{X : t \geq  0\}` is characterised by the following
     Stochastic Differential Equation
@@ -31,17 +34,20 @@ class Vasicek(SPEulerMaruyama):
 
     Each :math:`X_t` follows a normal distribution.
 
-
-    :param float theta: the parameter :math:`\theta` in the above SDE
-    :param float mu: the parameter :math:`\mu` in the above SDE
-    :param float sigma: the parameter :math:`\sigma>0` in the above SDE
-    :param float initial: the initial condition :math:`x_0` in the above SDE
-    :param float T: the right hand endpoint of the time interval :math:`[0,T]`
-        for the process
-    :param numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
     def __init__(self, theta=1.0, mu=3.0, sigma=0.5, initial=1.0, T=1.0, rng=None):
+        """
+        :param float theta: the parameter :math:`\theta` in the above SDE
+        :param float mu: the parameter :math:`\mu` in the above SDE
+        :param float sigma: the parameter :math:`\sigma>0` in the above SDE
+        :param float initial: the initial condition :math:`x_0` in the above SDE
+        :param float T: the right hand endpoint of the time interval :math:`[0,T]`
+            for the process
+        :param numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(T=T, rng=rng)
         self.theta = theta
         self.mu = mu

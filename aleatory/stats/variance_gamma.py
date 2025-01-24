@@ -59,6 +59,7 @@ class vg_gen(rv_continuous):
     %(after_notes)s
 
     %(example)s
+
     """
 
     def _argcheck(self, r, theta, sigma):
