@@ -9,13 +9,18 @@ from matplotlib.gridspec import GridSpec
 
 
 class GaltonWatson(SPAnalytical):
-    r"""Galton-Watson process
+    r"""
+    Galton-Watson process
+    =====================
 
-    .. image:: _static/galton_watson_draw.png
+    .. image:: ../_static/galton_watson_draw.png
 
 
-    A Galton–Watson process is a stochastic process :math:`\{X_n : t \geq 0\}` which evolves
-    according to the recurrence formula:
+    Notes
+    -----
+
+    A Galton–Watson process is a stochastic process :math:`\{X_n : n \in \mathbb{N}\}` which evolves
+    according to the following recurrence formula:
 
     .. math::
 
@@ -32,11 +37,15 @@ class GaltonWatson(SPAnalytical):
     .. math::
         Z_j^{(n)} \sim Poi(\mu).
 
-    :parameter float mu: the parameter :math:`\mu>0` in the above definition
-
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
     def __init__(self, mu=1.0, rng=None):
+        """
+        :parameter float mu: the parameter :math:`\mu>0` in the above definition
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(rng=rng, initial=1)
         self.mu = mu
         self.offspring_dist = poisson(mu=self.mu)
@@ -64,35 +73,33 @@ class GaltonWatson(SPAnalytical):
             current_population = next_population
         return np.array(populations)
 
-    def sample(self, generations=None):
-        sample = self._sample_galton_watson(generations=generations)
-        self.times = np.arange(generations + 1)
+    def sample(self, n=None):
+        sample = self._sample_galton_watson(generations=n)
+        self.times = np.arange(n + 1)
         return sample
 
-    def sample_upto(self, generations=None):
-        sample = self._sample_galton_watson(generations=generations)
+    def sample_upto(self, n=None):
+        sample = self._sample_galton_watson(generations=n)
         size = len(sample)
-        while size < generations:
-            sample = self._sample_galton_watson(generations=generations)
+        while size < n:
+            sample = self._sample_galton_watson(generations=n)
             size = len(sample)
         else:
             return sample
 
-    def simulate(self, N, generations=None):
+    def simulate(self, N, n):
         """
         Simulate paths/trajectories from the instanced stochastic process.
 
         :param int N: number of paths to simulate
-        :param int generations: number of generations to simulate
+        :param int n: number of generations to simulate
         :return: list with N paths (each one is a numpy array of size up to n)
 
         """
         self.N = N
-        self.T = generations
-        self.paths = [
-            self._sample_galton_watson(generations=generations) for _ in range(N)
-        ]
-        self.times = np.arange(generations + 1)
+        self.T = n
+        self.paths = [self._sample_galton_watson(generations=n) for _ in range(N)]
+        self.times = np.arange(n + 1)
         return self.paths
 
     def simulate_upto(self, N, generations=None):
@@ -111,7 +118,7 @@ class GaltonWatson(SPAnalytical):
         """
         self.N = N
         self.T = generations
-        self.paths = [self.sample_upto(generations=generations) for _ in range(N)]
+        self.paths = [self.sample_upto(n=generations) for _ in range(N)]
         self.times = np.arange(generations + 1)
         return self.paths
 
@@ -136,20 +143,27 @@ class GaltonWatson(SPAnalytical):
     def plot(
         self,
         N,
-        generations=None,
+        n,
         mode="steps",
+        title=None,
         style="seaborn-v0_8-whitegrid",
         color_survival=False,
-        title=None,
         **fig_kw,
     ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process. Simple plot of times
         versus process values as lines and/or markers.
+
+        :param int N: number of paths to simulate
+        :param int n: number of generations to simulate
+        :param str mode: type of plot to plot, defaults to "steps"
+        :param str title: title of the plot, if None then it defaults to the name of the process
+        :param str style: style to be used, it defaults to "seaborn-v0_8-whitegrid"
+        :param bool color_survival: if True, then the plot highlights the paths surviving
         """
 
         plot_title = title if title else self.name
-        self.simulate(N, generations=generations)
+        self.simulate(N, n=n)
         paths = self.paths
 
         if color_survival:
@@ -171,8 +185,8 @@ class GaltonWatson(SPAnalytical):
                         color = plt.gca().lines[-1].get_color()
                         ax.plot(times, path, "o", color=color)
                 ax.set_title(plot_title)
-                ax.set_xlabel("$t$")
-                ax.set_ylabel("$X(t)$")
+                ax.set_xlabel("$n$")
+                ax.set_ylabel("$X(n)$")
                 plt.show()
 
         else:
@@ -195,10 +209,10 @@ class GaltonWatson(SPAnalytical):
                             "mode can only take values 'points', 'steps', 'points+steps', or 'linear'."
                         )
 
-                ax.set_xlim(right=generations + 1)
+                ax.set_xlim(right=n + 1)
                 ax.set_title(plot_title)
-                ax.set_xlabel("$t$")
-                ax.set_ylabel("$X(t)$")
+                ax.set_xlabel("$n$")
+                ax.set_ylabel("$X(n)$")
                 plt.show()
 
         return fig
@@ -206,18 +220,38 @@ class GaltonWatson(SPAnalytical):
     def draw(
         self,
         N,
-        generations=None,
+        n,
+        mode="steps",
+        title=None,
         style="seaborn-v0_8-whitegrid",
         colormap="RdYlBu_r",
         envelope=False,
         marginal=True,
         colorspos=None,
-        mode="steps",
         **fig_kw,
     ):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process.
+         Visualisation shows:
 
-        title = self.name
-        self.simulate(N, generations=generations)
+         - generations versus process values
+         - the expectation of the process across time
+         - histogram showing the empirical marginal distribution for the last generation
+         - envelope of confidence intervals
+
+        :param int N: number of paths to simulate
+        :param int n: number of generations to simulate
+        :param str [optional, default="steps"] mode: type of plot to plot
+        :param str title: title of the plot, if None then it defaults to the name of the process
+        :param str [optional, default="seaborn-v0_8-whitegrid"] style:  style to be used
+        :param str [optional, default="RdYlBu_r"] colormap: colormap to be used
+        :param bool [optional, default="False] envelope: if True, then the plot highlights the paths envelope
+        :param bool [optional, default=True] marginal:  if True, then the plot highlights the paths marginal
+        :param double [optional, default=None] colorspos: if provided, it affects the color of the paths
+        """
+
+        title = title if title else self.name
+        self.simulate(N, n=n)
         paths = self.paths
         times = self.times
         expectations = self.marginal_expectation(times)
@@ -234,7 +268,7 @@ class GaltonWatson(SPAnalytical):
                 ax1 = fig.add_subplot(gs[:4])
                 ax2 = fig.add_subplot(gs[4:], sharey=ax1)
 
-                n, bins, patches = ax2.hist(
+                num, bins, patches = ax2.hist(
                     last_points, n_bins, orientation="horizontal", density=False
                 )
                 for c, pat in zip(col, patches):
@@ -248,7 +282,7 @@ class GaltonWatson(SPAnalytical):
                 colors = [col[b] for b in my_bins]
 
                 plt.setp(ax2.get_yticklabels(), visible=False)
-                ax2.set_title("$X_T$")
+                ax2.set_title(f"$X_{{{n}}}$")
 
                 for i in range(N):
                     times_i = times[: len(paths[i])]
@@ -269,10 +303,9 @@ class GaltonWatson(SPAnalytical):
                         ax1.scatter(times_i, paths[i], color=cm(colors[i]), s=10)
 
                 if expectations is not None:
-                    ax1.plot(times, expectations, "--", lw=1.75, label="$E[X_t]$")
+                    ax1.plot(times, expectations, "--", lw=1.75, label=f"$E[X_n]$")
                     ax1.legend()
                 plt.subplots_adjust(wspace=0.2, hspace=0.5)
-
             else:
                 fig, ax1 = plt.subplots(**fig_kw)
                 if colorspos:
@@ -310,24 +343,24 @@ class GaltonWatson(SPAnalytical):
                         ax1.scatter(times_i, paths[i], color=cm(colors[i]))
 
                 if expectations is not None:
-                    ax1.plot(times, expectations, "--", lw=1.75, label="$E[X_t]$")
+                    ax1.plot(times, expectations, "--", lw=1.75, label="$E[X_n]$")
                     ax1.legend()
 
             fig.suptitle(title)
-            ax1.set_xlim(right=generations + 1)
-            ax1.set_title(r"Simulated Paths $X_t, t \leq T$")  # Title
-            ax1.set_xlabel("$t$")
-            ax1.set_ylabel("$X(t)$")
+            ax1.set_xlim(right=n + 1)
+            ax1.set_title(r"Simulated Paths")  # Title
+            ax1.set_xlabel("$n$")
+            ax1.set_ylabel("$X(n)$")
             plt.show()
 
         return fig
 
 
 if __name__ == "__main__":
-    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
     p = GaltonWatson(mu=1.5)
-    p.plot(N=10, generations=10, style=qs, figsize=(12, 7))
-    p.draw(N=100, generations=10, style=qs, figsize=(12, 7), colormap="summer")
+    p.plot(N=10, n=10, figsize=(12, 7))
+    p.plot(N=10, n=10, figsize=(12, 7), color_survival=True)
+    p.draw(N=100, n=10, figsize=(12, 7), colormap="summer")
 
 #     for m in ["steps"]:
 #         # for par, gen in zip ([0.8, 1.0, 2.0], [25, 100, 10]):

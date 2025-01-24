@@ -7,9 +7,15 @@ from aleatory.utils.plotters import plot_poisson, draw_poisson_like
 
 
 class InhomogeneousPoissonProcess(BaseProcess):
-    r"""Inhomogeneous Poisson Process
+    r"""
+    Inhomogeneous Poisson Process
+    =============================
 
-        .. image:: _static/poisson_non_homogeneous_draw.png
+    .. image:: ../_static/poisson_non_homogeneous_draw.png
+
+
+    Notes
+    -----
 
     An inhomogeneous Poisson point process is a type of random mathematical object that consists of points randomly
     located on a mathematical space with the essential feature that the points occur independently of one another.
@@ -22,12 +28,16 @@ class InhomogeneousPoissonProcess(BaseProcess):
     - :math:`N(t)` has independent increments,
     - :math:`N(t)` has a Poisson distribution with parameter :math:`\Lambda (t) = \int_0^t \lambda(s)ds`, for each :math:`t> 0`.
 
-    :parameter callable intensity: a callable object which defines the intensity of the Poisson process
-    :parameter numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, intensity, rng=None):
+        """
+        :parameter callable intensity: a callable object which defines the intensity of the Poisson process
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(rng=rng)
         self.name = "Inhomogeneous Poisson Process"
         self.intensity = intensity
@@ -117,7 +127,7 @@ class InhomogeneousPoissonProcess(BaseProcess):
         paths = self.simulate(N, T=T)
         plot_title = title if title else self.name
 
-        plot_poisson(T=T, paths=paths, title=plot_title, **fig_kwargs)
+        return plot_poisson(T=T, paths=paths, title=plot_title, **fig_kwargs)
 
     def draw(
         self,

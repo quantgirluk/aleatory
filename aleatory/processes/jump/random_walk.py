@@ -128,9 +128,14 @@ class SimpleRandomWalk(SPAnalytical, ABC):
 
 
 class RandomWalk(SimpleRandomWalk):
-    r"""Simple Random Walk
+    r"""
+    Simple Random Walk
+    ==================
 
-      .. image:: _static/simple_random_walk_draw.png
+    .. image:: ../_static/simple_random_walk_draw.png
+
+    Notes
+    -----
 
     Let :math:`\{Z_i, i \geq 1\}` be a sequence of real-valued independent an identically
     distributed (i.i.d.) random variables defined on a probability
@@ -138,10 +143,12 @@ class RandomWalk(SimpleRandomWalk):
 
     .. math::
         \mathbb{P}(Z_1 = 1) = p,
+
     and
 
     .. math::
         \mathbb{P}(Z_1 = -1) = 1-p,
+
 
     Then, the stochastic process :math:`\{X_n , n\geq 0\}`,
     defined as :math:`X_0 =0`, and
@@ -150,14 +157,18 @@ class RandomWalk(SimpleRandomWalk):
 
         X_n = \sum_{i=1}^n Z_i, \qquad \forall n\geq 1,
 
+
     is called a Simple Random Walk.
 
-    :parameter double p: the probability :math:`p\in(0,1)` of $Z_i$ taking the value 1 as per above definition.
-    :parameter numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, rng=None):
+        """
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
 
         super().__init__(p=0.5, rng=rng)
 

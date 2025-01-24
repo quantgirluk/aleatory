@@ -5,22 +5,31 @@ import numpy as np
 
 
 class InverseGaussian(SPAnalytical):
-    r"""Inverse Gaussian process
+    r"""
+    Inverse Gaussian process
+    ========================
 
-    .. image:: _static/inverse_gaussian_process_draw.png
+    .. image:: ../_static/inverse_gaussian_process_draw.png
+
+    Notes
+    -----
 
     An Inverse Gaussian process is a stochastic process :math:`\{X(t),t\geq 0\}` where:
 
     - :math:`X(0)=0`,
     - the increments :math:`X(t)−X(s)` (for all :math:`t>s`) are independent and follow the Inverse Gaussian distribution with mean :math:`\mu(t-s)` and scale parameter :math:`\eta`.
 
-    :parameter double mu: the :math:`\mu>0` which defines the mean of the increments of the Inverse Gaussian process.
-    :parameter double scale: the :math:`\eta>0` which defines the scale of the increments of the Inverse Gaussian process
-    :parameter numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, mu=1.0, scale=1.0, T=1.0, rng=None):
+        """
+        :parameter double mu: the :math:`\mu>0` which defines the mean of the increments of the Inverse Gaussian process.
+        :parameter double scale: the :math:`\eta>0` which defines the scale of the increments of the Inverse Gaussian process
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(T=T, rng=rng)
         self.mu = mu
         self.scale = scale
@@ -82,7 +91,7 @@ class InverseGaussian(SPAnalytical):
         :return:
 
         """
-        self._plot_process(n=n, N=N, mode=mode, title=title, **fig_kw)
+        return self._plot_process(n=n, N=N, mode=mode, title=title, **fig_kw)
 
     def draw(
         self, n, N, marginal=True, envelope=False, mode="steps", title=None, **fig_kw

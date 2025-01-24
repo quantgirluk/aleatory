@@ -9,9 +9,14 @@ from aleatory.utils.plotters import plot_poisson, draw_poisson_like
 
 
 class MixedPoissonProcess(BaseProcess):
-    r"""Mixed Poisson Process
+    r"""
+    Mixed Poisson Process
+    =====================
 
-    .. image:: _static/mixed_poisson_draw.png
+    .. image:: ../_static/mixed_poisson_draw.png
+
+    Notes
+    -----
 
     In probability theory, a mixed Poisson process is a special point process that is a generalization of a
     Poisson process. Mixed Poisson processes are simple example for Cox processes.
@@ -28,14 +33,17 @@ class MixedPoissonProcess(BaseProcess):
 
     with :math:`\Lambda(0)=0`. This type of distribution is known as mixed Poisson distribution which gives the name to the processes.
 
-    :parameter callable intensity: a callable function which defines the structure distribution :math:`\Lambda`
-    :parameter intensity_args: the arguments to be passed to the intensity function
-    :parameter intensity_kwargs: the keyword arguments to be passed to the intensity function
-    :parameter numpy.random.Generator rng: a custom random number generator
-
+    Constructor, Methods, and Attributes
+    ------------------------------------
     """
 
     def __init__(self, intensity, intensity_args=None, intensity_kwargs=None, rng=None):
+        """
+        :parameter callable intensity: a callable function which defines the structure distribution :math:`\Lambda`
+        :parameter intensity_args: the arguments to be passed to the intensity function
+        :parameter intensity_kwargs: the keyword arguments to be passed to the intensity function
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(rng=rng)
         self.intensity = intensity
         self.intensity_args = intensity_args if intensity_args is not None else {}
@@ -112,7 +120,9 @@ class MixedPoissonProcess(BaseProcess):
         paths = self.simulate(N, jumps=jumps, T=T)
         plot_title = title if title else self.name
 
-        plot_poisson(jumps=jumps, T=T, paths=paths, title=plot_title, **fig_kwargs)
+        return plot_poisson(
+            jumps=jumps, T=T, paths=paths, title=plot_title, **fig_kwargs
+        )
 
     def draw(
         self,

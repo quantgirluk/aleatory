@@ -5,10 +5,14 @@ from aleatory.processes.jump.poisson_nonhomogeneous import (
 
 
 class HawkesProcess(InhomogeneousPoissonProcess):
-    r"""Hawkes process
+    r"""
+    Hawkes process
+    ==============
 
-        .. image:: _static/hawkes_draw.png
+    .. image:: ../_static/hawkes_draw.png
 
+    Notes
+    -----
 
     A Hawkes process is a counting process :math:`N(t)` whose conditional intensity process is given by
 
@@ -30,13 +34,19 @@ class HawkesProcess(InhomogeneousPoissonProcess):
 
     i.e. an exponentially decaying excitation function.
 
-    :parameter double mu: the baseline intensity
-    :parameter double alpha: the :math:`\alpha>0` in the excitation function above
-    :parameter double beta: the :math:`\beta>0` in the excitation function above
-    :parameter numpy.random.Generator rng: a custom random number generator
+
+    Constructor, Methods, and Attributes
+    ------------------------------------
+
     """
 
     def __init__(self, mu=1.0, alpha=1.0, beta=1.0, rng=None):
+        """
+        :parameter double mu: the baseline intensity
+        :parameter double alpha: the :math:`\alpha>0` in the excitation function above
+        :parameter double beta: the :math:`\beta>0` in the excitation function above
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
 
         def constant():
             return 1.0
@@ -123,7 +133,7 @@ class HawkesProcess(InhomogeneousPoissonProcess):
     def sample(self, T=None):
         return self._sample_hawkes_process(T=T)
 
-    def simulate(self, N, T=1.0):
+    def simulate(self, N, T=10.0):
         """
         Simulate paths/trajectories from the instanced stochastic process.
         The function returns :math:`N` paths over the time :math:`[0,T]`. Note

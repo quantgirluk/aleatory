@@ -11,9 +11,14 @@ import pandas as pd
 
 
 class PoissonProcess(BaseProcess):
-    r"""Poisson Process
+    r"""
+    Poisson Process
+    ===============
 
-        .. image:: _static/poisson_process_draw.png
+    .. image:: ../_static/poisson_process_draw.png
+
+    Notes
+    -----
 
     A Poisson point process is a type of random mathematical object that consists of points randomly located on
     a mathematical space with the essential feature that the points occur independently of one another.
@@ -24,12 +29,16 @@ class PoissonProcess(BaseProcess):
     - :math:`N(t)` has a Poisson distribution with parameter :math:`\lambda t`, for each :math:`t> 0`,
     -  It has independent increments.
 
-    :parameter float rate: the intensity rate :math:`\lambda>0`,
-    :parameter numpy.random.Generator rng: a custom random number generator
+    Constructor, Methods, and Attributes
+    ------------------------------------
 
     """
 
     def __init__(self, rate=1.0, rng=None):
+        """
+        :parameter float rate: the intensity rate :math:`\lambda>0`,
+        :parameter numpy.random.Generator rng: a custom random number generator
+        """
         super().__init__(rng=rng)
         self.rate = rate
         self.name = f"Poisson Process $N(\\lambda={self.rate})$"
@@ -160,10 +169,10 @@ class PoissonProcess(BaseProcess):
     def draw(
         self,
         N,
-        T=None,
+        T=10.0,
         style="seaborn-v0_8-whitegrid",
         colormap="RdYlBu_r",
-        envelope=True,
+        envelope=False,
         marginal=True,
         mode="steps",
         colorspos=None,
@@ -288,7 +297,7 @@ class PoissonProcess(BaseProcess):
         return fig
 
 
-# if __name__ == "__main__":
-#
-#     p = PoissonProcess()
-#     p.plot(N=5, T=10)
+if __name__ == "__main__":
+
+    p = PoissonProcess()
+    p.plot(N=5, T=10)
