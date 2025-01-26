@@ -133,3 +133,8 @@ dmypy.json
 
 # DS Store
 .DS_Store
+
+# Build docs files
+docs/_build/*
+docs/_static/*
+docs/auto_examples/*
