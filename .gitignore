@@ -136,5 +136,8 @@ dmypy.json
 
 # Build docs files
 docs/_build/*
-docs/_static/*
-docs/auto_examples/*
+
+docs/source/auto_examples/*
+docs/source/processes/*
+docs/source/stats/*
+
