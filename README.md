@@ -6,6 +6,7 @@
 - [Git Homepage](https://github.com/quantgirluk/aleatory)
 - [Pip Repository](https://pypi.org/project/aleatory/)
 - [Documentation](https://aleatory.readthedocs.io/en/latest/)
+- 🆕 [Gallery of Stochastic Processes](https://aleatory.readthedocs.io/en/latest/auto_examples/index.html) 🖼️
 
 ## Overview
 
@@ -21,32 +22,32 @@ stochastic processes and provides methods to:
 <img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png"   style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%">
 </p>
 
-Currently, `aleatory` supports the following 13 processes:
+Currently, aleatory supports the following stochastic processes:
 
-- Arithmetic Brownian Motion
-- Bessel process
-- Brownian Bridge
-- Brownian Excursion
-- Brownian Meander
-- Brownian Motion
-- Constant Elasticity Variance (CEV) process
-- Cox–Ingersoll–Ross (CIR) process
-- Chan-Karolyi-Longstaff-Sanders (CKLS) process
-- Fractional Brownian Motion
-- Galton-Watson with Poisson branching
-- Gamma process
-- General Random Walk
-- Geometric Brownian Motion
-- Hawkes process
-- Inverse Gaussian process
-- Inhomogeneous Poisson process
-- Mixed Poisson process
-- Ornstein–Uhlenbeck (OU) process
-- Poisson process
-- Random Walk
-- Squared Bessel processes
-- Vasicek process
-- Variance-Gamma process
+- Arithmetic Brownian Motion (see [Brownian Motion](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BrownianMotion.html#aleatory.processes.BrownianMotion))
+- [Bessel process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BESProcess.html#aleatory.processes.BESProcess)
+- [Brownian Bridge](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BrownianBridge.html#aleatory.processes.BrownianBridge)
+- [Brownian Excursion](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BrownianExcursion.html#aleatory.processes.BrownianExcursion)
+- [Brownian Meander](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BrownianMeander.html#aleatory.processes.BrownianMeander)
+- [Brownian Motion](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BrownianMotion.html#aleatory.processes.BrownianMotion)
+- [Constant Elasticity Variance (CEV) process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.CEVProcess.html#aleatory.processes.CEVProcess)
+- [Cox–Ingersoll–Ross (CIR) process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.CIRProcess.html#aleatory.processes.CIRProcess)
+- [Chan-Karolyi-Longstaff-Sanders (CKLS) process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.CKLSProcess.html#aleatory.processes.CKLSProcess)
+- [Fractional Brownian Motion process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.fBM.html#aleatory.processes.fBM)
+- [Galton-Watson process with Poisson branching](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GaltonWatson.html#aleatory.processes.GaltonWatson)
+- [Gamma process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GammaProcess.html#aleatory.processes.GammaProcess)
+- [General Random Walk](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GeneralRandomWalk.html#aleatory.processes.GeneralRandomWalk)
+- [Geometric Brownian Motion](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GBM.html#aleatory.processes.GBM)
+- [Hawkes process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.HawkesProcess.html#aleatory.processes.HawkesProcess)
+- [Inverse Gaussian process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.InverseGaussian.html#aleatory.processes.InverseGaussian)
+- [Inhomogeneous Poisson process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.InhomogeneousPoissonProcess.html#aleatory.processes.InhomogeneousPoissonProcess)
+- [Mixed Poisson process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.MixedPoissonProcess.html#aleatory.processes.MixedPoissonProcess)
+- [Ornstein–Uhlenbeck (OU) process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.OUProcess.html#aleatory.processes.OUProcess)
+- [Poisson process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.PoissonProcess.html#aleatory.processes.PoissonProcess)
+- [Random Walk](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.RandomWalk.html#aleatory.processes.RandomWalk)
+- [Squared Bessel processes](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BESQProcess.html#aleatory.processes.BESQProcess)
+- [Vasicek process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.Vasicek.html#aleatory.processes.Vasicek)
+- [Variance-Gamma process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.VarianceGammaProcess.html#aleatory.processes.VarianceGammaProcess)
 
 ## Installation
 
