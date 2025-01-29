@@ -35,7 +35,7 @@ class CEVProcess(CKLSProcessGeneric):
     """
 
     def __new__(cls, *args, **kwargs):
-        """
+        r"""
         :param float mu: the parameter :math:`\mu` in the above SDE
         :param float sigma: the parameter :math:`\sigma>0` in the above SDE
         :param float gamma: the parameter :math:`\gamma` in the above SDE
