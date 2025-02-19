@@ -43,9 +43,9 @@ class HawkesProcess(InhomogeneousPoissonProcess):
     def __init__(self, mu=1.0, alpha=1.0, beta=1.0, rng=None):
         r"""
         :parameter double mu: the baseline intensity
-        :parameter double alpha: the :math: `\alpha>0` in the excitation function above
-        :parameter double beta: the :math: `\beta>0` in the excitation function above
-        :parameter double beta: the :math: `\beta>0` in the excitation function above
+        :parameter double alpha: the :math:`\alpha>0` in the excitation function above
+        :parameter double beta: the :math:`\beta>0` in the excitation function above
+        :parameter double beta: the :math:`\beta>0` in the excitation function above
         :parameter numpy.random.Generator rng: a custom random number generator
         """
 
