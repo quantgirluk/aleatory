@@ -25,7 +25,7 @@ class CKLSProcessGeneric(SPEulerMaruyama):
     with initial condition :math:`X_0 = x_0`, where
 
     - :math:`\alpha \in \mathbb{R}`
-    - :math:`\beata \in \mathbb{R}`
+    - :math:`\beta \in \mathbb{R}`
     - :math:`\sigma>0` is the scale of the volatility
     - :math:`\gamma\geq 0` is the elasticity term
     - :math:`W_t` is a standard Brownian Motion.
@@ -38,7 +38,7 @@ class CKLSProcessGeneric(SPEulerMaruyama):
     def __init__(
         self, alpha=0.5, beta=0.5, sigma=0.1, gamma=1.0, initial=1.0, T=1.0, rng=None
     ):
-        """
+        r"""
         :param float alpha: the parameter :math:`\alpha` in the above SDE
         :param float beta: the parameter :math:`\beta` in the above SDE
         :param float sigma: the parameter :math:`\sigma>0` in the above SDE
