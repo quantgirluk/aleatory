@@ -38,17 +38,14 @@ class CorrelatedBMs(StochasticProcess):
         return W
 
     def sample(self, n):
-
         self.n = n
         self.times = get_times(self.T, self.n)
         W = self._sample(n)
-
         return W
 
     def simulate(self, n, N):
         sim = [self._sample(n) for _ in range(N)]
         self.times = get_times(self.T, self.n)
-
         return sim
 
     def plot(
@@ -112,7 +109,7 @@ class CorrelatedBMs(StochasticProcess):
 
         if color_by == "time":
             # Normalize time indices for coloring
-            time_indices = p.times
+            time_indices = self.times
             norm = Normalize(vmin=time_indices.min(), vmax=time_indices.max())
             colors_indices = cmap(norm(time_indices))
             label_title = "Time"
