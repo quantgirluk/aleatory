@@ -145,10 +145,3 @@ class CorrelatedBMs(StochasticProcess):
             ax.axis("equal")
             plt.show()
         return fig
-
-
-# p = CorrelatedBMs(rho=-0.5)
-# p.plot_sample(n=500, figsize=(12, 8))
-# p.plot(n=500, N=5, figsize=(12, 8))
-# p.plot_sample_2d(n=2000, figsize=(12, 10))
-# p.plot_sample_2d(n=2000, color_by="distance", figsize=(12, 10))
