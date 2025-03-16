@@ -63,3 +63,7 @@ from aleatory.processes.jump.poisson_mixed import MixedPoissonProcess
 from aleatory.processes.jump.poisson_nonhomogeneous import InhomogeneousPoissonProcess
 from aleatory.processes.jump.random_walk import RandomWalk, SimpleRandomWalk
 from aleatory.processes.jump.variance_gamma import VarianceGammaProcess
+
+from aleatory.processes.multi_dimensional.two_correlated_brownian_motions import (
+    CorrelatedBMs,
+)
