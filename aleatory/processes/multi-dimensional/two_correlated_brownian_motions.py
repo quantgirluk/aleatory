@@ -1,5 +1,5 @@
 """
-Brownian Motion 2-dimensional
+Correlated Brownian Motions
 """
 
 import matplotlib.pyplot as plt
@@ -11,7 +11,7 @@ from aleatory.processes.base import StochasticProcess
 from aleatory.utils.utils import get_times
 
 
-class BM2D(StochasticProcess):
+class CorrelatedBMs(StochasticProcess):
 
     def __init__(self, rho=0.0, T=1.0):
         super().__init__()
@@ -150,8 +150,8 @@ class BM2D(StochasticProcess):
         return fig
 
 
-p = BM2D(rho=-0.5)
-p.plot_sample(n=500, figsize=(12, 8))
-p.plot(n=500, N=5, figsize=(12, 8))
-p.plot_sample_2d(n=2000, figsize=(12, 10))
-p.plot_sample_2d(n=2000, color_by="distance", figsize=(12, 10))
+# p = CorrelatedBMs(rho=-0.5)
+# p.plot_sample(n=500, figsize=(12, 8))
+# p.plot(n=500, N=5, figsize=(12, 8))
+# p.plot_sample_2d(n=2000, figsize=(12, 10))
+# p.plot_sample_2d(n=2000, color_by="distance", figsize=(12, 10))
