@@ -17,7 +17,7 @@ class BM2D(StochasticProcess):
         super().__init__()
         self.rho = rho
         self.T = T
-        self.name = "Correlated Brownian Motions"
+        self.name = f"Correlated Brownian Motions $\\rho={self.rho}$"
         self.n = None
         self.times = None
 
@@ -39,6 +39,7 @@ class BM2D(StochasticProcess):
 
     def sample(self, n):
 
+        self.n = n
         self.times = get_times(self.T, self.n)
         W = self._sample(n)
 
@@ -50,22 +51,29 @@ class BM2D(StochasticProcess):
 
         return sim
 
-    def plot(self, n, N, title=None, style="seaborn-v0_8-whitegrid", **fig_kw):
+    def plot(
+        self, n, N, title=None, style="seaborn-v0_8-whitegrid", colors=None, **fig_kw
+    ):
 
         sim = self.simulate(n, N)
         chart_title = title if title is not None else self.name
-
+        if colors:
+            col1, col2 = colors[0], colors[1]
+        else:
+            col1, col2 = "#0079ff", "#ffb84c"
         with plt.style.context(style):
-            col1 = "cyan"
-            col2 = "darkgrey"
             fig, ax = plt.subplots(**fig_kw)
-            for sample in sim:
+
+            W1, W2 = sim[0]
+            ax.plot(self.times, W1, label="W1", color=col1)
+            ax.plot(self.times, W2, label="W2", color=col2)
+            for sample in sim[1:]:
                 W1, W2 = sample
-                ax.plot(self.times, W1, label="W1", color=col1)
-                ax.plot(self.times, W2, label="W2", color=col2)
+                ax.plot(self.times, W1, color=col1)
+                ax.plot(self.times, W2, color=col2)
             ax.set_title(chart_title)
-            ax.set_ylabel("W1(t), W2(t)")
             ax.set_xlabel("t")
+            ax.legend(loc="best")
             plt.show()
 
         return fig
@@ -82,14 +90,22 @@ class BM2D(StochasticProcess):
             ax.plot(times, W1, label="W1")
             ax.plot(times, W2, label="W2")
             ax.set_title(chart_title)
-            ax.set_ylabel("W1(t), W2(t)")
             ax.set_xlabel("t")
+            ax.legend(loc="best")
             plt.show()
         return fig
 
-    def plot_sample_2d(self, n, title=None, color_by="time"):
+    def plot_sample_2d(
+        self,
+        n,
+        title=None,
+        color_by="time",
+        style="seaborn-v0_8-whitegrid",
+        color_map="cool",
+        **fig_kw,
+    ):
 
-        cmap = plt.get_cmap("cool")
+        cmap = plt.get_cmap(color_map)
         chart_title = title if title else self.name
         self.n = n
         x, y = self.sample(n)
@@ -109,35 +125,33 @@ class BM2D(StochasticProcess):
         else:
             raise ValueError("color_by must be either 'time' or 'distance'")
 
-        # for colors, label_title in zip([colors_indices], [label_title]):
-        # Plotting the 2D Brownian motion
-        plt.figure(figsize=(10, 8))
-        # plt.plot(x, y, lw=1.5, color='blue')
-        # Add the colored line segments between consecutive points
-        for i in range(len(x) - 1):
-            plt.plot(x[i : i + 2], y[i : i + 2], color=colors_indices[i], lw=1.5)
+        with plt.style.context(style):
+            fig, ax = plt.subplots(**fig_kw)
+            ax.scatter(x[0], y[0], color="green", label="Start", zorder=5)
+            ax.scatter(x[-1], y[-1], color="maroon", label="End", zorder=5)
 
-        plt.scatter(x[0], y[0], color="green", label="Start", zorder=5)
-        plt.scatter(x[-1], y[-1], color="maroon", label="End", zorder=5)
+            # Plotting the 2D Brownian motion
+            # Add the colored line segments between consecutive points
+            for i in range(len(x) - 1):
+                ax.plot(x[i : i + 2], y[i : i + 2], color=colors_indices[i], lw=1.5)
 
-        # plt.colorbar(label=label_title)
-        plt.colorbar(
-            ScalarMappable(norm=norm, cmap=cmap),
-            label=label_title,
-            ax=plt.gca(),
-        )
-
-        plt.title(chart_title)
-        plt.xlabel("X position")
-        plt.ylabel("Y position")
-        plt.legend()
-        plt.grid(True)
-        plt.axis("equal")
-        plt.show()
+            fig.colorbar(
+                ScalarMappable(norm=norm, cmap=cmap),
+                label=label_title,
+                ax=plt.gca(),
+            )
+            ax.set_title(chart_title)
+            ax.set_ylabel("$W_2$(t)")
+            ax.set_xlabel("$W_1(t)$")
+            ax.legend()
+            ax.grid(True)
+            ax.axis("equal")
+            plt.show()
+        return fig
 
 
-# p = BM2D(rho=-0.8)
-# p.plot_sample(n=200, figsize=(12, 8))
-# p.plot(n=200, N=5, figsize=(12, 8))
-# # p.plot_sample_2d(n=500)
-# p.plot_sample_2d(n=500, color_by="distance")
+p = BM2D(rho=-0.5)
+p.plot_sample(n=500, figsize=(12, 8))
+p.plot(n=500, N=5, figsize=(12, 8))
+p.plot_sample_2d(n=2000, figsize=(12, 10))
+p.plot_sample_2d(n=2000, color_by="distance", figsize=(12, 10))
