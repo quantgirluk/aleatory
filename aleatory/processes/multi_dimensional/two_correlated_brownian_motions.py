@@ -103,7 +103,7 @@ class CorrelatedBMs(StochasticProcess):
     ):
 
         cmap = plt.get_cmap(color_map)
-        chart_title = title if title else self.name
+        chart_title = title if title else f"{self.name} Sample Path"
         self.n = n
         x, y = self.sample(n)
 
@@ -145,3 +145,14 @@ class CorrelatedBMs(StochasticProcess):
             ax.axis("equal")
             plt.show()
         return fig
+
+
+class BM2D(CorrelatedBMs):
+    def __init__(self, T=1):
+        super().__init__(rho=0.0, T=T)
+        self.name = "Brownian Motion 2D"
+
+
+# if __name__ == "__main__":
+#     p = BM2D()
+#     f = p.plot_sample_2d(n=100)
