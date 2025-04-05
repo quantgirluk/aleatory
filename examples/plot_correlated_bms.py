@@ -21,8 +21,5 @@ p = CorrelatedBMs(rho=-0.5)
 fig = p.plot_sample(n=500, figsize=(12, 8))
 fig.show()
 
-fig = p.plot(n=500, N=5, figsize=(12, 8))
-fig.show()
-
-fig = p.plot_sample_2d(n=2000, figsize=(12, 10))
+fig = p.plot_sample(n=200, coordinates=True, figsize=(12, 10))
 fig.show()
