@@ -45,12 +45,12 @@ class SimpleRandomWalk(SPAnalytical, ABC):
         """Generate a sample from a general random walk"""
         self.T = n
         self.n = n
-        self.times = get_times(self.T, self.n + 1)
         sample = np.array([0] + list(np.cumsum(self._sample_random_walk_steps(n))))
         return sample
 
     def sample(self, n):
         sample = self._sample_random_walk(n)
+        self.times = get_times(self.T, self.n + 1)
         return sample
 
     def _process_expectation(self, times=None):
