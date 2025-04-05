@@ -22,7 +22,7 @@ stochastic processes and provides methods to:
 <img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png"   style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%">
 </p>
 
-Currently, aleatory supports the following stochastic processes:
+Currently, aleatory supports the following stochastic processes in one dimension:
 
 - Arithmetic Brownian Motion (see [Brownian Motion](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BrownianMotion.html#aleatory.processes.BrownianMotion))
 - [Bessel process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BESProcess.html#aleatory.processes.BESProcess)
@@ -48,6 +48,12 @@ Currently, aleatory supports the following stochastic processes:
 - [Squared Bessel processes](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BESQProcess.html#aleatory.processes.BESQProcess)
 - [Vasicek process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.Vasicek.html#aleatory.processes.Vasicek)
 - [Variance-Gamma process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.VarianceGammaProcess.html#aleatory.processes.VarianceGammaProcess)
+
+From v1.1.1 aleatory supports the following 2-d stochastic processes:
+
+- [Brownian Motion 2D](https://aleatory.readthedocs.io/en/latest/auto_examples/plot_brownian_2d.html#sphx-glr-auto-examples-plot-brownian-2d-py)
+- [Correlated Brownian Motions](https://aleatory.readthedocs.io/en/latest/auto_examples/plot_correlated_bms.html)
+- [Random Walk 2D](https://aleatory.readthedocs.io/en/latest/auto_examples/plot_random_walk_2d.html#sphx-glr-auto-examples-plot-random-walk-2d-py)
 
 ## Installation
 

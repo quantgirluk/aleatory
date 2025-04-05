@@ -21,11 +21,11 @@ aleatory = importlib.import_module("aleatory")
 # -- Project information -----------------------------------------------------
 
 project = "aleatory"
-copyright = "2022, Dialid Santiago"
+copyright = "2022-2025, Dialid Santiago"
 author = "Dialid Santiago"
 
 # The full version, including alpha/beta/rc tags
-release = "1.0.1"
+release = "1.1.1"
 
 # -- General configuration ---------------------------------------------------
 
