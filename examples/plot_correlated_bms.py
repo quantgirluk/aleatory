@@ -1,6 +1,6 @@
 """
-Correlated Brownian Motions W1, W2
-=========================
+Correlated Brownian Motions
+===========================
 
 Simulate and visualise paths
 """
