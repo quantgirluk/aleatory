@@ -49,30 +49,21 @@ class CorrelatedBMs(StochasticProcess):
         self.times = get_times(self.T, self.n)
         return sim
 
-    def plot(
-        self, n, N, title=None, style="seaborn-v0_8-whitegrid", colors=None, **fig_kw
+    def plot_sample(
+        self,
+        n,
+        coordinates=False,
+        title=None,
+        style="seaborn-v0_8-whitegrid",
+        mode="linear",
+        **fig_kw,
     ):
-
-        sim = self.simulate(n, N)
-        chart_title = title if title is not None else self.name
-        if colors:
-            col1, col2 = colors[0], colors[1]
+        if coordinates:
+            fig = self.plot_sample_coordinates(
+                n=n, title=title, style=style, mode=mode, **fig_kw
+            )
         else:
-            col1, col2 = "#0079ff", "#ffb84c"
-        with plt.style.context(style):
-            fig, ax = plt.subplots(**fig_kw)
-
-            W1, W2 = sim[0]
-            ax.plot(self.times, W1, label="W1", color=col1)
-            ax.plot(self.times, W2, label="W2", color=col2)
-            for sample in sim[1:]:
-                W1, W2 = sample
-                ax.plot(self.times, W1, color=col1)
-                ax.plot(self.times, W2, color=col2)
-            ax.set_title(chart_title)
-            ax.set_xlabel("t")
-            ax.legend(loc="best")
-            plt.show()
+            fig = self.plot_sample_2d(n=n, title=title, style=style, **fig_kw)
 
         return fig
 
@@ -93,7 +84,7 @@ class CorrelatedBMs(StochasticProcess):
         )
         return fig
 
-    def plot_sample(
+    def plot_sample_2d(
         self,
         n,
         title=None,
@@ -139,8 +130,8 @@ class CorrelatedBMs(StochasticProcess):
                 ax=plt.gca(),
             )
             ax.set_title(chart_title)
-            ax.set_ylabel("$W_2$(t)")
-            ax.set_xlabel("$W_1(t)$")
+            ax.set_ylabel("$X_2$(t)")
+            ax.set_xlabel("$X_1(t)$")
             ax.legend()
             ax.grid(True)
             ax.axis("equal")
