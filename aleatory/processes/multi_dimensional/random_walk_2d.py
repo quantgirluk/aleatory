@@ -7,7 +7,7 @@ from aleatory.utils.utils import (
 )
 
 
-class RandomWalk2d(StochasticProcess):
+class RandomWalk2D(StochasticProcess):
 
     def __init__(self, rng1=None, rng2=None):
         super().__init__()
@@ -27,6 +27,24 @@ class RandomWalk2d(StochasticProcess):
         path = (x_steps, y_steps)
         return path
 
+    def plot_sample(
+        self,
+        n,
+        coordinates=False,
+        title=None,
+        style="seaborn-v0_8-whitegrid",
+        mode="steps",
+        **fig_kw,
+    ):
+        if coordinates:
+            fig = self.plot_sample_coordinates(
+                n=n, title=title, style=style, mode=mode, **fig_kw
+            )
+        else:
+            fig = self.plot_sample_2d(n=n, title=title, style=style, **fig_kw)
+
+        return fig
+
     def plot_sample_coordinates(
         self, n, title=None, style="seaborn-v0_8-whitegrid", **fig_kw
     ):
@@ -43,7 +61,7 @@ class RandomWalk2d(StochasticProcess):
         )
         return fig
 
-    def plot_sample(self, n, title=None, style="seaborn-v0_8-whitegrid", **fig_kw):
+    def plot_sample_2d(self, n, title=None, style="seaborn-v0_8-whitegrid", **fig_kw):
         chart_title = title if title is not None else self.name
         sample = self.sample(n)
         fig = plot_sample_2d(sample, title=chart_title, style=style, **fig_kw)
