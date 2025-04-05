@@ -66,5 +66,5 @@ from aleatory.processes.jump.variance_gamma import VarianceGammaProcess
 
 from aleatory.processes.multi_dimensional.two_correlated_brownian_motions import (
     CorrelatedBMs,
-    BM2D,
 )
+from aleatory.processes.multi_dimensional.brownian_motion_2d import BM2D

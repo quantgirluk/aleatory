@@ -9,6 +9,7 @@ from matplotlib.cm import ScalarMappable
 
 from aleatory.processes.base import StochasticProcess
 from aleatory.utils.utils import get_times
+from aleatory.utils.plotters_2d import plot_paths_coordinates
 
 
 class CorrelatedBMs(StochasticProcess):
@@ -23,16 +24,16 @@ class CorrelatedBMs(StochasticProcess):
 
     def _sample(self, n):
 
-        Z1 = np.random.randn(n)
-        Z2 = np.random.randn(n)
+        Z1 = np.random.randn(n - 1)
+        Z2 = np.random.randn(n - 1)
         dt = self.T / n
         # Apply Cholesky decomposition to get correlated Brownian increments
         dW1 = Z1 * np.sqrt(dt)
         dW2 = (self.rho * Z1 + np.sqrt(1 - self.rho**2) * Z2) * np.sqrt(dt)
 
         # Compute the Brownian motion paths
-        W1 = np.cumsum(dW1)  # Cumulative sum to get W1(t)
-        W2 = np.cumsum(dW2)  # Cumulative sum to get W2(t)
+        W1 = np.insert(np.cumsum(dW1), 0, 0)  # Cumulative sum to get W1(t)
+        W2 = np.insert(np.cumsum(dW2), 0, 0)  # Cumulative sum to get W2(t)
         W = (W1, W2)
 
         return W
@@ -75,24 +76,24 @@ class CorrelatedBMs(StochasticProcess):
 
         return fig
 
-    def plot_sample(self, n, title=None, style="seaborn-v0_8-whitegrid", **fig_kw):
-
+    def plot_sample_coordinates(
+        self, n, title=None, style="seaborn-v0_8-whitegrid", mode="linear", **fig_kw
+    ):
         chart_title = title if title is not None else self.name
-        self.n = n
-        W1, W2 = self.sample(n)
+        X, Y = self.sample(n)
         times = self.times
-
-        with plt.style.context(style):
-            fig, ax = plt.subplots(**fig_kw)
-            ax.plot(times, W1, label="W1")
-            ax.plot(times, W2, label="W2")
-            ax.set_title(chart_title)
-            ax.set_xlabel("t")
-            ax.legend(loc="best")
-            plt.show()
+        fig = plot_paths_coordinates(
+            times=times,
+            paths1=[X],
+            paths2=[Y],
+            style=style,
+            title=chart_title,
+            mode=mode,
+            **fig_kw,
+        )
         return fig
 
-    def plot_sample_2d(
+    def plot_sample(
         self,
         n,
         title=None,
@@ -145,14 +146,3 @@ class CorrelatedBMs(StochasticProcess):
             ax.axis("equal")
             plt.show()
         return fig
-
-
-class BM2D(CorrelatedBMs):
-    def __init__(self, T=1):
-        super().__init__(rho=0.0, T=T)
-        self.name = "Brownian Motion 2D"
-
-
-# if __name__ == "__main__":
-#     p = BM2D()
-#     f = p.plot_sample_2d(n=100)
