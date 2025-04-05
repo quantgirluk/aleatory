@@ -18,11 +18,11 @@ def plot_paths_coordinates(
                 ax.scatter(times, p1, s=7)
                 ax.scatter(times, p2, s=7)
             elif mode == "steps":
-                ax.step(times, p1, where="post", label="X")
-                ax.step(times, p2, where="post", label="Y")
+                ax.step(times, p1, where="post", label="$X_1$")
+                ax.step(times, p2, where="post", label="$X_2$")
             elif mode == "linear":
-                ax.plot(times, p1, label="X", *args)
-                ax.plot(times, p2, label="Y", *args)
+                ax.plot(times, p1, label="$X_1$", *args)
+                ax.plot(times, p2, label="$X_2$", *args)
             elif mode in ["points+steps", "steps+points"]:
                 ax.step(times, p1, where="post")
                 ax.step(times, p2, where="post")
