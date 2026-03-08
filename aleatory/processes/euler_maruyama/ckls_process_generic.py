@@ -5,6 +5,7 @@ Chan-Karolyi-Longstaff-Sanders (CKLS) process generic
 from aleatory.processes.base_eu import SPEulerMaruyama
 import numpy as np
 from aleatory.utils.plotters import draw_paths
+from aleatory.utils.utils import check_positive_number
 
 
 class CKLSProcessGeneric(SPEulerMaruyama):
@@ -142,8 +143,23 @@ class CKLSProcessGeneric(SPEulerMaruyama):
             initial=str(self.initial),
         )
 
-    def draw(self, n, N, marginal=True, envelope=False, title=None, **fig_kw):
-        self.simulate(n, N)
+    @property
+    def T(self):
+        return self._T
+
+    @T.setter
+    def T(self, value):
+        check_positive_number(value, "Time end")
+        self._T = float(value)
+        if hasattr(self, "n") and self.n:
+            self.dt = 1.0 * self._T / self.n
+            self.times = np.arange(0.0, self._T + self.dt, self.dt)
+
+    # def plot(self, n, N, T=None, title=None, **fig_kw):
+    #     return super().plot(n=n, N=N, T=T, title=title, **fig_kw)
+
+    def draw(self, n, N, T=None, marginal=True, envelope=False, title=None, **fig_kw):
+        self.simulate(n, N, T=T)
         expectations = self.estimate_expectations()
 
         if envelope:
@@ -193,24 +209,30 @@ if __name__ == "__main__":
     plt.style.use(qs)
 
     p1 = CKLSProcessGeneric()
-    p2 = CKLSProcessGeneric(alpha=1.0, beta=0.5, gamma=1.0, sigma=0.2)
-    p3 = CKLSProcessGeneric(alpha=0.5, beta=0.5, gamma=0.5, sigma=0.2)
-    for p, cm in [
-        (p1, "twilight"),
-        (p2, "PuBuGn"),
-        (p3, "Purples"),
-        # (p4, "RdBu"),
-        # (p5, "Purples"),
-        # (p6, "Oranges"),
-    ]:
+    p1.draw(n=200, N=200, figsize=(12, 7), style=qs, envelope=True)
+    p1.draw(n=200, N=200,  T=5.0, figsize=(12, 7), style=qs, envelope=False)
+    p1.plot(n=200, N=10, figsize=(12, 7), style=qs)
 
-        p.draw(
-            n=500,
-            N=300,
-            figsize=(12, 7),
-            style=qs,
-            colormap=cm,
-            envelope=False,
-        )
-    p1.plot(n=500, N=10, figsize=(12, 7), style=qs)
-    p1.draw(n=500, N=300, figsize=(12, 7), style=qs, envelope=True)
+
+#     p2 = CKLSProcessGeneric(alpha=1.0, beta=0.5, gamma=1.0, sigma=0.2)
+#     p3 = CKLSProcessGeneric(alpha=0.5, beta=0.5, gamma=0.5, sigma=0.2)
+#     for p, cm in [
+#         # (p1, "twilight"),
+#         (p2, "PuBuGn"),
+#         (p3, "Purples"),
+#         # (p4, "RdBu"),
+#         # (p5, "Purples"),
+#         # (p6, "Oranges"),
+#     ]:
+
+        # p.draw(
+        #     n=500,
+        #     N=300,
+        #     figsize=(12, 7),
+        #     style=qs,
+        #     colormap=cm,
+        #     envelope=False,
+        # )
+        # p.plot_mean_variance(times=np.linspace(0, 1, 100))
+    # p1.plot(n=500, N=10, figsize=(12, 7), style=qs)
+    # p1.draw(n=500, N=300, figsize=(12, 7), style=qs, envelope=True)

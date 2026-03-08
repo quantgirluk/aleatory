@@ -4,15 +4,17 @@ BESQ Process
 
 from functools import partial
 from multiprocessing import Pool
+import re
 
 import numpy as np
 from scipy.stats import ncx2
 
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
-from aleatory.processes.base_analytical import SPAnalytical
+from aleatory.processes.base_analytical import SPAnalyticalMarginals
 from aleatory.utils.utils import (
     get_times,
     check_positive_integer,
+    check_positive_number,
     sample_besselq_global,
 )
 
@@ -23,7 +25,7 @@ def _sample_besselq_global(T, initial, dim, n):
     return path
 
 
-class BESQProcess(SPAnalytical):
+class BESQProcess(SPAnalyticalMarginals):
     r"""
     Squared Bessel process
     ======================
@@ -89,6 +91,18 @@ class BESQProcess(SPAnalytical):
         )
 
     @property
+    def T(self):
+        return self._T
+
+    @T.setter
+    def T(self, value):
+        check_positive_number(value, "Time end")
+        self._T = float(value)
+        # Keep internal Brownian motion aligned with the process horizon.
+        if hasattr(self, "_brownian_motion") and self._brownian_motion is not None:
+            self._brownian_motion.T = self._T
+
+    @property
     def dim(self):
         """Bessel Process dimension."""
         return self._dim
@@ -117,14 +131,17 @@ class BESQProcess(SPAnalytical):
         else:
             return _sample_besselq_global(self.T, self.initial, self.dim, n)
 
-    def simulate(self, n, N):
+    def simulate(self, n, N, T=None):
         """
         Simulate paths/trajectories from the instanced stochastic process.
 
         :param n: number of steps in each path
         :param N: number of paths to simulate
+        :param T: optional right hand endpoint of the time interval [0, T]
         :return: list with N paths (each one is a numpy array of size n)
         """
+        if T is not None:
+            self.T = T
         self.n = n
         self.N = N
         self.times = get_times(self.T, n)
@@ -156,8 +173,16 @@ class BESQProcess(SPAnalytical):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
-        variances = 2.0 * (self.dim + 2.0 * self.initial / times) * times**2
 
+        def _var(t):
+            if t == 0:
+                return 0.0
+            return 2.0 * (self.dim + 2.0 * self.initial / t) * t**2
+
+        if np.isscalar(times):
+            return _var(times)
+
+        variances = np.array([_var(t) for t in times])
         return variances
 
     def _process_stds(self, times=None):
@@ -180,17 +205,20 @@ class BESQProcess(SPAnalytical):
         return variances
 
 
-# if __name__ == "__main__":
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     p1 = BESQProcess()
-#     p2 = BESQProcess(dim=4.0)
-#     p3 = BESQProcess(initial=5.0, dim=2.5)
-#     p4 = BESQProcess(initial=3.0, dim=2.25)
-#     p5 = BESQProcess(initial=1.0, dim=3.0)
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    p1 = BESQProcess()
+    p2 = BESQProcess(dim=4.0)
+    p3 = BESQProcess(initial=5.0, dim=2.5)
+    p4 = BESQProcess(initial=3.0, dim=2.25)
+    p5 = BESQProcess(initial=1.0, dim=3.0)
+
+    for p in [p1, p2, p3, p4, p5]:
+        p.plot_mean_variance(times=np.linspace(0, 1, 100))
 #
 #     p1.plot(n=200, N=5, figsize=(12, 7), style=qs)
 #     p1.draw(n=200, N=200, figsize=(12, 7), style=qs, envelope=True)

@@ -1,10 +1,10 @@
 import numpy as np
 
-from aleatory.processes.base_analytical import SPAnalytical
+from aleatory.processes.base_analytical import SPAnalytical, SPAnalyticalMarginals
 from aleatory.utils.utils import check_positive_integer, get_times
 
 
-class SPEulerMaruyama(SPAnalytical):
+class SPEulerMaruyama(SPAnalyticalMarginals):
     def __int__(self, f=None, g=None, initial=0.0, T=1.0, rng=None):
         super().__init__(T=T, rng=rng, initial=initial)
         self.f = f

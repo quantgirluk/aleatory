@@ -34,8 +34,8 @@ class OUProcess(Vasicek):
 
     def __init__(self, theta=1.0, sigma=0.5, initial=1.0, T=1.0, rng=None):
         """
-        :param float theta: the parameter :math:`\theta` in the above SDE
-        :param float sigma: the parameter :math:`\sigma>0` in the above SDE
+        :param float theta: the parameter :math:`\\theta` in the above SDE
+        :param float sigma: the parameter :math:`\\sigma>0` in the above SDE
         :param float initial: the initial condition :math:`x_0` in the above SDE
         :param float T: the right hand endpoint of the time interval :math:`[0,T]`
             for the process
@@ -47,7 +47,7 @@ class OUProcess(Vasicek):
         self.n = 1.0
         self.dt = 1.0 * self.T / self.n
         self.times = None
-        self.name = f"Ornstein–Uhlenbeck process $X(\\theta={self.theta}, \\sigma={self.sigma})$ on $[0,{self.T}]$"
+        self.name = f"Ornstein–Uhlenbeck process $X(\\theta={self.theta}, \\sigma={self.sigma})$"
 
     def __str__(self):
         return "Ornstein–Uhlenbeck process with parameters {speed}, and {volatility} on [0, {T}].".format(
@@ -55,14 +55,17 @@ class OUProcess(Vasicek):
         )
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     p = OUProcess()
+if __name__ == "__main__":
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    p = OUProcess()
+    p.plot_mean_variance(times=np.linspace(0, 10, 100))
+    
 #     p.plot(n=200, N=5, figsize=(12, 7), style=qs)
 #
 #     for p, cm in [

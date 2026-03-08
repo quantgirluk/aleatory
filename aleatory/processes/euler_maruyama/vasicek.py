@@ -132,3 +132,15 @@ class Vasicek(SPEulerMaruyama):
         marginal = norm(loc=mu_x, scale=sigma_x)
 
         return marginal
+
+# if __name__ == "__main__":
+#     import matplotlib.pyplot as plt
+
+#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+#     plt.style.use(qs)
+
+#     p = Vasicek()
+#     # p.plot_mean_variance(times=np.linspace(0, 1, 100))
+#     p.plot(n=200, N=5, figsize=(12, 7), style=qs)
+#     p.plot(n=200, N=5, T=4.0, figsize=(12, 7), style=qs)
+#     p.draw(n=200, N=200, T=2.0, figsize=(12, 7), style=qs, envelope=True)

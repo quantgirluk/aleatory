@@ -97,20 +97,21 @@ class BrownianExcursion(BrownianBridge):
         return marginal
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     for p, cm in [
-#         (BrownianExcursion(), "twilight"),
-#         (BrownianExcursion(T=2.0), "viridis"),
-#         (BrownianExcursion(T=10.0), "Accent"),
-#     ]:
-#
-#         p.draw(n=200, N=100, figsize=(12, 7), style=qs, colormap=cm, envelope=False)
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    for p, cm in [
+        (BrownianExcursion(), "twilight"),
+        (BrownianExcursion(T=2.0), "viridis"),
+        (BrownianExcursion(T=10.0), "Accent"),
+    ]:
+
+        # p.draw(n=200, N=100, figsize=(12, 7), style=qs, colormap=cm, envelope=False)
+        p.plot_mean_variance(times=np.linspace(0, 1, 100))
 #
 #     p = BrownianExcursion()
 #     p.plot(n=500, N=5, figsize=(12, 7), style=qs)

@@ -191,17 +191,18 @@ class BrownianBridge(BrownianMotion):
         return self._draw_paths(n, N, envelope=envelope, title=title, **fig_kw)
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
-#
-#     for p, cm in [
-#         (BrownianBridge(), "PRGn"),
-#         (BrownianBridge(initial=10.0, end=11.0), "viridis"),
-#         (BrownianBridge(initial=1.0, end=-1.0), "PiYG"),
-#     ]:
-#         # p.plot(n=100, N=5, figsize=(10, 7), style=qs)
-#         p.draw(n=200, N=200, figsize=(10, 7), style=qs, colormap=cm)
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
+
+    for p, cm in [
+        (BrownianBridge(), "PRGn"),
+        (BrownianBridge(initial=10.0, end=11.0), "viridis"),
+        (BrownianBridge(initial=1.0, end=-1.0), "PiYG"),
+    ]:
+        # p.plot(n=100, N=5, figsize=(10, 7), style=qs)
+        p.draw(n=200, N=200, figsize=(10, 7), style=qs, colormap=cm)
+        p.plot_mean_variance(times=np.linspace(0, 1, 100))

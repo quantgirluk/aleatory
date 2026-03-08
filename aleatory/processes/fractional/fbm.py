@@ -4,7 +4,7 @@ from functools import lru_cache
 
 import numpy as np
 from scipy.stats import norm
-from aleatory.processes.base_analytical import SPAnalytical
+from aleatory.processes.base_analytical import SPAnalytical, SPAnalyticalMarginals
 from aleatory.utils.utils import check_positive_number, get_times
 
 
@@ -17,7 +17,7 @@ def _fgn_dh_sqrt_eigenvalues(hurst, n):
     return np.fft.irfft(_fgn_auto_covariance(hurst, n))[:n] ** 0.5
 
 
-class fBM(SPAnalytical):
+class fBM(SPAnalyticalMarginals):
     r"""
     Fractional Brownian motion
     ==========================
@@ -105,6 +105,11 @@ class fBM(SPAnalytical):
         if times is None:
             times = self.times
         return 0.0 * times
+    
+    def _process_variance(self, times=None):
+        if times is None:
+            times = self.times
+        return times ** (2.0 * self.hurst)
 
     def get_marginal(self, t):
         s = np.sqrt(t ** (2.0 * self.hurst))
@@ -121,4 +126,7 @@ if __name__ == "__main__":
 
     p = fBM(hurst=0.25, T=1.0)
     p.plot(n=500, N=4, figsize=(12, 7), style=qs)
+    p.plot(n=500, N=4, T=3.0, figsize=(12, 7), style=qs)
     p.draw(n=500, N=200, figsize=(12, 7), style=qs, colormap="viridis")
+    p.draw(n=500, N=200, T=5.0, figsize=(12, 7), style=qs, colormap="viridis")
+    

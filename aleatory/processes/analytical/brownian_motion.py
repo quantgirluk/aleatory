@@ -3,12 +3,13 @@
 import numpy as np
 from scipy.stats import norm
 
-from aleatory.processes.base_analytical import SPAnalytical
+from aleatory.processes.base_analytical import SPAnalytical, SPAnalyticalMarginals
 from aleatory.processes.analytical.gaussian import GaussianIncrements
+from aleatory.utils.plotters_marginals import plot_mean_variance
 from aleatory.utils.utils import check_positive_number, check_numeric, get_times
 
 
-class BrownianMotion(SPAnalytical):
+class BrownianMotion(SPAnalyticalMarginals):
     r"""
     Brownian Motion
     ===============
@@ -75,8 +76,8 @@ class BrownianMotion(SPAnalytical):
 
     def __init__(self, drift=0.0, scale=1.0, initial=0.0, T=1.0, rng=None):
         """
-        :param double drift: the drift parameter :math:`\mu` in the above SDE
-        :param double scale: the scale parameter :math:`\sigma` in the above SDE
+        :param double drift: the drift parameter :math:`\\mu` in the above SDE
+        :param double scale: the scale parameter :math:`\\sigma` in the above SDE
         :param double initial: the initial condition :math:`x_0` in the above SDE
         :param double T: the endpoint of the time interval :math:`[0,T]` over which the process is defined
         """
@@ -91,6 +92,18 @@ class BrownianMotion(SPAnalytical):
         self.n = None
         self.times = None
         self.gaussian_increments = GaussianIncrements(T=self.T, rng=self.rng)
+
+    @property
+    def T(self):
+        return self._T
+
+    @T.setter
+    def T(self, value):
+        check_positive_number(value, "Time end")
+        self._T = float(value)
+        # Keep Gaussian increments aligned with the process horizon.
+        if hasattr(self, "gaussian_increments") and self.gaussian_increments is not None:
+            self.gaussian_increments.T = self._T
 
     @property
     def drift(self):
@@ -128,12 +141,6 @@ class BrownianMotion(SPAnalytical):
         path = (
             np.full(n, self.initial) + self.drift * self.times + self.scale * increments
         )
-        # bm = np.cumsum(self.scale *self.gaussian_increments.sample(n - 1))
-        # bm = np.insert(bm, 0, [0])
-        # if self.drift == 0:
-        #     return bm
-        # else:
-        # return self.initial + self.drift+self.times + bm
         return path
 
     def __str__(self):
@@ -160,7 +167,6 @@ class BrownianMotion(SPAnalytical):
         if times[0] != 0:
             times = np.insert(times, 0, [0])
         self.times = times
-
         increments = np.cumsum(self.gaussian_increments.sample_at(times))
         # increments = np.insert(increments, 0, [0])
 
@@ -220,7 +226,7 @@ class BrownianMotion(SPAnalytical):
         return variances
 
     def draw(
-        self, n, N, marginal=True, envelope=False, type="3sigma", title=None, **fig_kw
+        self, n, N, T=None, marginal=True, envelope=False, type="3sigma", title=None, **fig_kw
     ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
@@ -235,6 +241,7 @@ class BrownianMotion(SPAnalytical):
 
         :param int n: number of steps in each path
         :param int N: number of paths to simulate
+        :param float T: the endpoint of the time interval [0,T] over which the process is defined. If not passed, it defaults to the value of T passed in the constructor.
         :param bool marginal:  defaults to True
         :param bool envelope:   defaults to False
         :param str type:   defaults to  '3sigma'
@@ -244,17 +251,23 @@ class BrownianMotion(SPAnalytical):
 
         if type == "3sigma":
             return self._draw_3sigmastyle(
-                n=n, N=N, marginal=marginal, envelope=envelope, title=title, **fig_kw
+                n=n, N=N, T=T, marginal=marginal, envelope=envelope, title=title, **fig_kw
             )
         elif type == "qq":
             return self._draw_qqstyle(
-                n, N, marginal=marginal, envelope=envelope, title=title, **fig_kw
+                n, N, T=T, marginal=marginal, envelope=envelope, title=title, **fig_kw
             )
         else:
             raise ValueError
+    
+    def plot_mean_variance(self, times, **fig_kw):
+        return super()._plot_mean_variance(times, process_label="B", **fig_kw)
 
 
 if __name__ == "__main__":
 
-    p = BrownianMotion()
-    p.draw(n=20, N=100, figsize=(12, 7))
+    p = BrownianMotion(T=1.0)
+    p.draw(n=200, N=200, T=4.0, figsize=(12, 7))
+    p.draw(n=200, N=200, T=9.0, figsize=(12, 7))
+    # p.plot_mean_variance(times=np.linspace(0, 1, 100))
+    # p.draw(n=20, N=100, figsize=(12, 7))

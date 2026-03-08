@@ -12,7 +12,12 @@ from scipy.special import eval_genlaguerre
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.processes.base_analytical import SPAnalytical
 from aleatory.stats import ncx
-from aleatory.utils.utils import check_positive_integer, get_times, sample_bessel_global
+from aleatory.utils.utils import (
+    check_positive_integer,
+    check_positive_number,
+    get_times,
+    sample_bessel_global,
+)
 
 
 def _sample_bessel_global(T, initial, dim, n):
@@ -86,6 +91,18 @@ class BESProcess(SPAnalytical):
         )
 
     @property
+    def T(self):
+        return self._T
+
+    @T.setter
+    def T(self, value):
+        check_positive_number(value, "Time end")
+        self._T = float(value)
+        # Keep internal Brownian motion aligned with the process horizon.
+        if hasattr(self, "_brownian_motion") and self._brownian_motion is not None:
+            self._brownian_motion.T = self._T
+
+    @property
     def dim(self):
         """Bessel Process dimension."""
         return self._dim
@@ -123,14 +140,17 @@ class BESProcess(SPAnalytical):
         else:
             return _sample_bessel_global(self.T, self.initial, self.dim, n)
 
-    def simulate(self, n, N):
+    def simulate(self, n, N, T=None):
         """
         Simulate paths/trajectories from the instanced stochastic process.
 
         :param int n: number of steps in each path
         :param int N: number of paths to simulate
+        :param float T: optional right hand endpoint of the time interval [0, T]
         :return: list with N paths (each one is a numpy array of size n)
         """
+        if T is not None:
+            self.T = T
         self.n = n
         self.N = N
         self.times = get_times(self.T, n)

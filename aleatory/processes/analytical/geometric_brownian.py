@@ -5,7 +5,7 @@ Geometric Brownian Motion
 import numpy as np
 from scipy.stats import lognorm
 
-from aleatory.processes.base_analytical import SPAnalytical
+from aleatory.processes.base_analytical import SPAnalytical, SPAnalyticalMarginals
 from aleatory.processes.analytical.brownian_motion import BrownianMotion
 from aleatory.utils.utils import (
     check_positive_number,
@@ -15,7 +15,7 @@ from aleatory.utils.utils import (
 )
 
 
-class GBM(SPAnalytical):
+class GBM(SPAnalyticalMarginals):
     r"""
     Geometric Brownian Motion
     =========================
@@ -67,8 +67,8 @@ class GBM(SPAnalytical):
 
     def __init__(self, drift=1.0, volatility=0.5, initial=1.0, T=1.0, rng=None):
         """
-        :param float drift: the parameter :math:`\mu` in the above SDE
-        :param float volatility: the parameter :math:`\sigma>0` in the above SDE
+        :param float drift: the parameter :math:`\\mu` in the above SDE
+        :param float volatility: the parameter :math:`\\sigma>0` in the above SDE
         :param float initial: the initial condition :math:`x_0` in the above SDE
         :param float T: the right hand endpoint of the time interval :math:`[0,T]`
             for the process
@@ -93,6 +93,18 @@ class GBM(SPAnalytical):
         return "GeometricBrownianMotion(drift={d}, volatility={v}, T={T})".format(
             T=str(self.T), d=str(self.drift), v=str(self.volatility)
         )
+
+    @property
+    def T(self):
+        return self._T
+
+    @T.setter
+    def T(self, value):
+        check_positive_number(value, "Time end")
+        self._T = float(value)
+        # Keep internal Brownian motion aligned with the process horizon.
+        if hasattr(self, "_brownian_motion") and self._brownian_motion is not None:
+            self._brownian_motion.T = self._T
 
     @property
     def drift(self):
@@ -187,3 +199,15 @@ class GBM(SPAnalytical):
     def marginal_variance(self, times=None):
         variances = self._process_variance(times=times)
         return variances
+    
+if __name__ == "__main__":
+    p = GBM()
+    # p.draw(n=200, N=200, T=9.0, figsize=(12, 7))
+    # p.draw(n=200, N=200, T=4.0, figsize=(12, 7))
+
+    p.plot(n=100, N=100)
+    p.plot(n=100, N=100, T=3.0)
+    p.draw(n=100, N=100)
+
+    # p.plot_mean_variance(times=np.linspace(0, 1, 100))
+    

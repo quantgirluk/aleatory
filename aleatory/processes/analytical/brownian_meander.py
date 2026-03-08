@@ -4,14 +4,15 @@ Brownian Meander
 
 import numpy as np
 
-from aleatory.processes import BrownianBridge, BrownianMotion
+from aleatory.processes import BrownianBridge
+from aleatory.processes.base_analytical import SPAnalytical
 from aleatory.utils.utils import (
     check_positive_integer,
 )
 from aleatory.utils.plotters import draw_paths, draw_paths_with_end_point
 
 
-class BrownianMeander(BrownianMotion):
+class BrownianMeander(SPAnalytical):
     r"""
     Brownian Meander
     ================
@@ -164,12 +165,12 @@ class BrownianMeander(BrownianMotion):
         return self._draw_paths(n, N, title, **fig_kw)
 
 
-# if __name__ == "__main__":
-#
-#     import matplotlib.pyplot as plt
-#
-#     qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
-#     plt.style.use(qs)
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    qs = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
+    plt.style.use(qs)
 #
 #     for p, cm in [
 #         (BrownianMeander(), "twilight"),
@@ -180,5 +181,8 @@ class BrownianMeander(BrownianMotion):
 #
 #         p.draw(n=200, N=100, figsize=(12, 7), style=qs, colormap=cm, envelope=False)
 #
-#     p = BrownianMeander()
-#     p.plot(n=500, N=5, figsize=(12, 7), style=qs)
+    p = BrownianMeander()
+    p.draw(n=200, N=100, figsize=(12, 7), style=qs, envelope=False)
+    # p.draw(n=200, N=100, T=3.0, figsize=(12, 7), style=qs, envelope=False)
+    # p.plot_mean_variance(times=np.linspace(0, 1, 100))
+    # p.plot(n=500, N=5, figsize=(12, 7), style=qs)
