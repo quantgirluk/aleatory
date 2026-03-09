@@ -6,11 +6,11 @@ import numpy as np
 from scipy.stats import gamma
 from aleatory.utils.utils import check_positive_number, get_times
 
-from aleatory.processes.base_analytical import SPAnalytical
+from aleatory.processes.base_analytical import SPAnalytical, SPAnalyticalMarginals
 from aleatory.processes.analytical.increments import GammaIncrements
 
 
-class GammaProcess(SPAnalytical):
+class GammaProcess(SPAnalyticalMarginals):
     r"""
     Gamma process
     =============
@@ -58,6 +58,18 @@ class GammaProcess(SPAnalytical):
 
     def __repr__(self):
         return f"GammaProcess(mu={self.mu}, nu={self.nu})"
+
+    @property
+    def T(self):
+        return self._T
+
+    @T.setter
+    def T(self, value):
+        check_positive_number(value, "Time end")
+        self._T = float(value)
+        # Keep Gamma increments aligned with the process horizon.
+        if hasattr(self, "gamma_increments") and self.gamma_increments is not None:
+            self.gamma_increments.T = self._T
 
     @property
     def mu(self):
@@ -136,22 +148,23 @@ class GammaProcess(SPAnalytical):
         variances = self._process_variance(times=times)
         return variances
 
-    def plot(self, n, N, mode="steps", title=None, **fig_kw):
+    def plot(self, n, N, T=None, mode="steps", title=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Simple plot of times versus process values as lines and/or markers.
 
         :parameter int n: number of steps in each path
         :parameter int N: number of paths to simulate
+        :parameter double T: time horizon to simulate to
         :parameter str mode: defines the type of plot to produce
         :parameter str title: string to customise plot title
         :return:
 
         """
-        return self._plot_process(n=n, N=N, mode=mode, title=title, **fig_kw)
+        return self._plot_process(n=n, N=N, T=T, mode=mode, title=title, **fig_kw)
 
     def draw(
-        self, n, N, marginal=True, envelope=False, mode="steps", title=None, **fig_kw
+        self, n, N, T=None, marginal=True, envelope=False, mode="steps", title=None, **fig_kw
     ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
@@ -164,6 +177,7 @@ class GammaProcess(SPAnalytical):
 
         :param int n: number of steps in each path
         :param int N: number of paths to simulate
+        :param T: time horizon to simulate to
         :param bool marginal: defaults to True
         :param bool envelope: defaults to False
         :param mode: defines the type of plot to produce (e.g. "steps", "points" or "steps+points")
@@ -171,7 +185,7 @@ class GammaProcess(SPAnalytical):
         :return:
         """
         return self._draw_qqstyle(
-            n, N, marginal=marginal, mode=mode, envelope=envelope, title=title, **fig_kw
+            n, N, T=T, marginal=marginal, mode=mode, envelope=envelope, title=title, **fig_kw
         )
 
 

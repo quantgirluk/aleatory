@@ -82,7 +82,7 @@ class SimpleRandomWalk(SPAnalytical, ABC):
         :return:
 
         """
-        self.simulate(n, N)
+        self.simulate(n, N, T=n)
         if title:
             figure = plot_paths_random_walk(
                 *args, times=self.times, paths=self.paths, title=title, **fig_kw

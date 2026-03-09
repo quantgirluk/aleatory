@@ -1,6 +1,6 @@
 import numpy as np
 
-from aleatory.processes.base_analytical import SPAnalytical
+from aleatory.processes.base_analytical import SPAnalytical, SPAnalyticalMarginals
 from aleatory.utils.utils import (
     check_positive_integer,
     get_times,
@@ -8,7 +8,7 @@ from aleatory.utils.utils import (
 from aleatory.stats.variance_gamma import vg
 
 
-class VarianceGammaProcess(SPAnalytical):
+class VarianceGammaProcess(SPAnalyticalMarginals):
     r"""
     Variance Gamma Process
     ======================
@@ -40,9 +40,9 @@ class VarianceGammaProcess(SPAnalytical):
 
     def __init__(self, theta=0.0, nu=1.0, sigma=1.0, T=1.0, rng=None):
         """
-        :parameter double theta: the :math:`\theta` parameter in the above expression
-        :parameter double nu: the :math:`\nu` parameter in the above expression
-        :parameter double sigma: the :math:`\sigma` parameter in the above expression
+        :parameter double theta: the :math:`\\theta` parameter in the above expression
+        :parameter double nu: the :math:`\\nu` parameter in the above expression
+        :parameter double sigma: the :math:`\\sigma` parameter in the above expression
         :parameter float T: the right hand endpoint of the time interval :math:`[0,T]` for the process
         :parameter numpy.random.Generator rng: a custom random number generator
         """
@@ -105,13 +105,14 @@ class VarianceGammaProcess(SPAnalytical):
         marginal = vg(r=a, theta=b, sigma=c)
         return marginal
 
-    def plot(self, n, N, mode="steps", title=None, **fig_kw):
-        return self._plot_process(n=n, N=N, mode=mode, title=title, **fig_kw)
+    def plot(self, n, N, T=None, mode="steps", title=None, **fig_kw):
+        return self._plot_process(n=n, N=N, T=T, mode=mode, title=title, **fig_kw)
 
     def draw(
         self,
         n,
         N,
+        T=None,
         mode="steps",
         marginal=True,
         envelope=False,
@@ -122,6 +123,7 @@ class VarianceGammaProcess(SPAnalytical):
         return self._draw_qqstyle(
             n,
             N,
+            T=T,
             marginal=marginal,
             mode=mode,
             envelope=envelope,
@@ -170,13 +172,13 @@ if __name__ == "__main__":
         marginal=False,
         mode="steps+points",
     )
-    p.draw(n=50, N=100, figsize=(12, 7), style=qs, colormap="cool")
+    p.draw(n=50, N=100, T=2.0, figsize=(12, 7), style=qs, colormap="cool")
     p.plot(n=50, N=5, figsize=(10, 6), style=qs)
     p = VarianceGammaProcess(T=100)
     p.draw(n=100, N=100, figsize=(12, 7), style=qs, colormap="viridis")
-    p = VarianceGammaProcess(theta=1.5, nu=0.5, sigma=2.0, T=20)
-    p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="twilight")
-    p = VarianceGammaProcess(theta=0.0, nu=0.5, sigma=1.0, T=1.0)
-    p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="winter", envelope=False)
-    p = VarianceGammaProcess(theta=-1.0, nu=4.0, sigma=2.0, T=100.0)
-    p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="summer", envelope=False)
+    p.draw(n=100, N=200, T=10, figsize=(12, 7), style=qs, colormap="twilight")
+    p.plot(n=100, N=5, T=2.0, figsize=(10, 6), style=qs)
+    # p = VarianceGammaProcess(theta=0.0, nu=0.5, sigma=1.0, T=1.0)
+    # p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="winter", envelope=False)
+    # p = VarianceGammaProcess(theta=-1.0, nu=4.0, sigma=2.0, T=100.0)
+    # p.draw(n=100, N=200, figsize=(12, 7), style=qs, colormap="summer", envelope=False)
