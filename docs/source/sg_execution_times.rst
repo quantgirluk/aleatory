@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:02.104** total execution time for 24 files **from all galleries**:
+**00:21.902** total execution time for 27 files **from all galleries**:
 
 .. container::
 
@@ -32,8 +32,17 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
+   * - :ref:`sphx_glr_auto_examples_plot_correlated_bms.py` (``../../examples/plot_correlated_bms.py``)
+     - 00:07.899
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_brownian_2d.py` (``../../examples/plot_brownian_2d.py``)
+     - 00:06.389
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_random_walk_2d.py` (``../../examples/plot_random_walk_2d.py``)
+     - 00:05.324
+     - 0.0
    * - :ref:`sphx_glr_auto_examples_plot_brownian_bridge.py` (``../../examples/plot_brownian_bridge.py``)
-     - 00:02.104
+     - 00:02.289
      - 0.0
    * - :ref:`sphx_glr_auto_examples_plot_arithmetic_brownian_motion.py` (``../../examples/plot_arithmetic_brownian_motion.py``)
      - 00:00.000

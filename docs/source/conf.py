@@ -44,6 +44,7 @@ extensions = [
 ]
 
 sphinx_gallery_conf = {
+    'within_subsection_order': "FileNameSortKey", # order files according to their name within each subsection
     "examples_dirs": "../../examples",  # path to your example scripts
     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
 }
