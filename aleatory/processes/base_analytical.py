@@ -91,7 +91,7 @@ class SPAnalytical(StochasticProcess):
         stds = self._process_stds()
         return stds
 
-    def _plot_process(self, n, N, T=None, title=None, **fig_kw):
+    def _plot_process(self, n, N, T=None, title=None, suptitle=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Simple plot of times versus process values as lines and/or markers.
@@ -104,17 +104,17 @@ class SPAnalytical(StochasticProcess):
 
         """
         self.simulate(n, N, T=T)
-        if title:
-            figure = plot_paths(
-                times=self.times, paths=self.paths, title=title, **fig_kw
-            )
-        else:
-            figure = plot_paths(
-                times=self.times, paths=self.paths, title=self.name, **fig_kw
-            )
+        chart_suptitle = suptitle if suptitle is not None else self.name
+        figure = plot_paths(
+            times=self.times,
+            paths=self.paths,
+            title=title,
+            suptitle=chart_suptitle,
+            **fig_kw,
+        )
         return figure
 
-    def plot(self, n, N, T=None, title=None, **fig_kw):
+    def plot(self, n, N, T=None, title=None, suptitle=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Simple plot of times versus process values as lines and/or markers.
@@ -127,14 +127,14 @@ class SPAnalytical(StochasticProcess):
 
         """
         self.simulate(n, N, T=T)
-        if title:
-            figure = plot_paths(
-                times=self.times, paths=self.paths, title=title, **fig_kw
-            )
-        else:
-            figure = plot_paths(
-                times=self.times, paths=self.paths, title=self.name, **fig_kw
-            )
+        chart_suptitle = suptitle if suptitle is not None else self.name
+        figure = plot_paths(
+            times=self.times,
+            paths=self.paths,
+            title=title,
+            suptitle=chart_suptitle,
+            **fig_kw,
+        )
         return figure
 
     def _draw_paths(
@@ -146,6 +146,7 @@ class SPAnalytical(StochasticProcess):
         envelope=False,
         type=None,
         title=None,
+        suptitle=None,
         empirical_envelope=False,
         **fig_kw,
     ):  
@@ -178,12 +179,13 @@ class SPAnalytical(StochasticProcess):
         else:
             marginalT = None
 
-        chart_title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         fig = draw_paths(
             times=self.times,
             paths=self.paths,
             N=N,
-            title=chart_title,
+            title=title,
+            suptitle=chart_suptitle,
             expectations=expectations,
             marginal=marginal,
             marginalT=marginalT,
@@ -194,7 +196,17 @@ class SPAnalytical(StochasticProcess):
         )
         return fig
 
-    def _draw_qqstyle(self, n, N, T=None, marginal=False, envelope=False, title=None, **fig_kw):
+    def _draw_qqstyle(
+        self,
+        n,
+        N,
+        T=None,
+        marginal=False,
+        envelope=False,
+        title=None,
+        suptitle=None,
+        **fig_kw,
+    ):
 
         fig = self._draw_paths(
             n=n,
@@ -204,12 +216,21 @@ class SPAnalytical(StochasticProcess):
             envelope=envelope,
             type="qq",
             title=title,
+            suptitle=suptitle,
             **fig_kw,
         )
         return fig
 
     def _draw_3sigmastyle(
-        self, n, N, T=None, marginal=False, envelope=False, title=None, **fig_kw
+        self,
+        n,
+        N,
+        T=None,
+        marginal=False,
+        envelope=False,
+        title=None,
+        suptitle=None,
+        **fig_kw,
     ):
 
         fig = self._draw_paths(
@@ -220,11 +241,22 @@ class SPAnalytical(StochasticProcess):
             envelope=envelope,
             type="3sigma",
             title=title,
+            suptitle=suptitle,
             **fig_kw,
         )
         return fig
 
-    def draw(self, n, N, T=None, marginal=True, envelope=False, title=None, **fig_kw):
+    def draw(
+        self,
+        n,
+        N,
+        T=None,
+        marginal=True,
+        envelope=False,
+        title=None,
+        suptitle=None,
+        **fig_kw,
+    ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Visualisation shows
@@ -242,7 +274,14 @@ class SPAnalytical(StochasticProcess):
         :return:
         """
         return self._draw_qqstyle(
-            n, N, T=T, marginal=marginal, envelope=envelope, title=title, **fig_kw
+            n,
+            N,
+            T=T,
+            marginal=marginal,
+            envelope=envelope,
+            title=title,
+            suptitle=suptitle,
+            **fig_kw,
         )
 
 

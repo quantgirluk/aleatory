@@ -54,23 +54,37 @@ class CorrelatedBMs(StochasticProcess):
         n,
         coordinates=False,
         title=None,
+        suptitle=None,
         style="seaborn-v0_8-whitegrid",
         mode="linear",
         **fig_kw,
     ):
         if coordinates:
             fig = self.plot_sample_coordinates(
-                n=n, title=title, style=style, mode=mode, **fig_kw
+                n=n,
+                title=title,
+                suptitle=suptitle,
+                style=style,
+                mode=mode,
+                **fig_kw,
             )
         else:
-            fig = self.plot_sample_2d(n=n, title=title, style=style, **fig_kw)
+            fig = self.plot_sample_2d(
+                n=n, title=title, suptitle=suptitle, style=style, **fig_kw
+            )
 
         return fig
 
     def plot_sample_coordinates(
-        self, n, title=None, style="seaborn-v0_8-whitegrid", mode="linear", **fig_kw
+        self,
+        n,
+        title=None,
+        suptitle=None,
+        style="seaborn-v0_8-whitegrid",
+        mode="linear",
+        **fig_kw,
     ):
-        chart_title = title if title is not None else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         X, Y = self.sample(n)
         times = self.times
         fig = plot_paths_coordinates(
@@ -78,7 +92,8 @@ class CorrelatedBMs(StochasticProcess):
             paths1=[X],
             paths2=[Y],
             style=style,
-            title=chart_title,
+            title=title,
+            suptitle=chart_suptitle,
             mode=mode,
             **fig_kw,
         )
@@ -88,6 +103,7 @@ class CorrelatedBMs(StochasticProcess):
         self,
         n,
         title=None,
+        suptitle=None,
         color_by="time",
         style="seaborn-v0_8-whitegrid",
         color_map="cool",
@@ -95,7 +111,7 @@ class CorrelatedBMs(StochasticProcess):
     ):
 
         cmap = plt.get_cmap(color_map)
-        chart_title = title if title else f"{self.name} Sample Path"
+        chart_suptitle = suptitle if suptitle is not None else self.name
         self.n = n
         x, y = self.sample(n)
 
@@ -129,7 +145,8 @@ class CorrelatedBMs(StochasticProcess):
                 label=label_title,
                 ax=plt.gca(),
             )
-            ax.set_title(chart_title)
+            fig.suptitle(chart_suptitle)
+            ax.set_title(title)
             ax.set_ylabel("$X_2$(t)")
             ax.set_xlabel("$X_1(t)$")
             ax.legend()

@@ -32,23 +32,36 @@ class RandomWalk2D(StochasticProcess):
         n,
         coordinates=False,
         title=None,
+        suptitle=None,
         style="seaborn-v0_8-whitegrid",
         mode="steps",
         **fig_kw,
     ):
         if coordinates:
             fig = self.plot_sample_coordinates(
-                n=n, title=title, style=style, mode=mode, **fig_kw
+                n=n,
+                title=title,
+                suptitle=suptitle,
+                style=style,
+                mode=mode,
+                **fig_kw,
             )
         else:
-            fig = self.plot_sample_2d(n=n, title=title, style=style, **fig_kw)
+            fig = self.plot_sample_2d(
+                n=n, title=title, suptitle=suptitle, style=style, **fig_kw
+            )
 
         return fig
 
     def plot_sample_coordinates(
-        self, n, title=None, style="seaborn-v0_8-whitegrid", **fig_kw
+        self,
+        n,
+        title=None,
+        suptitle=None,
+        style="seaborn-v0_8-whitegrid",
+        **fig_kw,
     ):
-        chart_title = title if title is not None else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         X, Y = self.sample(n)
         times = self.times
         fig = plot_paths_coordinates(
@@ -56,15 +69,20 @@ class RandomWalk2D(StochasticProcess):
             paths1=[X],
             paths2=[Y],
             style=style,
-            title=chart_title,
+            title=title,
+            suptitle=chart_suptitle,
             **fig_kw,
         )
         return fig
 
-    def plot_sample_2d(self, n, title=None, style="seaborn-v0_8-whitegrid", **fig_kw):
-        chart_title = title if title is not None else self.name
+    def plot_sample_2d(
+        self, n, title=None, suptitle=None, style="seaborn-v0_8-whitegrid", **fig_kw
+    ):
+        chart_suptitle = suptitle if suptitle is not None else self.name
         sample = self.sample(n)
-        fig = plot_sample_2d(sample, title=chart_title, style=style, **fig_kw)
+        fig = plot_sample_2d(
+            sample, title=title, suptitle=chart_suptitle, style=style, **fig_kw
+        )
 
         return fig
 

@@ -146,6 +146,7 @@ class GaltonWatson(SPAnalytical):
         n,
         mode="steps",
         title=None,
+        suptitle=None,
         style="seaborn-v0_8-whitegrid",
         color_survival=False,
         **fig_kw,
@@ -162,7 +163,7 @@ class GaltonWatson(SPAnalytical):
         :param bool color_survival: if True, then the plot highlights the paths surviving
         """
 
-        plot_title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         self.simulate(N, n=n)
         paths = self.paths
 
@@ -184,7 +185,8 @@ class GaltonWatson(SPAnalytical):
                         ax.step(times, path, where="post", alpha=0.5, color=color)
                         color = plt.gca().lines[-1].get_color()
                         ax.plot(times, path, "o", color=color)
-                ax.set_title(plot_title)
+                fig.suptitle(chart_suptitle)
+                ax.set_title(title)
                 ax.set_xlabel("$n$")
                 ax.set_ylabel("$X(n)$")
                 plt.show()
@@ -210,7 +212,8 @@ class GaltonWatson(SPAnalytical):
                         )
 
                 ax.set_xlim(right=n + 1)
-                ax.set_title(plot_title)
+                fig.suptitle(chart_suptitle)
+                ax.set_title(title)
                 ax.set_xlabel("$n$")
                 ax.set_ylabel("$X(n)$")
                 plt.show()
@@ -228,6 +231,7 @@ class GaltonWatson(SPAnalytical):
         envelope=False,
         marginal=True,
         colorspos=None,
+        suptitle=None,
         **fig_kw,
     ):
         """
@@ -250,7 +254,7 @@ class GaltonWatson(SPAnalytical):
         :param double [optional, default=None] colorspos: if provided, it affects the color of the paths
         """
 
-        title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         self.simulate(N, n=n)
         paths = self.paths
         times = self.times
@@ -346,9 +350,12 @@ class GaltonWatson(SPAnalytical):
                     ax1.plot(times, expectations, "--", lw=1.75, label="$E[X_n]$")
                     ax1.legend()
 
-            fig.suptitle(title)
+            fig.suptitle(chart_suptitle)
             ax1.set_xlim(right=n + 1)
-            ax1.set_title(r"Simulated Paths")  # Title
+            if title is None:
+                ax1.set_title(r"Simulated Paths")
+            else:
+                ax1.set_title(title)
             ax1.set_xlabel("$n$")
             ax1.set_ylabel("$X(n)$")
             plt.show()

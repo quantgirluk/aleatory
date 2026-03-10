@@ -71,7 +71,7 @@ class SimpleRandomWalk(SPAnalytical, ABC):
         variances = self._process_variance(times=times)
         return variances
 
-    def plot(self, *args, n, N, title=None, **fig_kw):
+    def plot(self, *args, n, N, title=None, suptitle=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
         Simple plot of times versus process values as lines and/or markers.
@@ -83,18 +83,27 @@ class SimpleRandomWalk(SPAnalytical, ABC):
 
         """
         self.simulate(n, N, T=n)
-        if title:
-            figure = plot_paths_random_walk(
-                *args, times=self.times, paths=self.paths, title=title, **fig_kw
-            )
-        else:
-            figure = plot_paths_random_walk(
-                *args, times=self.times, paths=self.paths, title=self.name, **fig_kw
-            )
+        chart_suptitle = suptitle if suptitle is not None else self.name
+        figure = plot_paths_random_walk(
+            *args,
+            times=self.times,
+            paths=self.paths,
+            title=title,
+            suptitle=chart_suptitle,
+            **fig_kw,
+        )
         return figure
 
     def draw(
-        self, n, N, marginal=True, envelope=False, mode="steps", title=None, **fig_kw
+        self,
+        n,
+        N,
+        marginal=True,
+        envelope=False,
+        mode="steps",
+        title=None,
+        suptitle=None,
+        **fig_kw,
     ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
@@ -122,6 +131,7 @@ class SimpleRandomWalk(SPAnalytical, ABC):
             marginal=marginal,
             envelope=envelope,
             title=title,
+            suptitle=suptitle,
             mode=mode,
             **fig_kw,
         )

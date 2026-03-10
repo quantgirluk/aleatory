@@ -158,7 +158,17 @@ class CKLSProcessGeneric(SPEulerMaruyama):
     # def plot(self, n, N, T=None, title=None, **fig_kw):
     #     return super().plot(n=n, N=N, T=T, title=title, **fig_kw)
 
-    def draw(self, n, N, T=None, marginal=True, envelope=False, title=None, **fig_kw):
+    def draw(
+        self,
+        n,
+        N,
+        T=None,
+        marginal=True,
+        envelope=False,
+        title=None,
+        suptitle=None,
+        **fig_kw,
+    ):
         self.simulate(n, N, T=T)
         expectations = self.estimate_expectations()
 
@@ -169,14 +179,15 @@ class CKLSProcessGeneric(SPEulerMaruyama):
             lower = None
             upper = None
 
-        chart_title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
 
         if marginal:
             fig = draw_paths(
                 times=self.times,
                 paths=self.paths,
                 N=N,
-                title=chart_title,
+                title=title,
+                suptitle=chart_suptitle,
                 KDE=True,
                 marginal=marginal,
                 expectations=expectations,
@@ -190,7 +201,8 @@ class CKLSProcessGeneric(SPEulerMaruyama):
                 times=self.times,
                 paths=self.paths,
                 N=N,
-                title=chart_title,
+                title=title,
+                suptitle=chart_suptitle,
                 expectations=expectations,
                 marginal=marginal,
                 **fig_kw,

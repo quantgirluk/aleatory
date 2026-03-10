@@ -122,12 +122,18 @@ class InhomogeneousPoissonProcess(BaseProcess):
         self.paths = [self._sample_in_poisson_process() for _ in range(N)]
         return self.paths
 
-    def plot(self, N, T=10.0, title=None, **fig_kwargs):
+    def plot(self, N, T=10.0, title=None, suptitle=None, **fig_kwargs):
 
         paths = self.simulate(N, T=T)
-        plot_title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
 
-        return plot_poisson(T=T, paths=paths, title=plot_title, **fig_kwargs)
+        return plot_poisson(
+            T=T,
+            paths=paths,
+            title=title,
+            suptitle=chart_suptitle,
+            **fig_kwargs,
+        )
 
     def draw(
         self,
@@ -137,14 +143,22 @@ class InhomogeneousPoissonProcess(BaseProcess):
         colormap="RdYlBu_r",
         mode="steps",
         title=None,
+        suptitle=None,
         **fig_kw,
     ):
 
-        title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         self.simulate(N=N, T=T)
         paths = self.paths
         fig = draw_poisson_like(
-            T, paths, title=title, style=style, colormap=colormap, mode=mode, **fig_kw
+            T,
+            paths,
+            title=title,
+            suptitle=chart_suptitle,
+            style=style,
+            colormap=colormap,
+            mode=mode,
+            **fig_kw,
         )
         return fig
 

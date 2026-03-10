@@ -142,7 +142,9 @@ class BrownianBridge(BrownianMotion):
         marginal = norm(loc=mean, scale=np.sqrt(var))
         return marginal
 
-    def _draw_paths(self, n, N, envelope=False, type=None, title=None, **fig_kw):
+    def _draw_paths(
+        self, n, N, envelope=False, type=None, title=None, suptitle=None, **fig_kw
+    ):
         self.simulate(n, N)
         expectations = self._process_expectation()
 
@@ -154,7 +156,7 @@ class BrownianBridge(BrownianMotion):
             upper = None
             lower = None
 
-        chart_title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         if "marginal" in fig_kw:
             fig_kw.pop("marginal")
         if "orientation" in fig_kw:
@@ -163,7 +165,8 @@ class BrownianBridge(BrownianMotion):
             times=self.times,
             paths=self.paths,
             expectations=expectations,
-            title=chart_title,
+            title=title,
+            suptitle=chart_suptitle,
             envelope=envelope,
             lower=lower,
             upper=upper,
@@ -171,7 +174,7 @@ class BrownianBridge(BrownianMotion):
         )
         return fig
 
-    def draw(self, n, N, envelope=False, title=None, **fig_kw):
+    def draw(self, n, N, envelope=False, title=None, suptitle=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
 
@@ -188,7 +191,14 @@ class BrownianBridge(BrownianMotion):
         :return:
         """
 
-        return self._draw_paths(n, N, envelope=envelope, title=title, **fig_kw)
+        return self._draw_paths(
+            n,
+            N,
+            envelope=envelope,
+            title=title,
+            suptitle=suptitle,
+            **fig_kw,
+        )
 
 
 if __name__ == "__main__":

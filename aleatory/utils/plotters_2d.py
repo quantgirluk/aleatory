@@ -8,6 +8,7 @@ def plot_paths_coordinates(
     paths2,
     style="seaborn-v0_8-whitegrid",
     title=None,
+    suptitle=None,
     mode="steps",
     **fig_kw,
 ):
@@ -31,6 +32,8 @@ def plot_paths_coordinates(
                 ax.plot(times, p2, "o", color=color)
             else:
                 raise ValueError("mode must be 'points', 'steps', or 'points+steps'.")
+        if suptitle is not None:
+            fig.suptitle(suptitle)
         ax.set_title(title)
         ax.set_xlabel("$t$")
         ax.set_ylabel("Coordinate processes")
@@ -43,6 +46,7 @@ def plot_sample_2d(
     path,
     style="seaborn-v0_8-whitegrid",
     title=None,
+    suptitle=None,
     **fig_kw,
 ):
     x_positions, y_positions = path
@@ -52,6 +56,8 @@ def plot_sample_2d(
         ax.plot(x_positions, y_positions, linewidth=1)
         ax.plot(x_positions[0], y_positions[0], "go", label="Start")  # Start point
         ax.plot(x_positions[-1], y_positions[-1], "ro", label="End")  # End point
+        if suptitle is not None:
+            fig.suptitle(suptitle)
         ax.set_title(title)
         ax.set_xlabel("X Position")
         ax.set_ylabel("Y Position")

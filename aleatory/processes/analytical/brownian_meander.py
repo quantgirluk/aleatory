@@ -117,9 +117,9 @@ class BrownianMeander(SPAnalytical):
     def sample_at(self, times):
         return self._sample_brownian_meander_at(times)
 
-    def _draw_paths(self, n, N, title=None, **fig_kw):
+    def _draw_paths(self, n, N, title=None, suptitle=None, **fig_kw):
         self.simulate(n, N)
-        chart_title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         fig_kw["envelope"] = False
 
         if self.fixed_end:
@@ -128,7 +128,11 @@ class BrownianMeander(SPAnalytical):
             if "orientation" in fig_kw:
                 fig_kw.pop("orientation")
             fig = draw_paths_with_end_point(
-                times=self.times, paths=self.paths, title=chart_title, **fig_kw
+                times=self.times,
+                paths=self.paths,
+                title=title,
+                suptitle=chart_suptitle,
+                **fig_kw,
             )
         else:
             fig = draw_paths(
@@ -137,14 +141,15 @@ class BrownianMeander(SPAnalytical):
                 N=N,
                 expectations=None,
                 KDE=False,
-                title=chart_title,
+                title=title,
+                suptitle=chart_suptitle,
                 marginal=True,
                 **fig_kw,
             )
 
         return fig
 
-    def draw(self, n, N, title=None, **fig_kw):
+    def draw(self, n, N, title=None, suptitle=None, **fig_kw):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
 
@@ -162,7 +167,7 @@ class BrownianMeander(SPAnalytical):
         :param title: string to customise plot title
         :return:
         """
-        return self._draw_paths(n, N, title, **fig_kw)
+        return self._draw_paths(n, N, title=title, suptitle=suptitle, **fig_kw)
 
 
 if __name__ == "__main__":

@@ -115,13 +115,18 @@ class MixedPoissonProcess(BaseProcess):
         self.paths = [self.sample(jumps=jumps, T=T) for _ in range(N)]
         return self.paths
 
-    def plot(self, N, jumps=None, T=None, title=None, **fig_kwargs):
+    def plot(self, N, jumps=None, T=None, title=None, suptitle=None, **fig_kwargs):
 
         paths = self.simulate(N, jumps=jumps, T=T)
-        plot_title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
 
         return plot_poisson(
-            jumps=jumps, T=T, paths=paths, title=plot_title, **fig_kwargs
+            jumps=jumps,
+            T=T,
+            paths=paths,
+            title=title,
+            suptitle=chart_suptitle,
+            **fig_kwargs,
         )
 
     def draw(
@@ -135,10 +140,11 @@ class MixedPoissonProcess(BaseProcess):
         marginal=True,
         colorspos=None,
         title=None,
+        suptitle=None,
         **fig_kw,
     ):
 
-        title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         self.simulate(N, T=T)
         paths = self.paths
 
@@ -173,6 +179,7 @@ class MixedPoissonProcess(BaseProcess):
             mode=mode,
             colorspos=colorspos,
             title=title,
+            suptitle=chart_suptitle,
             **fig_kw,
         )
 

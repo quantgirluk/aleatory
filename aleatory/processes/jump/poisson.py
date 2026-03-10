@@ -120,6 +120,7 @@ class PoissonProcess(BaseProcess):
         style="seaborn-v0_8-whitegrid",
         mode="steps",
         title=None,
+        suptitle=None,
         **fig_kw,
     ):
         """
@@ -136,7 +137,7 @@ class PoissonProcess(BaseProcess):
         if jumps and T:
             raise ValueError("Only one must be provided either jumps or T")
 
-        plot_title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         self.simulate(N, jumps=jumps, T=T)
         paths = self.paths
 
@@ -155,7 +156,8 @@ class PoissonProcess(BaseProcess):
                     color = plt.gca().lines[-1].get_color()
                     ax.plot(p, counts, "o", color=color, markersize=6)
 
-            ax.set_title(plot_title)
+            fig.suptitle(chart_suptitle)
+            ax.set_title(title)
             ax.set_xlabel("$t$")
             ax.set_ylabel("$N(t)$")
             if T is not None:
@@ -177,10 +179,11 @@ class PoissonProcess(BaseProcess):
         mode="steps",
         colorspos=None,
         title=None,
+        suptitle=None,
         **fig_kw,
     ):
 
-        title = title if title else self.name
+        chart_suptitle = suptitle if suptitle is not None else self.name
         self.simulate(N, T=T)
         paths = self.paths
 
@@ -287,9 +290,12 @@ class PoissonProcess(BaseProcess):
                 if envelope:
                     ax1.fill_between(times, upper, lower, color="lightgray", alpha=0.25)
 
-            fig.suptitle(title)
+            fig.suptitle(chart_suptitle)
             ax1.set_xlim(right=T)
-            ax1.set_title(r"Simulated Paths $N_t, t \leq T$")  # Title
+            if title is None:
+                ax1.set_title(r"Simulated Paths $N_t, t \leq T$")
+            else:
+                ax1.set_title(title)
             ax1.set_xlabel("$t$")
             ax1.set_ylabel("$N(t)$")
             plt.show()

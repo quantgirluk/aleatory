@@ -115,6 +115,52 @@ def test_charts_modes():
             process.draw(n=100, N=200, envelope=False, figsize=(12, 6), mode=sty)
 
 
+def test_custom_axis_labels_plot_and_draw():
+    process = BrownianMotion()
+
+    fig_plot = process.plot(n=20, N=3, xlabel="time", ylabel="value")
+    assert fig_plot.axes[0].get_xlabel() == "time"
+    assert fig_plot.axes[0].get_ylabel() == "value"
+
+    fig_draw = process.draw(
+        n=20,
+        N=30,
+        marginal=False,
+        envelope=False,
+        title="Custom Title",
+        xlabel="custom x",
+        ylabel="custom y",
+    )
+    assert fig_draw.axes[0].get_xlabel() == "custom x"
+    assert fig_draw.axes[0].get_ylabel() == "custom y"
+
+
+def test_custom_title_and_suptitle_plot_and_draw():
+    process = BrownianMotion()
+
+    fig_plot = process.plot(
+        n=20,
+        N=3,
+        title="Main Plot Title",
+        suptitle="Plot Super Title",
+    )
+    assert fig_plot.axes[0].get_title() == "Main Plot Title"
+    assert fig_plot._suptitle is not None
+    assert fig_plot._suptitle.get_text() == "Plot Super Title"
+
+    fig_draw = process.draw(
+        n=20,
+        N=30,
+        marginal=True,
+        envelope=False,
+        title="Main Draw Title",
+        suptitle="Draw Super Title",
+    )
+    assert fig_draw.axes[0].get_title() == "Main Draw Title"
+    assert fig_draw._suptitle is not None
+    assert fig_draw._suptitle.get_text() == "Draw Super Title"
+
+
 def test_poisson():
     process = PoissonProcess()
     process.plot(N=10, T=100)
@@ -165,3 +211,10 @@ def test_quick_start():
     figure = process.draw(n=100, N=200, colormap="cool", figsize=(12, 6), dpi=100)
     if SAVE:
         figure.savefig(SAVE_PATH + name + '_quickstart_08.png', dpi=300)
+
+
+
+if __name__ == "__main__":
+    test_custom_axis_labels_plot_and_draw()
+    test_custom_title_and_suptitle_plot_and_draw()
+    test_quick_start()
