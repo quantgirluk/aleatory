@@ -141,3 +141,4 @@ docs/source/auto_examples/*
 docs/source/processes/*
 docs/source/stats/*
 
+.vscode/settings.json
