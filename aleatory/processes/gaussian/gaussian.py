@@ -4,22 +4,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 import ipywidgets as widgets
 from ipywidgets import interact, interactive
+import kernels as kernels
 
 class GaussianProcess:
 
-    def __init__(self, mean, covariance, T=1.0):
+    """ 
+    A Gaussian Process is a collection of random variables, for which any finite number of which have a joint Gaussian distribution. 
+    It is fully specified by its mean function and covariance function (kernel).
+    """
+
+    def __init__(self, mean_function, covariance_function, T=1.0):
         self.T = T
-        self.mean = mean
-        self.covariance = covariance
+        self.mean = mean_function
+        self.covariance = covariance_function
+        self.kernel = covariance_function
+        self.name = "GaussianProcess"
 
-
-    def covariance_at(self, times):
-        return self.covariance(times)
-    
     def sample_at(self, times):
-        mean = self.mean(times)
-        covariance = self.covariance_at(times)
-        return np.random.multivariate_normal(mean, covariance)
+        mean_evaluated = self.mean(times)
+        covariance_evaluated = self.covariance(times)
+        return np.random.multivariate_normal(mean_evaluated, covariance_evaluated)
     
     def sample(self, n, T=None):
         if T is None:
@@ -32,23 +36,25 @@ class GaussianProcess:
         if T is None:
             T = self.T
         times = np.linspace(0, T, n)
-        paths = np.random.multivariate_normal(self.mean(times), self.covariance_at(times), size=N)
+        paths = np.random.multivariate_normal(self.mean(times), self.covariance(times), size=N)
         return paths
     
 
-    def plot(self, n, N, T=None):
+    def plot(self, n, N, T=None, title=None):
         paths = self.simulate(n, N, T)
         if T is None:
             T = self.T
         times = np.linspace(0, T, n)
         for i in range(N):
             plt.plot(times, paths[i])
-        plt.title("Gaussian Process")
+        if title is None:
+            title = "Gaussian Process"
+        plt.title(title)
         plt.xlabel("Time")
         plt.ylabel("Value")
         plt.show()
 
-    def plot_covariance_at(self, times, cmap='coolwarm', title="Covariance Matrix"):
+    def plot_covariance_at(self, times, cmap='coolwarm', title="Covariance Function"):
         covariance_matrix = self.covariance_at(times)
         plt.imshow(covariance_matrix, cmap=cmap, interpolation='none', origin='lower')
         plt.colorbar()
@@ -60,15 +66,9 @@ class GaussianProcess:
     def plot_kernel_at(self, times):
         self.plot_covariance_at(times, title="Covariance Kernel")
 
-
     def plot_covariance_function(self, T, n):
         times = np.linspace(0, T, n)
-        covariance_values = [self.covariance_at([t, t])[0, 1] for t in times]
-        plt.plot(times, covariance_values)
-        plt.title("Covariance Function")
-        plt.xlabel("Time")
-        plt.ylabel("Covariance")
-        plt.show()
+        self.plot_covariance_at(times)
 
     def plot_kernel(self, T, n):
         self.plot_covariance_function(T, n)
@@ -89,7 +89,7 @@ class GaussianProcess:
 
         paths = self.simulate(n, N, T)
         times = np.linspace(0, T, n)
-        K = self.covariance_at(times)
+        K = self.covariance(times)
 
         fig, axes = plt.subplots(1, 2, figsize=(12, 4))
         for i in range(N):
@@ -99,55 +99,162 @@ class GaussianProcess:
         axes[0].set_ylabel("Value")
 
         axes[1].imshow(K, cmap=cmap, interpolation='none', origin='lower', extent=[0, T, 0, T])
-        axes[1].set_title("Covariance Matrix")
+        cbar = fig.colorbar(plt.cm.ScalarMappable(cmap=cmap), ax=axes[1])
+        cbar.set_label('Covariance')
+        axes[1].set_title("Kernel")
         axes[1].set_xlabel("Time")
         axes[1].set_ylabel("Time")
 
         if title:
             fig.suptitle(title)
         else:
-            fig.suptitle("Gaussian Process Paths and Covariance Matrix")
+            fig.suptitle(f"{self.name} Paths and Kernel/Covariance Function")
 
         plt.tight_layout()
         plt.show()
         return fig
-    
 
-class GaussianRBF(GaussianProcess):
+
+class GaussianSigma(GaussianProcess):
+    
+    def __init__(self, sigma=1.0, T=1.0):
+        super().__init__(mean_function=lambda t: np.zeros_like(t), covariance_function=self.covariance_function, T=T)
+        self.sigma = sigma
+        self.name = f"Gaussian Process (sigma={sigma:.2f})"
+
+    def make_widget(self):
+
+        sigma_slider = widgets.FloatSlider(value=self.sigma, min=0.25, max=3.0, step=0.25, description='Sigma')
+        n_samples_slider = widgets.IntSlider(value=5, min=2, max=10, step=1, description='Samples')
+
+        def update(sigma=self.sigma, n_samples=5):
+            self.sigma = sigma
+            self.plot_paths_and_kernel(n=100, N=n_samples, T=self.T, title=f"GP (sigma={sigma:.2f})")
+
+        widget = interact(update, sigma=sigma_slider, n_samples=n_samples_slider)
+        return widget 
+
+class GaussianLengthScaleSigma(GaussianProcess):
     
     def __init__(self, length_scale=1.0, sigma=1.0, T=1.0):
+        super().__init__(mean_function=lambda t: np.zeros_like(t), covariance_function=self.covariance_function, T=T)
         self.length_scale = length_scale
         self.sigma = sigma
-        super().__init__(mean=lambda t: np.zeros_like(t), covariance=self.rbf_covariance, T=T)
+        self.name = f"Gaussian Process (length_scale={length_scale:.2f}, sigma={sigma:.2f})"
 
-    def rbf_covariance(self, times):
-        pairwise_dists = np.subtract.outer(times, times)**2
-        return self.sigma * np.exp(-0.5 * pairwise_dists / self.length_scale**2)
-    
+
     def make_widget(self):
         length_slider = widgets.FloatSlider(value=self.length_scale, min=0.1, max=1.0, step=0.1, description='Length Scale')
         sigma_slider = widgets.FloatSlider(value=self.sigma, min=0.25, max=3.0, step=0.25, description='Sigma')
-        n_samples_slider = widgets.IntSlider(value=5, min=1, max=10, step=1, description='Samples')
+        n_samples_slider = widgets.IntSlider(value=5, min=2, max=10, step=1, description='Samples')
 
-        def update(length_scale, sigma, n_samples):
+        def update(length_scale, sigma, n_samples=5):
             self.length_scale = length_scale
             self.sigma = sigma
-            self.plot_paths_and_kernel(n=200, N=n_samples, title=f"RBF GP (length_scale={length_scale:.2f}, sigma={sigma:.2f})")
-            # self.plot_gp(times=np.linspace(0, self.T, 100), n_samples=n_samples,
-            #              title=f"RBF GP (length_scale={length_scale:.2f}, sigma={sigma:.2f})")
+            self.plot_paths_and_kernel(n=100, N=n_samples, T=self.T, title=f"{self.name} (length_scale={length_scale:.2f}, sigma={sigma:.2f})")
 
         widget = interact(update, length_scale=length_slider, sigma=sigma_slider, n_samples=n_samples_slider)
+        return widget  
+
+
+class GaussianThreeParameter(GaussianProcess):
+    
+    def __init__(self, length_scale=1.0, sigma=1.0, nu=1.5, T=1.0):
+        super().__init__(mean_function=lambda t: np.zeros_like(t), covariance_function=self.covariance_function, T=T)
+        self.length_scale = length_scale
+        self.sigma = sigma
+        self.nu = nu
+        self.name = f"Gaussian Process (length_scale={length_scale:.2f}, sigma={sigma:.2f}, nu={nu:.2f})"
+
+    def make_widget(self):
+        length_slider = widgets.FloatSlider(value=self.length_scale, min=0.1, max=1.0, step=0.1, description='Length Scale')
+        sigma_slider = widgets.FloatSlider(value=self.sigma, min=0.25, max=3.0, step=0.25, description='Sigma')
+        nu_slider = widgets.FloatSlider(value=self.nu, min=0.5, max=2.5, step=0.5, description='Nu')
+        n_samples_slider = widgets.IntSlider(value=5, min=2, max=10, step=1, description='Samples')
+
+        def update(length_scale, sigma, nu, n_samples):
+            self.length_scale = length_scale
+            self.sigma = sigma
+            self.nu = nu
+            self.plot_paths_and_kernel(n=100, N=n_samples, T=self.T, title=f"{self.name} (length_scale={length_scale:.2f}, sigma={sigma:.2f}, nu={nu:.2f})")
+
+        widget = interact(update, length_scale=length_slider, sigma=sigma_slider, nu=nu_slider, n_samples=n_samples_slider)
         return widget
 
-class GaussianWhiteNoise(GaussianProcess):
+
+    
+
+class GaussianWhiteNoise(GaussianSigma):
     
     def __init__(self, sigma=1.0, T=1.0):
-        self.sigma = sigma
-        super().__init__(mean=lambda t: np.zeros_like(t), covariance=self.white_noise_covariance, T=T)
+        super().__init__(sigma=sigma, T=T)
+        self.name = f"White Noise GP (sigma={sigma:.2f})"
 
-    def white_noise_covariance(self, times):
-        return self.sigma * np.eye(len(times))
-        
+    def covariance_function(self, times):
+        return kernels.white_noise_kernel(times, sigma=self.sigma)
+
+
+class GaussianLinear(GaussianSigma):
+    
+    def __init__(self, sigma=1.0, T=1.0):
+        super().__init__(sigma=sigma, T=T)
+        self.name = f"Linear GP (sigma={sigma:.2f})"
+
+    def covariance_function(self, times):
+        return kernels.linear_kernel(times, sigma=self.sigma)
+
+
+class GaussianConstant(GaussianSigma):
+    
+    def __init__(self, sigma=1.0, T=1.0):
+        super().__init__(sigma=sigma, T=T)
+        self.name = f"Constant GP (sigma={sigma:.2f})"
+
+    def covariance_function(self, times):
+        return kernels.constant_kernel(times, sigma=self.sigma)
+
+
+class GaussianRBF(GaussianLengthScaleSigma):
+    
+    def __init__(self, length_scale=1.0, sigma=1.0, T=1.0):
+        super().__init__(length_scale=length_scale, sigma=sigma, T=T)
+        self.name = f"RBF Gaussian Process (length_scale={length_scale:.2f}, sigma={sigma:.2f})"
+
+    def covariance_function(self, times):
+        return kernels.RBF_kernel(times, length_scale=self.length_scale, sigma=self.sigma)
+
+
+class GaussianSquaredExponential(GaussianLengthScaleSigma):
+    
+    def __init__(self, length_scale=1.0, sigma=1.0, T=1.0):
+        super().__init__(length_scale=length_scale, sigma=sigma, T=T)
+        self.name = f"Squared Exponential GP (length_scale={length_scale:.2f}, sigma={sigma:.2f})"
+
+    def covariance_function(self, times):
+        return kernels.squared_exponential_kernel(times, length_scale=self.length_scale, sigma=self.sigma)
+
+
+class GaussianMatern(GaussianThreeParameter):
+    
+    def __init__(self, length_scale=1.0, sigma=1.0, nu=1.5, T=1.0):
+        super().__init__(length_scale=length_scale, sigma=sigma, nu=nu, T=T)
+        self.name = f"Matern GP (length_scale={length_scale:.2f}, sigma={sigma:.2f}, nu={nu:.2f})"
+
+    def covariance_function(self, times):
+        return kernels.matern_kernel(times, length_scale=self.length_scale, sigma=self.sigma, nu=self.nu)
+    
+
+class GaussianPeriodic(GaussianThreeParameter):
+    
+    def __init__(self, length_scale=1.0, sigma=1.0, period=1.0, T=1.0):
+        super().__init__(length_scale=length_scale, sigma=sigma, nu=period, T=T)
+        self.name = f"Periodic GP (length_scale={length_scale:.2f}, sigma={sigma:.2f}, period={period:.2f})"
+
+    def covariance_function(self, times):
+        return kernels.periodic_kernel(times, length_scale=self.length_scale, sigma=self.sigma, period=self.nu)
+    
+    
+
 
 
 
