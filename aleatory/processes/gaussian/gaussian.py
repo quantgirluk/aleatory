@@ -23,10 +23,11 @@ class GaussianProcess(SPAnalyticalMarginals):
     It is fully specified by its mean function and covariance function (kernel).
     """
 
-    def __init__(self, mean_function, covariance_function, T=1.0, rng=None):
+    def __init__(self, mean_function, covariance_function, variance_function=None, T=1.0, rng=None):
         super().__init__(T=T, rng=rng)
         self.mean = mean_function
         self.covariance = covariance_function
+        self.variance = variance_function
         self.kernel = covariance_function
         self.name = "GaussianProcess"
         self.short_name = "GP"
@@ -68,6 +69,8 @@ class GaussianProcess(SPAnalyticalMarginals):
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
+        if self.variance is not None:
+            return np.asarray(self.variance(times))
         return np.diag(self.covariance(times))
     
     def _process_stds(self, times=None):
@@ -77,7 +80,10 @@ class GaussianProcess(SPAnalyticalMarginals):
     
     def get_marginal(self, time):
         expectation = self.mean(time)
-        variance = self.covariance(np.array([time]))[0, 0]
+        if self.variance is not None:
+            variance = np.asarray(self.variance(np.array([time]))).reshape(-1)[0]
+        else:
+            variance = self.covariance(np.array([time]))[0, 0]
         return norm(loc=expectation, scale=np.sqrt(variance))
                     
     def draw(
@@ -215,10 +221,19 @@ class GaussianProcess(SPAnalyticalMarginals):
 class GaussianSigma(GaussianProcess):
     
     def __init__(self, sigma=1.0, T=1.0):
-        super().__init__(mean_function=lambda t: np.zeros_like(t), covariance_function=self.covariance_function, T=T)
+        super().__init__(
+            mean_function=lambda t: np.zeros_like(t),
+            covariance_function=self.covariance_function,
+            variance_function=self.variance_function,
+            T=T,
+        )
         self.sigma = sigma
         self.name = f"Gaussian Process ($\\sigma$={sigma:.2f})"
         self.short_name = f"GP"
+
+    def variance_function(self, times):
+        covariance_matrix = self.covariance_function(times)
+        return np.diag(covariance_matrix)
 
     def make_widget(self, matrix_shape=False, cmap='coolwarm'):
 
@@ -235,11 +250,20 @@ class GaussianSigma(GaussianProcess):
 class GaussianLengthScaleSigma(GaussianProcess):
     
     def __init__(self, length_scale=1.0, sigma=1.0, T=1.0):
-        super().__init__(mean_function=lambda t: np.zeros_like(t), covariance_function=self.covariance_function, T=T)
+        super().__init__(
+            mean_function=lambda t: np.zeros_like(t),
+            covariance_function=self.covariance_function,
+            variance_function=self.variance_function,
+            T=T,
+        )
         self.length_scale = length_scale
         self.sigma = sigma
         self.name = f"Gaussian Process (l={length_scale:.2f}, $\\sigma$={sigma:.2f})"
         self.short_name = f"GP"
+
+    def variance_function(self, times):
+        covariance_matrix = self.covariance_function(times)
+        return np.diag(covariance_matrix)
 
 
     def make_widget(self, matrix_shape=False,cmap='coolwarm'):
@@ -259,12 +283,21 @@ class GaussianLengthScaleSigma(GaussianProcess):
 class GaussianThreeParameter(GaussianProcess):
     
     def __init__(self, length_scale=1.0, sigma=1.0, nu=1.5, T=1.0):
-        super().__init__(mean_function=lambda t: np.zeros_like(t), covariance_function=self.covariance_function, T=T)
+        super().__init__(
+            mean_function=lambda t: np.zeros_like(t),
+            covariance_function=self.covariance_function,
+            variance_function=self.variance_function,
+            T=T,
+        )
         self.length_scale = length_scale
         self.sigma = sigma
         self.nu = nu
         self.name = f"Gaussian Process (l={length_scale:.2f}, $\\sigma$={sigma:.2f}, $\\nu$={nu:.2f})"
         self.short_name = f"GP"
+
+    def variance_function(self, times):
+        covariance_matrix = self.covariance_function(times)
+        return np.diag(covariance_matrix)
 
     def make_widget(self, matrix_shape=False, cmap='coolwarm'):
         length_slider = widgets.FloatSlider(value=self.length_scale, min=0.1, max=1.0, step=0.1, description='Length Scale')
@@ -292,6 +325,9 @@ class GPWhiteNoise(GaussianSigma):
     def covariance_function(self, times):
         return kernels.white_noise_kernel(times, sigma=self.sigma)
 
+    def variance_function(self, times):
+        return kernels.white_noise_kernel_diag(times, sigma=self.sigma)
+
 
 class GPLinear(GaussianSigma):
     
@@ -302,6 +338,9 @@ class GPLinear(GaussianSigma):
 
     def covariance_function(self, times):
         return kernels.linear_kernel(times, sigma=self.sigma)
+
+    def variance_function(self, times):
+        return kernels.linear_kernel_diag(times, sigma=self.sigma)
 
 
 class GPConstant(GaussianSigma):
@@ -314,6 +353,9 @@ class GPConstant(GaussianSigma):
     def covariance_function(self, times):
         return kernels.constant_kernel(times, sigma=self.sigma)
 
+    def variance_function(self, times):
+        return kernels.constant_kernel_diag(times, sigma=self.sigma)
+
 
 class GPRBF(GaussianLengthScaleSigma):
     
@@ -324,6 +366,9 @@ class GPRBF(GaussianLengthScaleSigma):
 
     def covariance_function(self, times):
         return kernels.RBF_kernel(times, length_scale=self.length_scale, sigma=self.sigma)
+
+    def variance_function(self, times):
+        return kernels.RBF_kernel_diag(times, length_scale=self.length_scale, sigma=self.sigma)
 
 
 class GPSquaredExponential(GaussianLengthScaleSigma):
@@ -336,6 +381,9 @@ class GPSquaredExponential(GaussianLengthScaleSigma):
     def covariance_function(self, times):
         return kernels.squared_exponential_kernel(times, length_scale=self.length_scale, sigma=self.sigma)
 
+    def variance_function(self, times):
+        return kernels.squared_exponential_kernel_diag(times, length_scale=self.length_scale, sigma=self.sigma)
+
 
 class GPMatern(GaussianThreeParameter):
     
@@ -346,6 +394,9 @@ class GPMatern(GaussianThreeParameter):
 
     def covariance_function(self, times):
         return kernels.matern_kernel(times, length_scale=self.length_scale, sigma=self.sigma, nu=self.nu)
+
+    def variance_function(self, times):
+        return kernels.matern_kernel_diag(times, length_scale=self.length_scale, sigma=self.sigma, nu=self.nu)
     
 
 class GPPeriodic(GaussianThreeParameter):
@@ -357,6 +408,9 @@ class GPPeriodic(GaussianThreeParameter):
 
     def covariance_function(self, times):
         return kernels.periodic_kernel(times, length_scale=self.length_scale, sigma=self.sigma, period=self.nu)
+
+    def variance_function(self, times):
+        return kernels.periodic_kernel_diag(times, length_scale=self.length_scale, sigma=self.sigma, period=self.nu)
     
 
 if __name__ == "__main__":
@@ -366,7 +420,7 @@ if __name__ == "__main__":
     plt.style.use(mystyle)
 
     processes = [GPWhiteNoise(sigma=1.0, T=1.0), GPLinear(sigma=1.0, T=1.0), 
-                 GPConstant(sigma=1.0, T=1.0), GPRBF(length_scale=0.3, sigma=1.0, T=1.0), 
+                 GPConstant(sigma=1, T=1.0), GPRBF(length_scale=0.3, sigma=1.0, T=1.0), 
                  GPSquaredExponential(length_scale=0.3, sigma=1.0, T=1.0), 
                  GPMatern(length_scale=0.3, sigma=1.0, nu=1.5, T=1.0), 
                  GPPeriodic(length_scale=0.3, sigma=1.0, period=0.5, T=1.0)]
@@ -377,6 +431,9 @@ if __name__ == "__main__":
         g.plot_paths_and_kernel(n=100, N=5, matrix_shape=True)
         g.plot(n=100, N=100)
         g.draw(n=100, N=100)
+        g.plot_covariance()
+        # g.plot_mean_function()
+        g.plot_mean_variance(times=np.linspace(0, 1.0, 100))
 
 #     def brownian_cov(t):
 #         return np.minimum.outer(t, t)

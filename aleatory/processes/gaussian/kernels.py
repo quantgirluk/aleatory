@@ -2,28 +2,66 @@
 
 import numpy as np
 
+
+def _as_array_1d(times):
+    return np.asarray(times)
+
 def constant_kernel(times, sigma=1.0):
     return sigma**2 * np.ones((len(times), len(times)))
+
+
+def constant_kernel_diag(times, sigma=1.0):
+    times = _as_array_1d(times)
+    return sigma**2 * np.ones_like(times, dtype=float)
     
 def linear_kernel(times, sigma=1.0):
     return sigma**2 * np.outer(times, times)
+
+
+def linear_kernel_diag(times, sigma=1.0):
+    times = _as_array_1d(times)
+    return sigma**2 * times**2
 
 def squared_exponential_kernel(times, length_scale=1.0, sigma=1.0):
     sqdist = np.subtract.outer(times, times)**2
     return sigma**2 * np.exp(-0.5 * sqdist / length_scale**2)
 
+
+def squared_exponential_kernel_diag(times, length_scale=1.0, sigma=1.0):
+    times = _as_array_1d(times)
+    return sigma**2 * np.ones_like(times, dtype=float)
+
 def periodic_kernel(times, length_scale=1.0, sigma=1.0, period=1.0):
     pairwise_dists = np.subtract.outer(times, times)**2
     return sigma**2 * np.exp(-2 * np.sin(np.pi * pairwise_dists / period)**2 / length_scale**2)
 
+
+def periodic_kernel_diag(times, length_scale=1.0, sigma=1.0, period=1.0):
+    times = _as_array_1d(times)
+    return sigma**2 * np.ones_like(times, dtype=float)
+
 def RBF_kernel(times, length_scale=1.0, sigma=1.0):
     return squared_exponential_kernel(times, length_scale=length_scale, sigma=sigma)
+
+
+def RBF_kernel_diag(times, length_scale=1.0, sigma=1.0):
+    return squared_exponential_kernel_diag(times, length_scale=length_scale, sigma=sigma)
 
 def white_noise_kernel(times, sigma=1.0):
     return sigma**2 * np.eye(len(times))
 
+
+def white_noise_kernel_diag(times, sigma=1.0):
+    times = _as_array_1d(times)
+    return sigma**2 * np.ones_like(times, dtype=float)
+
 def brownian_kernel(times, sigma=1.0):
     return sigma**2 * np.minimum.outer(times, times)
+
+
+def brownian_kernel_diag(times, sigma=1.0):
+    times = _as_array_1d(times)
+    return sigma**2 * times
 
 def ournstein_uhlenbeck_kernel(times, theta=1.0, sigma=1.0):
     s = times[:, None]
@@ -31,6 +69,11 @@ def ournstein_uhlenbeck_kernel(times, theta=1.0, sigma=1.0):
     m = np.minimum(s, t_)    
     res = (sigma**2 / (2 * theta)) * (np.exp(-np.abs(s - t_)) - np.exp(-(s + t_)))
     return res
+
+
+def ournstein_uhlenbeck_kernel_diag(times, theta=1.0, sigma=1.0):
+    times = _as_array_1d(times)
+    return (sigma**2 / (2 * theta)) * (1.0 - np.exp(-2.0 * times))
 
 def matern_kernel(times, length_scale=1.0, sigma=1.0, nu=1.5):
     from scipy.spatial.distance import pdist, squareform
@@ -46,9 +89,21 @@ def matern_kernel(times, length_scale=1.0, sigma=1.0, nu=1.5):
     else:
         raise ValueError("Unsupported nu value. Use 0.5, 1.5, or 2.5.")
 
+
+def matern_kernel_diag(times, length_scale=1.0, sigma=1.0, nu=1.5):
+    if nu not in (0.5, 1.5, 2.5):
+        raise ValueError("Unsupported nu value. Use 0.5, 1.5, or 2.5.")
+    times = _as_array_1d(times)
+    return sigma**2 * np.ones_like(times, dtype=float)
+
 def rational_quadratic_kernel(times, length_scale=1.0, sigma=1.0, alpha=1.0):
     pairwise_dists = np.subtract.outer(times, times)**2
     return sigma**2 * (1 + pairwise_dists / (2 * alpha * length_scale**2))**(-alpha)
+
+
+def rational_quadratic_kernel_diag(times, length_scale=1.0, sigma=1.0, alpha=1.0):
+    times = _as_array_1d(times)
+    return sigma**2 * np.ones_like(times, dtype=float)
 
 
 if __name__ == "__main__":
