@@ -6,29 +6,38 @@ import ipywidgets as widgets
 from ipywidgets import interact, interactive
 import kernels as kernels
 
+from scipy.stats import norm
+
+from aleatory.processes.base_analytical import SPAnalytical, SPAnalyticalMarginals
+
 def check_positive_definite(matrix):
     """ Check if a matrix is positive definite """
     eigenvalues = np.linalg.eigvals(matrix)
     return np.all(eigenvalues > 0)
 
 
-class GaussianProcess:
+class GaussianProcess(SPAnalyticalMarginals):
 
     """ 
     A Gaussian Process is a collection of random variables, for which any finite number of which have a joint Gaussian distribution. 
     It is fully specified by its mean function and covariance function (kernel).
     """
 
-    def __init__(self, mean_function, covariance_function, T=1.0):
-        self.T = T
+    def __init__(self, mean_function, covariance_function, T=1.0, rng=None):
+        super().__init__(T=T, rng=rng)
         self.mean = mean_function
         self.covariance = covariance_function
         self.kernel = covariance_function
         self.name = "GaussianProcess"
         self.short_name = "GP"
+        self.paths = None
+        self.times = None
 
-    
+
     def sample_at(self, times):
+        return self._sample_at(times)
+    
+    def _sample_at(self, times):
         mean_evaluated = self.mean(times)
         covariance_evaluated = self.covariance(times)
         return np.random.multivariate_normal(mean_evaluated, covariance_evaluated)
@@ -45,22 +54,85 @@ class GaussianProcess:
             T = self.T
         times = np.linspace(0, T, n)
         paths = np.random.multivariate_normal(self.mean(times), self.covariance(times), size=N)
+        self.times = times
+        self.paths = paths
         return paths
     
 
-    def plot(self, n, N, T=None, title=None):
-        paths = self.simulate(n, N, T)
-        if T is None:
-            T = self.T
-        times = np.linspace(0, T, n)
-        for i in range(N):
-            plt.plot(times, paths[i])
-        if title is None:
-            title = "Gaussian Process"
-        plt.title(title)
-        plt.xlabel("Time")
-        plt.ylabel("Value")
-        plt.show()
+    def _process_expectation(self, times=None):
+        if times is None:
+            times = self.times
+        return self.mean(times)
+    
+
+    def _process_variance(self, times=None):
+        if times is None:
+            times = self.times
+        return np.diag(self.covariance(times))
+    
+    def _process_stds(self, times=None):
+        if times is None:
+            times = self.times
+        return np.sqrt(self._process_variance(times))
+    
+    def get_marginal(self, time):
+        expectation = self.mean(time)
+        variance = self.covariance(np.array([time]))[0, 0]
+        return norm(loc=expectation, scale=np.sqrt(variance))
+                    
+    def draw(
+        self, n, N, T=None, marginal=True, envelope=False, type="3sigma", title=None, **fig_kw
+    ):
+        """
+        Simulates and plots paths/trajectories from the instanced stochastic process.
+
+        Produces different kind of visualisation illustrating the following elements:
+
+        - times versus process values as lines
+        - the expectation of the process across time
+        - histogram showing the empirical marginal distribution :math:`X_T` (optional when ``marginal = True``)
+        - probability density function of the marginal distribution :math:`X_T` (optional when ``marginal = True``)
+        - envelope of confidence intervals across time (optional when ``envelope = True``)
+
+        :param int n: number of steps in each path
+        :param int N: number of paths to simulate
+        :param float T: the endpoint of the time interval [0,T] over which the process is defined. If not passed, it defaults to the value of T passed in the constructor.
+        :param bool marginal:  defaults to True
+        :param bool envelope:   defaults to False
+        :param str type:   defaults to  '3sigma'
+        :param str title:  to be used to customise plot title. If not passed, the title defaults to the name of the process.
+        :return:
+        """
+
+        if type == "3sigma":
+            return self._draw_3sigmastyle(
+                n=n, N=N, T=T, marginal=marginal, envelope=envelope, title=title, **fig_kw
+            )
+        elif type == "qq":
+            return self._draw_qqstyle(
+                n, N, T=T, marginal=marginal, envelope=envelope, title=title, **fig_kw
+            )
+        else:
+            raise ValueError
+    
+    def plot_mean_variance(self, times, **fig_kw):
+        return super()._plot_mean_variance(times, process_label="B", **fig_kw)
+
+    
+
+    # def plot(self, n, N, T=None, title=None):
+    #     paths = self.simulate(n, N, T)
+    #     if T is None:
+    #         T = self.T
+    #     times = np.linspace(0, T, n)
+    #     for i in range(N):
+    #         plt.plot(times, paths[i])
+    #     if title is None:
+    #         title = "Gaussian Process"
+    #     plt.title(title)
+    #     plt.xlabel("Time")
+    #     plt.ylabel("Value")
+    #     plt.show()
 
     def plot_covariance(self, times=None, cmap='coolwarm',matrix_shape=True,  title=None, cbar_label='Covariance'):
         if times is None:
@@ -293,18 +365,18 @@ if __name__ == "__main__":
     mystyle = "https://raw.githubusercontent.com/quantgirluk/matplotlib-stylesheets/main/quant-pastel-light.mplstyle"
     plt.style.use(mystyle)
 
-    g = GPRBF(length_scale=0.1, sigma=1.0, T=1.0)
+    processes = [GPWhiteNoise(sigma=1.0, T=1.0), GPLinear(sigma=1.0, T=1.0), 
+                 GPConstant(sigma=1.0, T=1.0), GPRBF(length_scale=0.3, sigma=1.0, T=1.0), 
+                 GPSquaredExponential(length_scale=0.3, sigma=1.0, T=1.0), 
+                 GPMatern(length_scale=0.3, sigma=1.0, nu=1.5, T=1.0), 
+                 GPPeriodic(length_scale=0.3, sigma=1.0, period=0.5, T=1.0)]
 
-    # g.plot_covariance()
-    # # g.plot_covariance(times=np.linspace(0, 2, 200), title="RBF Kernel", cmap='viridis', matrix_shape=True)
+    for g in processes:
 
-    # # g.plot_covariance(times=np.linspace(0, 1, 100), title="RBF Kernel", cmap='viridis', matrix_shape=False)
-
-    # g.plot_kernel()
-    # g.plot_kernel(times=np.linspace(0, 1, 100), cmap='viridis',)
-
-    g.plot_paths_and_kernel(n=100, N=5)
-    g.plot_paths_and_kernel(n=100, N=5, matrix_shape=True)
+        # g.plot_paths_and_kernel(n=100, N=5)
+        g.plot_paths_and_kernel(n=100, N=5, matrix_shape=True)
+        g.plot(n=100, N=100)
+        g.draw(n=100, N=100)
 
 #     def brownian_cov(t):
 #         return np.minimum.outer(t, t)
@@ -330,5 +402,4 @@ if __name__ == "__main__":
 
 #     # test.plot_paths_covariance(n=100, N=5)
 #     # interact(test.plot_paths_covariance, n=5, N=widgets.IntSlider(min=1, max=20, step=1, value=5))
-
 
