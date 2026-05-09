@@ -17,8 +17,7 @@ def periodic_kernel(times, length_scale=1.0, sigma=1.0, period=1.0):
     return sigma**2 * np.exp(-2 * np.sin(np.pi * pairwise_dists / period)**2 / length_scale**2)
 
 def RBF_kernel(times, length_scale=1.0, sigma=1.0):
-    sqdist = np.subtract.outer(times, times)**2
-    return sigma**2 * np.exp(-0.5 * sqdist / length_scale**2)
+    return squared_exponential_kernel(times, length_scale=length_scale, sigma=sigma)
 
 def white_noise_kernel(times, sigma=1.0):
     return sigma**2 * np.eye(len(times))
@@ -46,7 +45,13 @@ def matern_kernel(times, length_scale=1.0, sigma=1.0, nu=1.5):
         return sigma**2 * (1 + sqrt5 * pairwise_dists / length_scale + 5 * pairwise_dists**2 / (3 * length_scale**2)) * np.exp(-sqrt5 * pairwise_dists / length_scale)
     else:
         raise ValueError("Unsupported nu value. Use 0.5, 1.5, or 2.5.")
-    
-def RBF_kernel(times, length_scale=1.0, sigma=1.0):
-    sqdist = np.subtract.outer(times, times)**2
-    return sigma**2 * np.exp(-0.5 * sqdist / length_scale**2)
+
+def rational_quadratic_kernel(times, length_scale=1.0, sigma=1.0, alpha=1.0):
+    pairwise_dists = np.subtract.outer(times, times)**2
+    return sigma**2 * (1 + pairwise_dists / (2 * alpha * length_scale**2))**(-alpha)
+
+
+if __name__ == "__main__":
+
+    test = constant_kernel(times=np.linspace(0, 1, 5), sigma=1.0)
+    print(test)
