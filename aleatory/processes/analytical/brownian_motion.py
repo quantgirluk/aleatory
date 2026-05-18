@@ -5,7 +5,9 @@ from scipy.stats import norm
 
 from aleatory.processes.base_analytical import SPAnalytical, SPAnalyticalMarginals
 from aleatory.processes.analytical.gaussian import GaussianIncrements
-from aleatory.utils.plotters_marginals import plot_mean_variance
+
+# from aleatory.utils.plotters_marginals import plot_mean_variance
+# from aleatory.utils.plotters_covariances import plot_covariance_matrix
 from aleatory.utils.utils import check_positive_number, check_numeric, get_times
 
 
@@ -80,6 +82,7 @@ class BrownianMotion(SPAnalyticalMarginals):
         :param double scale: the scale parameter :math:`\\sigma` in the above SDE
         :param double initial: the initial condition :math:`x_0` in the above SDE
         :param double T: the endpoint of the time interval :math:`[0,T]` over which the process is defined
+        :param rng: random number generator for reproducibility
         """
         super().__init__(T=T, rng=rng, initial=0.0)
         self.drift = drift
@@ -102,7 +105,10 @@ class BrownianMotion(SPAnalyticalMarginals):
         check_positive_number(value, "Time end")
         self._T = float(value)
         # Keep Gaussian increments aligned with the process horizon.
-        if hasattr(self, "gaussian_increments") and self.gaussian_increments is not None:
+        if (
+            hasattr(self, "gaussian_increments")
+            and self.gaussian_increments is not None
+        ):
             self.gaussian_increments.T = self._T
 
     @property
@@ -134,7 +140,6 @@ class BrownianMotion(SPAnalyticalMarginals):
     def _sample_brownian_motion(self, n):
         self.n = n
         self.times = get_times(self.T, self.n)
-        # increments = np.random.normal(scale=np.sqrt(self.T/self.n), size=self.n)
         increments = np.cumsum(self.gaussian_increments.sample(n - 1))
         increments = np.insert(increments, 0, [0])
 
@@ -211,6 +216,15 @@ class BrownianMotion(SPAnalyticalMarginals):
         stds = self._process_stds()
         return stds
 
+    def _process_covariance(self, times=None):
+        if times is None:
+            times = self.times
+        times = np.asarray(times)
+        covariances = self.scale**2 * np.minimum(
+            times[:, np.newaxis], times[np.newaxis, :]
+        )
+        return covariances
+
     def get_marginal(self, t):
         marginal = norm(
             loc=self.initial + self.drift * t, scale=self.scale * np.sqrt(t)
@@ -226,7 +240,15 @@ class BrownianMotion(SPAnalyticalMarginals):
         return variances
 
     def draw(
-        self, n, N, T=None, marginal=True, envelope=False, type="3sigma", title=None, **fig_kw
+        self,
+        n,
+        N,
+        T=None,
+        marginal=True,
+        envelope=False,
+        type="3sigma",
+        title=None,
+        **fig_kw,
     ):
         """
         Simulates and plots paths/trajectories from the instanced stochastic process.
@@ -251,7 +273,13 @@ class BrownianMotion(SPAnalyticalMarginals):
 
         if type == "3sigma":
             return self._draw_3sigmastyle(
-                n=n, N=N, T=T, marginal=marginal, envelope=envelope, title=title, **fig_kw
+                n=n,
+                N=N,
+                T=T,
+                marginal=marginal,
+                envelope=envelope,
+                title=title,
+                **fig_kw,
             )
         elif type == "qq":
             return self._draw_qqstyle(
@@ -259,7 +287,7 @@ class BrownianMotion(SPAnalyticalMarginals):
             )
         else:
             raise ValueError
-    
+
     def plot_mean_variance(self, times, **fig_kw):
         return super()._plot_mean_variance(times, process_label="B", **fig_kw)
 
@@ -269,5 +297,6 @@ if __name__ == "__main__":
     p = BrownianMotion(T=1.0)
     p.draw(n=200, N=200, T=4.0, figsize=(12, 7))
     p.draw(n=200, N=200, T=9.0, figsize=(12, 7))
-    # p.plot_mean_variance(times=np.linspace(0, 1, 100))
+    p.plot_mean_variance(times=np.linspace(0, 1, 100))
+    p._plot_covariance_matrix(times=np.linspace(0, 1, 100))
     # p.draw(n=20, N=100, figsize=(12, 7))

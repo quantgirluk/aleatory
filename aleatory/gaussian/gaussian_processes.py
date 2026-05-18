@@ -1,4 +1,4 @@
-from aleatory.processes.gaussian.gp_base import (
+from aleatory.gaussian.gp_base import (
     GaussianSigma,
     GaussianLengthScaleSigma,
     GaussianThreeParameter,
@@ -16,9 +16,9 @@ class GPWhiteNoise(GaussianSigma):
     A centered Gaussian Process with covariance function given by
 
     .. math::
-        K(t, s) = \\sigma^2 \\delta(t - s)
+        K(t, s) = \sigma^2 \delta(t - s)
 
-    where :math:`\\delta` is the Dirac delta function.
+    where :math:`\delta` is the Dirac delta function.
 
     Notes
     -----
@@ -44,8 +44,8 @@ class GPWhiteNoise(GaussianSigma):
         fig.show()
     """
 
-    def __init__(self, sigma=1.0, T=1.0):
-        super().__init__(sigma=sigma, T=T)
+    def __init__(self, sigma=1.0, T=1.0, rng=None):
+        super().__init__(sigma=sigma, T=T, rng=rng)
         self.name = f"White Noise ($\\sigma$={sigma:.2f})"
         self.short_name = f"White Noise"
 
@@ -57,9 +57,20 @@ class GPWhiteNoise(GaussianSigma):
 
 
 class GPLinear(GaussianSigma):
+    r"""
+    Gaussian Process with Linear Kernel
+    ===================================
 
-    def __init__(self, sigma=1.0, T=1.0):
-        super().__init__(sigma=sigma, T=T)
+    A centered Gaussian Process with covariance function given by
+
+    .. math::
+
+        K(t, s) = \sigma^2 ts, \ \ \ \ t, s \in [0,T]
+
+    """
+
+    def __init__(self, sigma=1.0, T=1.0, rng=None):
+        super().__init__(sigma=sigma, T=T, rng=rng)
         self.name = f"Linear GP ($\\sigma$={sigma:.2f})"
         self.short_name = f"Linear GP"
 
@@ -71,9 +82,20 @@ class GPLinear(GaussianSigma):
 
 
 class GPConstant(GaussianSigma):
+    r"""
+    GP with Constant Kernel
+    =======================
 
-    def __init__(self, sigma=1.0, T=1.0):
-        super().__init__(sigma=sigma, T=T)
+    A centered Gaussian Process with covariance function given by
+
+    .. math::
+
+        K(t, s) = \sigma^2, \ \ \ \ t, s \in [0,T]
+
+    """
+
+    def __init__(self, sigma=1.0, T=1.0, rng=None):
+        super().__init__(sigma=sigma, T=T, rng=rng)
         self.name = f"Constant GP ($\\sigma$={sigma:.2f})"
         self.short_name = f"Constant GP"
 
@@ -84,31 +106,41 @@ class GPConstant(GaussianSigma):
         return kernels.constant_kernel_diag(times, sigma=self.sigma)
 
 
+"""
+Gaussian Process with Radial Basis Function (RBF) Kernel
+"""
+
+
 class GPRBF(GaussianLengthScaleSigma):
     r"""
     Gaussian Process with Radial Basis Function (RBF) Kernel
     =========================================================
 
-    Notes
-    -----
-
     A Gaussian Process with RBF kernel is a centered Gaussian Process with covariance function given by
 
     .. math::
-        K(t, s) = \\sigma^2 \\exp\\left(-\\frac{(t - s)^2}{2l^2}\\right)
 
-    where :math:`l` is the length scale parameter and :math:`\\sigma` is the scale parameter.
+        K(t, s) = \sigma^2 \exp\left(-\frac{(t - s)^2}{2l^2}\right)
+
+    where :math:`l` is the length scale parameter and :math:`\sigma` is the scale parameter.
+
+
+    Notes
+    -----
+
 
     Examples
     --------
     .. highlight:: python
     .. code-block:: python
+
         from aleatory.processes import GPRBF
         process = GPRBF(length_scale=0.3, sigma=1.0, T=1.0)
         fig = process.plot_paths_and_kernel(n=100, N=5, matrix_shape=True)
         fig.show()
 
     .. code-block:: python
+
         from aleatory.processes import GPRBF
         process = GPRBF(length_scale=0.3, sigma=1.0, T=1.0)
         fig = process.draw(n=100, N=200, figsize=(12, 7))
@@ -116,8 +148,14 @@ class GPRBF(GaussianLengthScaleSigma):
 
     """
 
-    def __init__(self, length_scale=1.0, sigma=1.0, T=1.0):
-        super().__init__(length_scale=length_scale, sigma=sigma, T=T)
+    def __init__(self, length_scale=1.0, sigma=1.0, T=1.0, rng=None):
+        """
+        :param double length_scale: the length scale parameter :math:`l` in the above covariance function
+        :param double sigma: the scale parameter :math:`\\sigma` in the above covariance function
+        :param double T: the endpoint of the time interval :math:`[0,T]` over which the process is defined
+        :param rng: random number generator for reproducibility
+        """
+        super().__init__(length_scale=length_scale, sigma=sigma, T=T, rng=rng)
         self.name = f"RBF(l={length_scale:.2f}, $\\sigma$={sigma:.2f})"
         self.short_name = f"RBF"
 
@@ -133,9 +171,22 @@ class GPRBF(GaussianLengthScaleSigma):
 
 
 class GPSquaredExponential(GaussianLengthScaleSigma):
+    r"""
+    Gaussian Process with Squared Exponential Kernel
+    ================================================
 
-    def __init__(self, length_scale=1.0, sigma=1.0, T=1.0):
-        super().__init__(length_scale=length_scale, sigma=sigma, T=T)
+    This process is identical to the Gaussian Process with RBF kernel, as the Squared Exponential kernel is just
+    another name for the RBF kernel. The covariance function is given by
+
+    .. math::
+
+        K(t, s) = \sigma^2 \exp\left(-\frac{(t - s)^2}{2l^2}\right) \ \ \ \ \ t, s \in [0,T]
+
+
+    """
+
+    def __init__(self, length_scale=1.0, sigma=1.0, T=1.0, rng=None):
+        super().__init__(length_scale=length_scale, sigma=sigma, T=T, rng=rng)
         self.name = (
             f"Squared Exponential GP (l={length_scale:.2f}, $\\sigma$={sigma:.2f})"
         )
@@ -153,7 +204,7 @@ class GPSquaredExponential(GaussianLengthScaleSigma):
 
 
 class GPMatern(GaussianThreeParameter):
-    r""" "
+    r"""
     Gaussian Process with Matern Kernel
     ===================================
 
@@ -162,14 +213,15 @@ class GPMatern(GaussianThreeParameter):
     A Gaussian Process with Matern kernel is a centered Gaussian Process with covariance function given by
 
     .. math::
-        K(t, s) = \\sigma^2 \\frac{2^{1-\\nu}}{\\Gamma(\\nu)} \\left(\\sqrt{2\\nu} \\frac{|t - s|}{l}\\right)^{\\!\\!\\!\\!\\!\\!\\!\\!\\!\\!\\!} K_{\\nu}\\left(\\sqrt{2\\nu} \\frac{|t - s|}{l}\\right)
 
-    where :math:`l` is the length scale parameter, :math:`\\sigma` is the scale parameter, :math:`\\nu` is the smoothness parameter, and :math:`K_{\\nu}` is the modified Bessel function of the second kind.
+        K(t, s) = \sigma^2 \frac{2^{1-\nu}}{\Gamma(\nu)} \left( \sqrt{2\nu} \frac{|t - s|}{l} \right)^\nu K_\nu\left( \sqrt{2\nu} \frac{|t - s|}{l} \right)
+
+    where :math:`l` is the length scale parameter, :math:`\sigma` is the scale parameter, :math:`\nu` is the smoothness parameter, and :math:`K_{\nu}` is the modified Bessel function of the second kind.
 
     """
 
-    def __init__(self, length_scale=1.0, sigma=1.0, nu=1.5, T=1.0):
-        super().__init__(length_scale=length_scale, sigma=sigma, nu=nu, T=T)
+    def __init__(self, length_scale=1.0, sigma=1.0, nu=1.5, T=1.0, rng=None):
+        super().__init__(length_scale=length_scale, sigma=sigma, nu=nu, T=T, rng=rng)
         self.name = (
             f"Matern GP (l={length_scale:.2f}, $\\sigma$={sigma:.2f}, $\\nu$={nu:.2f})"
         )
@@ -188,8 +240,10 @@ class GPMatern(GaussianThreeParameter):
 
 class GPPeriodic(GaussianThreeParameter):
 
-    def __init__(self, length_scale=1.0, sigma=1.0, period=1.0, T=1.0):
-        super().__init__(length_scale=length_scale, sigma=sigma, nu=period, T=T)
+    def __init__(self, length_scale=1.0, sigma=1.0, period=1.0, T=1.0, rng=None):
+        super().__init__(
+            length_scale=length_scale, sigma=sigma, nu=period, T=T, rng=rng
+        )
         self.name = (
             f"Periodic GP (l={length_scale:.2f}, $\\sigma$={sigma:.2f}, p={period:.2f})"
         )

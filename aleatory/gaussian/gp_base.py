@@ -47,7 +47,9 @@ class GaussianProcess(SPAnalyticalMarginals):
     def _sample_at(self, times):
         mean_evaluated = self.mean(times)
         covariance_evaluated = self.covariance(times)
-        return np.random.multivariate_normal(mean_evaluated, covariance_evaluated)
+        return np.random.default_rng(self.rng).multivariate_normal(
+            mean_evaluated, covariance_evaluated
+        )
 
     def sample(self, n, T=None):
         if T is None:
@@ -59,7 +61,7 @@ class GaussianProcess(SPAnalyticalMarginals):
         if T is None:
             T = self.T
         times = np.linspace(0, T, n)
-        paths = np.random.multivariate_normal(
+        paths = np.random.default_rng(self.rng).multivariate_normal(
             self.mean(times), self.covariance(times), size=N
         )
         self.times = times
@@ -266,13 +268,15 @@ class GaussianProcess(SPAnalyticalMarginals):
 
 class GaussianSigma(GaussianProcess):
 
-    def __init__(self, sigma=1.0, T=1.0):
+    def __init__(self, sigma=1.0, T=1.0, rng=None):
         super().__init__(
             mean_function=lambda t: np.zeros_like(t),
             covariance_function=self.covariance_function,
             variance_function=self.variance_function,
             T=T,
+            rng=rng,
         )
+
         self.sigma = sigma
         self.name = f"Gaussian Process ($\\sigma$={sigma:.2f})"
         self.short_name = f"GP"
@@ -307,12 +311,13 @@ class GaussianSigma(GaussianProcess):
 
 class GaussianLengthScaleSigma(GaussianProcess):
 
-    def __init__(self, length_scale=1.0, sigma=1.0, T=1.0):
+    def __init__(self, length_scale=1.0, sigma=1.0, T=1.0, rng=None):
         super().__init__(
             mean_function=lambda t: np.zeros_like(t),
             covariance_function=self.covariance_function,
             variance_function=self.variance_function,
             T=T,
+            rng=rng,
         )
         self.length_scale = length_scale
         self.sigma = sigma
@@ -361,12 +366,13 @@ class GaussianLengthScaleSigma(GaussianProcess):
 
 class GaussianThreeParameter(GaussianProcess):
 
-    def __init__(self, length_scale=1.0, sigma=1.0, nu=1.5, T=1.0):
+    def __init__(self, length_scale=1.0, sigma=1.0, nu=1.5, T=1.0, rng=None):
         super().__init__(
             mean_function=lambda t: np.zeros_like(t),
             covariance_function=self.covariance_function,
             variance_function=self.variance_function,
             T=T,
+            rng=rng,
         )
         self.length_scale = length_scale
         self.sigma = sigma

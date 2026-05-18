@@ -5,6 +5,8 @@ import numpy as np
 from aleatory.processes.base import StochasticProcess
 from aleatory.utils.plotters import plot_paths, draw_paths
 from aleatory.utils.plotters_marginals import plot_mean_variance
+from aleatory.utils.plotters_covariances import plot_covariance_matrix
+
 
 class SPAnalytical(StochasticProcess):
 
@@ -65,6 +67,12 @@ class SPAnalytical(StochasticProcess):
         stds = [np.sqrt(var) for var in variances]
         return stds
 
+    def estimate_covariances(self, times=None):
+        if self._empirical_marginals is None:
+            self._empirical_marginals = self._get_empirical_marginal_samples()
+        empirical_covariances = np.cov(self._empirical_marginals)
+        return empirical_covariances
+
     def estimate_quantiles(self, q):
         if self._empirical_marginals is None:
             self._empirical_marginals = self._get_empirical_marginal_samples()
@@ -90,6 +98,12 @@ class SPAnalytical(StochasticProcess):
     def process_stds(self):
         stds = self._process_stds()
         return stds
+
+    def _process_covariance(self, times=None):
+        return self.estimate_covariances(times=times)
+
+    def process_covariance(self, times=None):
+        return self._process_covariance(times=times)
 
     def _plot_process(self, n, N, T=None, title=None, suptitle=None, **fig_kw):
         """
@@ -149,8 +163,8 @@ class SPAnalytical(StochasticProcess):
         suptitle=None,
         empirical_envelope=False,
         **fig_kw,
-    ):  
-        
+    ):
+
         self.simulate(n, N, T=T)
         expectations = self._process_expectation()
 
@@ -299,7 +313,7 @@ class SPAnalyticalMarginals(SPAnalytical):
         variances = self._process_variance(times=times)
         stds = np.sqrt(variances)
         return stds
-    
+
     def _plot_mean_variance(self, times, title=None, **fig_kw):
         """
         Plots the expectation and variance of the process as a function of time.
@@ -322,7 +336,28 @@ class SPAnalyticalMarginals(SPAnalytical):
             **fig_kw,
         )
         return fig
-    
+
     def plot_mean_variance(self, times, title=None, **fig_kw):
 
         return self._plot_mean_variance(times=times, title=title, **fig_kw)
+
+    def _plot_covariance_matrix(self, times, title=None, **fig_kw):
+        """
+        Plots the covariance matrix of the process as a function of time.
+
+        :param list times: list of times to evaluate the covariance matrix
+        :param str title: string optional default to the name of the process
+        :param fig_kw: keyword arguments for the figure
+        :return:
+        """
+
+        plot_title = title if title else self.name
+        covariances = self._process_covariance(times=times)
+        
+        fig = plot_covariance_matrix(
+            times=times,
+            covariance_matrix=covariances,
+            title=plot_title,
+            **fig_kw,
+        )
+        return fig
