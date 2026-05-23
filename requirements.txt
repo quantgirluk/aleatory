@@ -4,3 +4,4 @@ scipy>=1.10.0
 matplotlib>=3.6.2
 statsmodels>=0.13.5
 parameterized>=0.8.1
+ipywidgets>=8.0.0
