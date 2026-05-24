@@ -9,6 +9,11 @@ from ipywidgets import interact, interactive
 from scipy.stats import norm
 
 from aleatory.processes.base_analytical import SPAnalyticalMarginals
+from aleatory.utils.plotters_covariances import (
+    plot_covariance_matrix,
+    plot_paths_and_kernel,
+    plot_kernel3d,
+)
 
 
 def check_positive_definite(matrix):
@@ -148,70 +153,53 @@ class GaussianProcess(SPAnalyticalMarginals):
     def plot_covariance(
         self,
         times=None,
-        cmap="coolwarm",
+        colormap="coolwarm",
         matrix_shape=True,
         title=None,
-        cbar_label="Covariance",
+        **fig_kw,
     ):
         if times is None:
             times = np.linspace(0, self.T, 100)
         covariance_matrix = self.covariance(times)
         title = title if title else f"{self.name} \nCovariance Matrix"
-        if matrix_shape:
-            origin = "upper"
-            my_extent = [times[0], times[-1], times[-1], times[0]]
-        else:
-            origin = "lower"
-            my_extent = [times[0], times[-1], times[0], times[-1]]
 
-        fig, ax = plt.subplots(figsize=(6, 5))
-        im = ax.imshow(
+        fig = plot_covariance_matrix(
+            times,
             covariance_matrix,
-            cmap=cmap,
-            interpolation="none",
-            origin=origin,
-            extent=my_extent,
+            colormap=colormap,
+            matrix_shape=matrix_shape,
+            title=title,
+            **fig_kw,
         )
-        cbar = fig.colorbar(im, ax=ax)
-        cbar.set_label(cbar_label)
-        ax.set_title(title)
-        ax.set_xlabel("t")
-        ax.set_ylabel("s")
-        plt.show()
 
         return fig
 
     def plot_kernel(
         self,
         times=None,
-        cmap="coolwarm",
+        colormap="coolwarm",
         matrix_shape=False,
         title=None,
-        cbar_label="Kernel K(t, s)",
+        cbar_labels={"cbar": "Kernel K(t, s)"},
     ):
         if title is None:
             title = f"{self.name} \nKernel Function"
         return self.plot_covariance(
             times,
-            cmap=cmap,
+            colormap=colormap,
             matrix_shape=matrix_shape,
             title=title,
-            cbar_label=cbar_label,
+            cbar_labels=cbar_labels,
         )
 
-    def plot_kernel3d(self, times=None, title=None):
+    def plot_kernel3d(self, times=None, title=None, **fig_kw):
         if times is None:
-            times = np.linspace(0, self.T, 100)
+            npoints = int(100 * self.T)
+            times = np.linspace(0, self.T, npoints)
         K = self.covariance(times)
-        fig = plt.figure(figsize=(8, 6))
-        ax = fig.add_subplot(111, projection="3d")
-        T1, T2 = np.meshgrid(times, times)
-        ax.plot_surface(T1, T2, K, cmap="viridis")
-        ax.set_title(title if title else f"{self.name} \nKernel Function")
-        ax.set_xlabel("t")
-        ax.set_ylabel("s")
-        ax.set_zlabel("K(t, s)")
-        plt.show()
+
+        style = fig_kw.pop("style", "seaborn-v0_8-whitegrid")
+        fig = plot_kernel3d(times, K, title=title, style=style, **fig_kw)
         return fig
 
     def plot_mean_function(self, T=None, n=None):
@@ -236,34 +224,15 @@ class GaussianProcess(SPAnalyticalMarginals):
         times = np.linspace(0, T, n)
         K = self.covariance(times)
 
-        fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-        for i in range(N):
-            axes[0].plot(times, paths[i])
-        axes[0].set_title("Simulated Paths")
-        axes[0].set_xlabel("Time")
-        axes[0].set_ylabel("Value")
-
-        if matrix_shape:
-            origin = "upper"
-            extent = [times[0], times[-1], times[-1], times[0]]
-        else:
-            origin = "lower"
-            extent = [times[0], times[-1], times[0], times[-1]]
-
-        axes[1].imshow(K, cmap=cmap, interpolation="none", origin=origin, extent=extent)
-        cbar = fig.colorbar(plt.cm.ScalarMappable(cmap=cmap), ax=axes[1])
-        cbar.set_label("K(t, s)")
-        axes[1].set_title("Kernel")
-        axes[1].set_xlabel("t")
-        axes[1].set_ylabel("s")
-
-        if title:
-            fig.suptitle(title)
-        else:
-            fig.suptitle(f"{self.name}")
-        plt.tight_layout()
-        plt.show()
-        return fig
+        title = title if title else f"{self.name}"
+        return plot_paths_and_kernel(
+            paths,
+            times,
+            K,
+            title=title,
+            cmap=cmap,
+            matrix_shape=matrix_shape,
+        )
 
 
 class GaussianSigma(GaussianProcess):
@@ -296,8 +265,9 @@ class GaussianSigma(GaussianProcess):
 
         def update(sigma=self.sigma, n_samples=5):
             self.sigma = sigma
+            n_steps = int(100 * self.T)
             self.plot_paths_and_kernel(
-                n=100,
+                n=n_steps,
                 N=n_samples,
                 T=self.T,
                 title=f"GP ($\\sigma$={sigma:.2f})",
@@ -346,8 +316,9 @@ class GaussianLengthScaleSigma(GaussianProcess):
         def update(length_scale, sigma, n_samples=5):
             self.length_scale = length_scale
             self.sigma = sigma
+            nsteps = int(100 * self.T)
             self.plot_paths_and_kernel(
-                n=100,
+                n=nsteps,
                 N=n_samples,
                 T=self.T,
                 title=f"{self.short_name} (l={length_scale:.2f}, $\\sigma$={sigma:.2f})",
@@ -406,8 +377,9 @@ class GaussianThreeParameter(GaussianProcess):
             self.length_scale = length_scale
             self.sigma = sigma
             self.nu = nu
+            nsteps = int(100 * self.T)
             self.plot_paths_and_kernel(
-                n=100,
+                n=nsteps,
                 N=n_samples,
                 T=self.T,
                 title=f"{self.short_name} (l={length_scale:.2f}, $\\sigma$={sigma:.2f}, $\\nu$={nu:.2f})",

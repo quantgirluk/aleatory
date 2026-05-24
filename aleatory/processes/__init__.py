@@ -21,6 +21,11 @@ The :py:mod:`aleatory.processes` module provides classes for following stochasti
    CKLSProcess                  -- Chan-Karolyi-Longstaff-Sanders (CKLS) process
    fBM                          -- fractional Brownian Motion
    GaltonWatson                 -- Galton-Watson Process
+   GaussianConstant             -- Gaussian Process with Constant Kernel
+   GaussianLinear               -- Gaussian Process with Linear Kernel
+   GaussianRBF                  -- Gaussian Process with RBF Kernel
+   GaussianSquaredExponential   -- Gaussian Process with Squared Exponential Kernel
+   GaussianWhiteNoise           -- Gaussian Process with White Noise Kernel
    GammaProcess                 -- Gamma Process
    GeneralRandomWalk            -- General Random Walk Process
    HawkesProcess                -- Hawkes Process
@@ -70,10 +75,12 @@ from aleatory.processes.multi_dimensional.two_correlated_brownian_motions import
 from aleatory.processes.multi_dimensional.brownian_motion_2d import BM2D
 from aleatory.processes.multi_dimensional.random_walk_2d import RandomWalk2D
 
-from aleatory.gaussian.gaussian_processes import (
-    GPWhiteNoise,
-    GPRBF,
+from aleatory.processes.gaussian.gaussian_constant import GPConstant
+from aleatory.processes.gaussian.gaussian_linear import GPLinear
+from aleatory.processes.gaussian.gaussian_matern import GPMatern
+from aleatory.processes.gaussian.gaussian_periodic import GPPeriodic
+from aleatory.processes.gaussian.gaussian_rbf import GPRBF
+from aleatory.processes.gaussian.gaussian_squared_exponential import (
     GPSquaredExponential,
-    GPLinear,
-    GPConstant,
 )
+from aleatory.processes.gaussian.gaussian_whitenoise import GPWhiteNoise

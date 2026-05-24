@@ -296,7 +296,10 @@ if __name__ == "__main__":
 
     p = BrownianMotion(T=1.0)
     p.draw(n=200, N=200, T=4.0, figsize=(12, 7))
-    p.draw(n=200, N=200, T=9.0, figsize=(12, 7))
-    p.plot_mean_variance(times=np.linspace(0, 1, 100))
-    p._plot_covariance_matrix(times=np.linspace(0, 1, 100))
+    # p.draw(n=200, N=200, T=9.0, figsize=(12, 7))
+    # p.plot_mean_variance(times=np.linspace(0, 1, 100))
+    # p._plot_covariance_matrix(times=np.linspace(0, 1, 100))
+    # p.plot_covariance_matrix(times=np.linspace(0, 1, 100))
+    p.plot_paths_and_kernel(n=200, N=5)
+
     # p.draw(n=20, N=100, figsize=(12, 7))
