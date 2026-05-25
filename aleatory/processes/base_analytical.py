@@ -8,6 +8,7 @@ from aleatory.utils.plotters_marginals import plot_mean_variance
 from aleatory.utils.plotters_covariances import (
     plot_covariance_matrix,
     plot_paths_and_kernel,
+    plot_kernel3d,
 )
 
 
@@ -378,12 +379,39 @@ class SPAnalyticalMarginals(SPAnalytical):
         )
         return fig
 
-    def plot_covariance_matrix(self, times=None, title=None, **fig_kw):
-
+    def plot_covariance(self, times=None, title=None, **fig_kw):
         if times is None:
             times = self.times
 
         return self._plot_covariance_matrix(times=times, title=title, **fig_kw)
+
+    def plot_kernel(
+        self,
+        times=None,
+        colormap="coolwarm",
+        matrix_shape=False,
+        title=None,
+        cbar_labels={"cbar": "Kernel K(t, s)"},
+    ):
+        if title is None:
+            title = f"{self.name} \nKernel Function"
+        return self.plot_covariance(
+            times,
+            colormap=colormap,
+            matrix_shape=matrix_shape,
+            title=title,
+            cbar_labels=cbar_labels,
+        )
+
+    def plot_kernel3d(self, times=None, title=None, **fig_kw):
+        if times is None:
+            npoints = int(100 * self.T)
+            times = np.linspace(0, self.T, npoints)
+        K = self._process_covariance(times)
+
+        style = fig_kw.pop("style", "seaborn-v0_8-whitegrid")
+        fig = plot_kernel3d(times, K, title=title, style=style, **fig_kw)
+        return fig
 
     def plot_paths_and_kernel(
         self,
