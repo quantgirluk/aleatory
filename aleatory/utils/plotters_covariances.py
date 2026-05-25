@@ -64,7 +64,7 @@ def plot_paths_and_kernel(
     K = covariance_matrix
 
     with plt.style.context(style):
-        fig, axes = plt.subplots(1, 2, figsize=(12, 4), **fig_kw)
+        fig, axes = plt.subplots(1, 2, **fig_kw)
         for i in range(len(paths)):
             axes[0].plot(times, paths[i])
         axes[0].set_title("Simulated Paths")
