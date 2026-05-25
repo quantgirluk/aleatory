@@ -2,14 +2,14 @@ import matplotlib.figure
 import numpy as np
 import unittest
 
-from aleatory.processes import GPWhiteNoise, GPLinear, GPConstant, GPRBF
+from aleatory.processes import WhiteNoise, GPLinear, GPConstant, GPRBF
 
 
 class TestGaussianProcesses(unittest.TestCase):
 
     def test_gaussian_processes(self):
         processes = [
-            GPWhiteNoise(sigma=1.0, T=1.0),
+            WhiteNoise(sigma=1.0, T=1.0),
             GPLinear(sigma=1.0, T=1.0),
             GPConstant(sigma=1, T=1.0),
             GPRBF(length_scale=0.3, sigma=1.0, T=1.0),
@@ -25,7 +25,7 @@ class TestGaussianProcesses(unittest.TestCase):
 
     def test_gaussian_processes_figures(self, skip=True):
         processes = [
-            GPWhiteNoise(sigma=1.0, T=1.0),
+            WhiteNoise(sigma=1.0, T=1.0),
             GPLinear(sigma=1.0, T=1.0),
             GPConstant(sigma=1, T=1.0),
             GPRBF(length_scale=0.3, sigma=1.0, T=1.0),
