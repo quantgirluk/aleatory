@@ -185,6 +185,22 @@ class GBM(SPAnalyticalMarginals):
         stds = np.sqrt(variances)
         return stds
 
+    def _process_covariance(self, times=None):
+        if times is None:
+            times = self.times
+
+        t = np.asarray(times)
+
+        tt = t[:, None] + t[None, :]
+        tmin = np.minimum(t[:, None], t[None, :])
+
+        covariances = (
+            self.initial**2
+            * np.exp(self.drift * tt)
+            * (np.exp(self.volatility**2 * tmin) - 1)
+        )
+        return covariances
+
     def get_marginal(self, t):
         mu_x = np.log(self.initial) + (self.drift - 0.5 * self.volatility**2) * t
         sigma_x = self.volatility * np.sqrt(t)
@@ -199,15 +215,19 @@ class GBM(SPAnalyticalMarginals):
     def marginal_variance(self, times=None):
         variances = self._process_variance(times=times)
         return variances
-    
+
+
 if __name__ == "__main__":
     p = GBM()
     # p.draw(n=200, N=200, T=9.0, figsize=(12, 7))
     # p.draw(n=200, N=200, T=4.0, figsize=(12, 7))
 
-    p.plot(n=100, N=100)
-    p.plot(n=100, N=100, T=3.0)
-    p.draw(n=100, N=100)
+    # p.plot(n=100, N=100)
+    # p.plot(n=100, N=100, T=3.0)
+    # p.draw(n=100, N=100)
+    # p.plot_covariance(times=np.linspace(0, 1, 100))
+    p.plot_kernel(times=np.linspace(0, 1, 100))
+    p.plot_kernel3d(times=np.linspace(0, 1, 100), title="Covariance Kernel of GBM")
+    p.plot_paths_and_kernel(n=100, N=5)
 
     # p.plot_mean_variance(times=np.linspace(0, 1, 100))
-    
