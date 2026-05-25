@@ -27,3 +27,11 @@ fig.show()
 process = BrownianMotion()
 fig = process.plot(n=100, N=10, figsize=(12, 7), dpi=250)
 fig.show()
+
+
+###############################################################################
+
+
+process = BrownianMotion()
+fig = process.plot_paths_and_kernel(n=100, N=5)
+fig.show()

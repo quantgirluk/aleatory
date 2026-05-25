@@ -21,11 +21,11 @@ aleatory = importlib.import_module("aleatory")
 # -- Project information -----------------------------------------------------
 
 project = "aleatory"
-copyright = "2022-2025, Dialid Santiago"
+copyright = "2022-2026, Dialid Santiago"
 author = "Dialid Santiago"
 
 # The full version, including alpha/beta/rc tags
-release = "1.1.1"
+release = "1.2.1"
 
 # -- General configuration ---------------------------------------------------
 
@@ -44,7 +44,7 @@ extensions = [
 ]
 
 sphinx_gallery_conf = {
-    'within_subsection_order': "FileNameSortKey", # order files according to their name within each subsection
+    "within_subsection_order": "FileNameSortKey",  # order files according to their name within each subsection
     "examples_dirs": "../../examples",  # path to your example scripts
     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
 }
@@ -94,3 +94,5 @@ source_suffix = {
     ".txt": "markdown",
     ".md": "markdown",
 }
+
+autodoc_member_order = "alphabetical"

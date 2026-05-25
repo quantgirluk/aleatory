@@ -51,6 +51,12 @@ Currently, `aleatory` supports the following stochastic processes:
 - :py:class:`Fractional Brownian Motion process<aleatory.processes.fBM>`
 - :py:class:`Galton-Watson process with Poisson branching<aleatory.processes.GaltonWatson>`
 - :py:class:`Gamma process<aleatory.processes.GammaProcess>`
+- :py:class:`Gaussian process with Constant kernel<aleatory.processes.GPConstant>`
+- :py:class:`Gaussian process with Linear kernel<aleatory.processes.GPLinear>`
+- :py:class:`Gaussian process with Matern kernel<aleatory.processes.GPMatern>`
+- :py:class:`Gaussian process with Periodic kernel<aleatory.processes.GPPeriodic>`
+- :py:class:`Gaussian process with RBF kernel<aleatory.processes.GPRBF>`
+- :py:class:`Gaussian process with Squared Exponential kernel<aleatory.processes.GPSquaredExponential>`
 - :py:class:`General Random Walk<aleatory.processes.GeneralRandomWalk>`
 - :py:class:`Geometric Brownian Motion<aleatory.processes.GBM>`
 - :py:class:`Hawkes process<aleatory.processes.HawkesProcess>`
@@ -63,6 +69,7 @@ Currently, `aleatory` supports the following stochastic processes:
 - :py:class:`Squared Bessel processes<aleatory.processes.BESQProcess>`
 - :py:class:`Vasicek process<aleatory.processes.Vasicek>`
 - :py:class:`Variance-Gamma process<aleatory.processes.VarianceGammaProcess>`
+- :py:class:`White Noise kernel<aleatory.processes.WhiteNoise>`
 
 
 Installation

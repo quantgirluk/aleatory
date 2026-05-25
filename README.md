@@ -10,13 +10,12 @@
 
 ## Overview
 
-The **_aleatory_** (/ˈeɪliətəri/) Python library provides functionality for simulating and visualising
+The ***aleatory*** (/ˈeɪliətəri/) Python library provides functionality for simulating and visualising
 stochastic processes. More precisely, it introduces objects representing a number of 
 stochastic processes and provides methods to:
 
 - generate realizations/trajectories from each process —over discrete time sets
 - create visualisations to illustrate the processes properties and behaviour
-
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/quantgirluk/aleatory/main/docs/source/_static/vasicek_process_drawn.png"   style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%">
@@ -36,6 +35,12 @@ Currently, aleatory supports the following stochastic processes in one dimension
 - [Fractional Brownian Motion process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.fBM.html#aleatory.processes.fBM)
 - [Galton-Watson process with Poisson branching](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GaltonWatson.html#aleatory.processes.GaltonWatson)
 - [Gamma process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GammaProcess.html#aleatory.processes.GammaProcess)
+- [Gaussian Process with  Constant Kernel](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GPConstant.html#aleatory.processes.GPConstant)
+- [Gaussian Process with Linear Kernel](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GPLinear.html#aleatory.processes.GPLinear)
+- [Gaussian Process with Matern Kernel](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GPMatern.html#aleatory.processes.GPMatern)
+- [Gaussian Process with Periodic Kernel](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GPPeriodic.html#aleatory.processes.GPPeriodic)
+- [Gaussian Process with RBF Kernel](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GPRBF.html#aleatory.processes.GPRBF)
+- [Gaussian Process with Squared Exponential Kernel](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GPSquaredExponential.html#aleatory.processes.GPSquaredExponential)
 - [General Random Walk](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GeneralRandomWalk.html#aleatory.processes.GeneralRandomWalk)
 - [Geometric Brownian Motion](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.GBM.html#aleatory.processes.GBM)
 - [Hawkes process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.HawkesProcess.html#aleatory.processes.HawkesProcess)
@@ -48,6 +53,7 @@ Currently, aleatory supports the following stochastic processes in one dimension
 - [Squared Bessel processes](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.BESQProcess.html#aleatory.processes.BESQProcess)
 - [Vasicek process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.Vasicek.html#aleatory.processes.Vasicek)
 - [Variance-Gamma process](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.VarianceGammaProcess.html#aleatory.processes.VarianceGammaProcess)
+- [White Noise](https://aleatory.readthedocs.io/en/latest/processes/aleatory.processes.WhiteNoise.html#aleatory.processes.WhiteNoise)
 
 From v1.1.1 aleatory supports the following 2-d stochastic processes:
 
@@ -60,7 +66,7 @@ From v1.1.1 aleatory supports the following 2-d stochastic processes:
 Aleatory is available on [pypi](https://pypi.python.org/pypi) and can be
 installed as follows
 
-```
+```bash
 pip install aleatory
 ```
 
@@ -98,7 +104,6 @@ generates a chart like this:
 
 For more examples visit the [Quick-Start Guide](https://aleatory.readthedocs.io/en/latest/general.html).
 
-
 **If you like this project, please give it a star!** ⭐️
 
 ## Thanks for Visiting! ✨
@@ -109,5 +114,3 @@ Connect with me via:
 - 👩🏽‍💼 [Linkedin](https://www.linkedin.com/in/dialidsantiago/)
 - 📸 [Instagram](https://www.instagram.com/quant_girl/)
 - 👾 [Personal Website](https://quantgirl.blog)
-
-
