@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**02:11.669** total execution time for 32 files **from all galleries**:
+**00:07.052** total execution time for 32 files **from all galleries**:
 
 .. container::
 
@@ -32,99 +32,99 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_auto_examples_plot_besq.py` (``../../examples/plot_besq.py``)
-     - 00:27.455
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_bes.py` (``../../examples/plot_bes.py``)
-     - 00:26.079
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_brownian_2d.py` (``../../examples/plot_brownian_2d.py``)
-     - 00:11.118
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_hawkes.py` (``../../examples/plot_hawkes.py``)
-     - 00:05.666
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_cev.py` (``../../examples/plot_cev.py``)
-     - 00:04.170
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_cir.py` (``../../examples/plot_cir.py``)
-     - 00:04.090
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_brownian_motion.py` (``../../examples/plot_brownian_motion.py``)
-     - 00:03.702
+   * - :ref:`sphx_glr_auto_examples_plot_vasicek.py` (``../../examples/plot_vasicek.py``)
+     - 00:07.052
      - 0.0
    * - :ref:`sphx_glr_auto_examples_plot_arithmetic_brownian_motion.py` (``../../examples/plot_arithmetic_brownian_motion.py``)
-     - 00:03.600
+     - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_random_walk_2d.py` (``../../examples/plot_random_walk_2d.py``)
-     - 00:03.593
+   * - :ref:`sphx_glr_auto_examples_plot_bes.py` (``../../examples/plot_bes.py``)
+     - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_galton_watson.py` (``../../examples/plot_galton_watson.py``)
-     - 00:02.869
+   * - :ref:`sphx_glr_auto_examples_plot_besq.py` (``../../examples/plot_besq.py``)
+     - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_ou.py` (``../../examples/plot_ou.py``)
-     - 00:02.710
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_fbm.py` (``../../examples/plot_fbm.py``)
-     - 00:02.401
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_ckls.py` (``../../examples/plot_ckls.py``)
-     - 00:02.261
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_gaussian_matern.py` (``../../examples/plot_gaussian_matern.py``)
-     - 00:02.215
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_gamma.py` (``../../examples/plot_gamma.py``)
-     - 00:02.176
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_poisson_mixed.py` (``../../examples/plot_poisson_mixed.py``)
-     - 00:02.175
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_variance_gamma.py` (``../../examples/plot_variance_gamma.py``)
-     - 00:02.163
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_poisson_non_homogeneous.py` (``../../examples/plot_poisson_non_homogeneous.py``)
-     - 00:02.105
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_poisson.py` (``../../examples/plot_poisson.py``)
-     - 00:02.089
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_gaussian_squared_exponential.py` (``../../examples/plot_gaussian_squared_exponential.py``)
-     - 00:01.926
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_white_noise.py` (``../../examples/plot_white_noise.py``)
-     - 00:01.760
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_vasicek.py` (``../../examples/plot_vasicek.py``)
-     - 00:01.688
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_random_walk.py` (``../../examples/plot_random_walk.py``)
-     - 00:01.605
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_gaussian_periodic.py` (``../../examples/plot_gaussian_periodic.py``)
-     - 00:01.550
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_correlated_bms.py` (``../../examples/plot_correlated_bms.py``)
-     - 00:01.550
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_gaussian_rbf.py` (``../../examples/plot_gaussian_rbf.py``)
-     - 00:01.540
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_simple_random_walk.py` (``../../examples/plot_simple_random_walk.py``)
-     - 00:01.417
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_inverse_gaussian.py` (``../../examples/plot_inverse_gaussian.py``)
-     - 00:01.382
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_brownian_meander.py` (``../../examples/plot_brownian_meander.py``)
-     - 00:01.279
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_gbm.py` (``../../examples/plot_gbm.py``)
-     - 00:01.225
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_brownian_excursion.py` (``../../examples/plot_brownian_excursion.py``)
-     - 00:01.066
+   * - :ref:`sphx_glr_auto_examples_plot_brownian_2d.py` (``../../examples/plot_brownian_2d.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_examples_plot_brownian_bridge.py` (``../../examples/plot_brownian_bridge.py``)
-     - 00:01.042
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_brownian_excursion.py` (``../../examples/plot_brownian_excursion.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_brownian_meander.py` (``../../examples/plot_brownian_meander.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_brownian_motion.py` (``../../examples/plot_brownian_motion.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_cev.py` (``../../examples/plot_cev.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_cir.py` (``../../examples/plot_cir.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_ckls.py` (``../../examples/plot_ckls.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_correlated_bms.py` (``../../examples/plot_correlated_bms.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_fbm.py` (``../../examples/plot_fbm.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_galton_watson.py` (``../../examples/plot_galton_watson.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_gamma.py` (``../../examples/plot_gamma.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_gaussian_matern.py` (``../../examples/plot_gaussian_matern.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_gaussian_periodic.py` (``../../examples/plot_gaussian_periodic.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_gaussian_rbf.py` (``../../examples/plot_gaussian_rbf.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_gaussian_squared_exponential.py` (``../../examples/plot_gaussian_squared_exponential.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_gbm.py` (``../../examples/plot_gbm.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_hawkes.py` (``../../examples/plot_hawkes.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_inverse_gaussian.py` (``../../examples/plot_inverse_gaussian.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_ou.py` (``../../examples/plot_ou.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_poisson.py` (``../../examples/plot_poisson.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_poisson_mixed.py` (``../../examples/plot_poisson_mixed.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_poisson_non_homogeneous.py` (``../../examples/plot_poisson_non_homogeneous.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_random_walk.py` (``../../examples/plot_random_walk.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_random_walk_2d.py` (``../../examples/plot_random_walk_2d.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_simple_random_walk.py` (``../../examples/plot_simple_random_walk.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_variance_gamma.py` (``../../examples/plot_variance_gamma.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_white_noise.py` (``../../examples/plot_white_noise.py``)
+     - 00:00.000
      - 0.0
