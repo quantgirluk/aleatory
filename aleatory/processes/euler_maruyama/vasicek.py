@@ -107,10 +107,6 @@ class Vasicek(SPEulerMaruyama):
         )
         return variances
 
-    def marginal_variance(self, times=None):
-        variances = self._process_variance(times=times)
-        return variances
-
     def _process_stds(self):
         stds = np.sqrt(self.marginal_variance())
         return stds
@@ -118,6 +114,25 @@ class Vasicek(SPEulerMaruyama):
     def process_stds(self):
         stds = self._process_stds()
         return stds
+
+    def _process_covariance(self, times=None):
+
+        if times is None:
+            times = self.times
+
+        t1 = times[:, None]
+        t2 = times[None, :]
+        covariances = (
+            self.sigma**2
+            * (1.0 / (2.0 * self.theta))
+            * (np.exp(-self.theta * np.abs(t1 - t2)) - np.exp(-self.theta * (t1 + t2)))
+        )
+
+        return covariances
+
+    def marginal_variance(self, times=None):
+        variances = self._process_variance(times=times)
+        return variances
 
     def get_marginal(self, t):
         mu_x = self.initial * np.exp(-1.0 * self.theta * t) + self.mu * (
@@ -133,6 +148,7 @@ class Vasicek(SPEulerMaruyama):
 
         return marginal
 
+
 # if __name__ == "__main__":
 #     import matplotlib.pyplot as plt
 
@@ -142,5 +158,15 @@ class Vasicek(SPEulerMaruyama):
 #     p = Vasicek()
 #     # p.plot_mean_variance(times=np.linspace(0, 1, 100))
 #     p.plot(n=200, N=5, figsize=(12, 7), style=qs)
-#     p.plot(n=200, N=5, T=4.0, figsize=(12, 7), style=qs)
+#     # p.plot(n=200, N=5, T=4.0, figsize=(12, 7), style=qs)
 #     p.draw(n=200, N=200, T=2.0, figsize=(12, 7), style=qs, envelope=True)
+#     p.plot_covariance(
+#         times=np.linspace(0, 2, 100), title="Covariance Matrix of Vasicek Process"
+#     )
+#     p.plot_kernel(
+#         times=np.linspace(0, 2, 100), title="Covariance Kernel of Vasicek Process"
+#     )
+#     p.plot_kernel3d(
+#         times=np.linspace(0, 2, 100), title="Covariance Kernel of Vasicek Process"
+#     )
+#     p.plot_paths_and_kernel(n=100, N=5, title="Vasicek Process Paths and Kernel")
