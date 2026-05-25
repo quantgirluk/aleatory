@@ -5,7 +5,7 @@ from aleatory.processes.gaussian.gaussian_processes_base import (
 from aleatory.utils.kernels import white_noise_kernel, white_noise_kernel_diag
 
 
-class GPWhiteNoise(GaussianSigma):
+class WhiteNoise(GaussianSigma):
     r"""
     Gaussian Process White Noise
     ============================
@@ -63,7 +63,7 @@ class GPWhiteNoise(GaussianSigma):
 #     plt.style.use(mystyle)
 
 #     processes = [
-#         # GPWhiteNoise(sigma=1.0, T=1.0),
+#         # WhiteNoise(sigma=1.0, T=1.0),
 #         # GPLinear(sigma=1.0, T=1.0),
 #         # GPConstant(sigma=1, T=1.0),
 #         # GPRBF(length_scale=0.3, sigma=1.0, T=1.0),

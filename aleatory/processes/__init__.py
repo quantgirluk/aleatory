@@ -83,4 +83,4 @@ from aleatory.processes.gaussian.gaussian_rbf import GPRBF
 from aleatory.processes.gaussian.gaussian_squared_exponential import (
     GPSquaredExponential,
 )
-from aleatory.processes.gaussian.gaussian_whitenoise import GPWhiteNoise
+from aleatory.processes.gaussian.gaussian_whitenoise import WhiteNoise
