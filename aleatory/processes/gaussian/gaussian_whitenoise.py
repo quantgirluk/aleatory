@@ -29,15 +29,15 @@ class WhiteNoise(GaussianSigma):
     .. highlight:: python
     .. code-block:: python
 
-        from aleatory.processes import GPWhiteNoise
-        process = GPWhiteNoise(sigma=1.0, T=1.0)
+        from aleatory.processes import WhiteNoise
+        process = WhiteNoise(sigma=1.0, T=1.0)
         fig = process.plot_paths_and_kernel(n=100, N=5, matrix_shape=True)
         fig.show()
 
     .. code-block:: python
 
-        from aleatory.processes import GPWhiteNoise
-        process = GPWhiteNoise(sigma=1.0, T=1.0)
+        from aleatory.processes import WhiteNoise
+        process = WhiteNoise(sigma=1.0, T=1.0)
         fig = process.draw(n=100, N=200, figsize=(12, 7))
         fig.show()
     """
