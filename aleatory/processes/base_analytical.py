@@ -45,6 +45,7 @@ class SPAnalytical(StochasticProcess):
             None  # Cleaning the empirical marginals from previous simulations
         )
         self.paths = [self.sample(n) for _ in range(N)]
+        self.times = np.linspace(0, self.T, n)
         return self.paths
 
     def _get_empirical_marginal_samples(self):
