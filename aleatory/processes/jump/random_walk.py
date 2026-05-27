@@ -63,6 +63,13 @@ class SimpleRandomWalk(SPAnalytical, ABC):
             times = self.times
         return times * 4.0 * self.p * self.q
 
+    def _process_covariance(self, times=None):
+        if times is None:
+            times = self.times
+        t1 = times[:, None]
+        t2 = times[None, :]
+        return 4.0 * self.p * self.q * np.minimum(t1, t2)
+
     def marginal_expectation(self, times=None):
         expectations = self._process_expectation(times=times)
         return expectations
