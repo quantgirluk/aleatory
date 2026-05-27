@@ -36,8 +36,8 @@ class GammaProcess(SPAnalyticalMarginals):
     def __init__(self, mu=1.0, nu=1.0, T=10.0, rng=None):
         """
 
-        :parameter float mu: the parameter :math:`\mu` in the above definition
-        :parameter float nu: the parameter :math:`\nu` in the above definition
+        :parameter float mu: the parameter :math:`\\mu` in the above definition
+        :parameter float nu: the parameter :math:`\\nu` in the above definition
 
         """
         super().__init__(T=T, rng=rng, initial=0.0)
@@ -139,6 +139,13 @@ class GammaProcess(SPAnalyticalMarginals):
         if times is None:
             times = self.times
         return self.nu * times
+    
+    def _process_covariance(self, times=None):
+        if times is None:
+            times = self.times
+        t1 = times[:, None]
+        t2 = times[None, :]
+        return self.nu * np.minimum(t1, t2)
 
     def marginal_expectation(self, times=None):
         expectations = self._process_expectation(times=times)
