@@ -105,11 +105,22 @@ class fBM(SPAnalyticalMarginals):
         if times is None:
             times = self.times
         return 0.0 * times
-    
+
     def _process_variance(self, times=None):
         if times is None:
             times = self.times
         return times ** (2.0 * self.hurst)
+
+    def _process_covariance(self, times=None):
+        if times is None:
+            times = self.times
+        t1 = times[:, None]
+        t2 = times[None, :]
+        return 0.5 * (
+            t1 ** (2.0 * self.hurst)
+            + t2 ** (2.0 * self.hurst)
+            - np.abs(t1 - t2) ** (2.0 * self.hurst)
+        )
 
     def get_marginal(self, t):
         s = np.sqrt(t ** (2.0 * self.hurst))
@@ -126,7 +137,8 @@ if __name__ == "__main__":
 
     p = fBM(hurst=0.25, T=1.0)
     p.plot(n=500, N=4, figsize=(12, 7), style=qs)
-    p.plot(n=500, N=4, T=3.0, figsize=(12, 7), style=qs)
+    # p.plot(n=500, N=4, T=3.0, figsize=(12, 7), style=qs)
     p.draw(n=500, N=200, figsize=(12, 7), style=qs, colormap="viridis")
-    p.draw(n=500, N=200, T=5.0, figsize=(12, 7), style=qs, colormap="viridis")
-    
+    # p.draw(n=500, N=200, T=5.0, figsize=(12, 7), style=qs, colormap="viridis")
+    p.plot_covariance(times=np.linspace(0, 1, 100))
+    p.plot_paths_and_kernel(n=100, N=5, figsize=(12, 7))
