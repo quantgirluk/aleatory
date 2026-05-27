@@ -90,6 +90,23 @@ class PoissonProcess(BaseProcess):
     def marginal_expectation(self, times):
         return self.rate * times
 
+    def _process_expectation(self, times=None):
+        if times is None:
+            times = self.times
+        return self.rate * times
+
+    def _process_variance(self, times=None):
+        if times is None:
+            times = self.times
+        return self.rate * times
+
+    def _process_covariance(self, times=None):
+        if times is None:
+            times = self.times
+        t1 = times[:, None]
+        t2 = times[None, :]
+        return self.rate * np.minimum(t1, t2)
+
     def simulate(self, N, jumps=None, T=None):
         """
         Simulate paths/trajectories from the instanced stochastic process.
