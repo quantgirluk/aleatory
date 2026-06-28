@@ -181,6 +181,7 @@ class GaussianProcess(SPAnalyticalMarginals):
         matrix_shape=False,
         title=None,
         cbar_labels={"cbar": "Kernel K(t, s)"},
+        **fig_kw,
     ):
         if title is None:
             title = f"{self.name} \nKernel Function"
@@ -190,6 +191,7 @@ class GaussianProcess(SPAnalyticalMarginals):
             matrix_shape=matrix_shape,
             title=title,
             cbar_labels=cbar_labels,
+            **fig_kw,
         )
 
     def plot_kernel3d(self, times=None, title=None, **fig_kw):
@@ -216,7 +218,7 @@ class GaussianProcess(SPAnalyticalMarginals):
         plt.show()
 
     def plot_paths_and_kernel(
-        self, n, N, T=None, cmap="coolwarm", matrix_shape=False, title=None
+        self, n, N, T=None, cmap="coolwarm", matrix_shape=False, title=None, **fig_kw
     ):
         if T is None:
             T = self.T
@@ -226,12 +228,7 @@ class GaussianProcess(SPAnalyticalMarginals):
 
         title = title if title else f"{self.name}"
         return plot_paths_and_kernel(
-            paths,
-            times,
-            K,
-            title=title,
-            cmap=cmap,
-            matrix_shape=matrix_shape,
+            paths, times, K, title=title, cmap=cmap, matrix_shape=matrix_shape, **fig_kw
         )
 
 
@@ -254,7 +251,7 @@ class GaussianSigma(GaussianProcess):
         covariance_matrix = self.covariance_function(times)
         return np.diag(covariance_matrix)
 
-    def make_widget(self, matrix_shape=False, cmap="coolwarm"):
+    def make_widget(self, matrix_shape=False, cmap="coolwarm", figsize=(12, 6)):
 
         sigma_slider = widgets.FloatSlider(
             value=self.sigma, min=0.25, max=3.0, step=0.25, description="Sigma"
@@ -273,6 +270,7 @@ class GaussianSigma(GaussianProcess):
                 title=f"GP ($\\sigma$={sigma:.2f})",
                 cmap=cmap,
                 matrix_shape=matrix_shape,
+                figsize=figsize,
             )
 
         widget = interact(update, sigma=sigma_slider, n_samples=n_samples_slider)
@@ -298,7 +296,7 @@ class GaussianLengthScaleSigma(GaussianProcess):
         covariance_matrix = self.covariance_function(times)
         return np.diag(covariance_matrix)
 
-    def make_widget(self, matrix_shape=False, cmap="coolwarm"):
+    def make_widget(self, matrix_shape=False, cmap="coolwarm", figsize=(12, 6)):
         length_slider = widgets.FloatSlider(
             value=self.length_scale,
             min=0.1,
@@ -324,6 +322,7 @@ class GaussianLengthScaleSigma(GaussianProcess):
                 title=f"{self.short_name} (l={length_scale:.2f}, $\\sigma$={sigma:.2f})",
                 cmap=cmap,
                 matrix_shape=matrix_shape,
+                figsize=figsize,
             )
 
         widget = interact(
@@ -355,7 +354,7 @@ class GaussianThreeParameter(GaussianProcess):
         covariance_matrix = self.covariance_function(times)
         return np.diag(covariance_matrix)
 
-    def make_widget(self, matrix_shape=False, cmap="coolwarm"):
+    def make_widget(self, matrix_shape=False, cmap="coolwarm", figsize=(12, 6)):
         length_slider = widgets.FloatSlider(
             value=self.length_scale,
             min=0.1,
@@ -385,6 +384,7 @@ class GaussianThreeParameter(GaussianProcess):
                 title=f"{self.short_name} (l={length_scale:.2f}, $\\sigma$={sigma:.2f}, $\\nu$={nu:.2f})",
                 cmap=cmap,
                 matrix_shape=matrix_shape,
+                figsize=figsize,
             )
 
         widget = interact(

@@ -36,9 +36,9 @@ def squared_exponential_kernel_diag(times, length_scale=1.0, sigma=1.0):
 
 
 def periodic_kernel(times, length_scale=1.0, sigma=1.0, period=1.0):
-    pairwise_dists = np.subtract.outer(times, times) ** 2
+    pairwise_dists = np.abs(np.subtract.outer(times, times))
     return sigma**2 * np.exp(
-        -2 * np.sin(np.pi * pairwise_dists / period) ** 2 / length_scale**2
+        -(2 * np.sin(np.pi * pairwise_dists / period) ** 2) / length_scale**2
     )
 
 
