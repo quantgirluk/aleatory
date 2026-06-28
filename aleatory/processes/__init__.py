@@ -26,6 +26,7 @@ The :py:mod:`aleatory.processes` module provides classes for following stochasti
    GaussianRBF                  -- Gaussian Process with RBF Kernel
    GaussianSquaredExponential   -- Gaussian Process with Squared Exponential Kernel
    GaussianWhiteNoise           -- Gaussian Process with White Noise Kernel
+   GaussianRationalQuadratic    -- Gaussian Process with Rational Quadratic Kernel
    GammaProcess                 -- Gamma Process
    GeneralRandomWalk            -- General Random Walk Process
    HawkesProcess                -- Hawkes Process
@@ -84,3 +85,4 @@ from aleatory.processes.gaussian.gaussian_squared_exponential import (
     GPSquaredExponential,
 )
 from aleatory.processes.gaussian.gaussian_whitenoise import WhiteNoise
+from aleatory.processes.gaussian.gaussian_rational_quadratic import GPRationalQuadratic

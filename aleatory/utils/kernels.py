@@ -181,7 +181,6 @@ def rational_quadratic_kernel_diag(times, length_scale=1.0, sigma=1.0, alpha=1.0
     times = _as_array_1d(times)
     return sigma**2 * np.ones_like(times, dtype=float)
 
-
 if __name__ == "__main__":
 
     test = constant_kernel(times=np.linspace(0, 1, 5), sigma=1.0)
