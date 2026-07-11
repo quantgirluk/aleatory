@@ -70,27 +70,19 @@ def plot_paths_and_kernel(
         axes[0].set_title("Simulated Paths")
         axes[0].set_xlabel("Time")
         axes[0].set_ylabel("Value")
+        axes[1].imshow(K, cmap=cmap, interpolation="none", origin=origin, extent=extent)
+        cbar = fig.colorbar(axes[1].images[0], ax=axes[1])
+        cbar.set_label("K(t, s)")
+        axes[1].set_title("Kernel")
+        axes[1].set_xlabel("t")
+        axes[1].set_ylabel("s")
 
-    if matrix_shape:
-        origin = "upper"
-        extent = [times[0], times[-1], times[-1], times[0]]
-    else:
-        origin = "lower"
-        extent = [times[0], times[-1], times[0], times[-1]]
-
-    axes[1].imshow(K, cmap=cmap, interpolation="none", origin=origin, extent=extent)
-    cbar = fig.colorbar(plt.cm.ScalarMappable(cmap=cmap), ax=axes[1])
-    cbar.set_label("K(t, s)")
-    axes[1].set_title("Kernel")
-    axes[1].set_xlabel("t")
-    axes[1].set_ylabel("s")
-
-    if title:
-        fig.suptitle(title)
-    else:
-        fig.suptitle("Simulated Paths and Kernel")
-    plt.tight_layout()
-    plt.show()
+        if title:
+            fig.suptitle(title)
+        else:
+            fig.suptitle("Simulated Paths and Kernel")
+        plt.tight_layout()
+        plt.show()
     return fig
 
 
