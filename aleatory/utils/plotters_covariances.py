@@ -64,14 +64,20 @@ def plot_paths_and_kernel(
     K = covariance_matrix
 
     with plt.style.context(style):
-        fig, axes = plt.subplots(1, 2, **fig_kw)
+        fig, axes = plt.subplots(1, 2, gridspec_kw={"width_ratios": [2, 1]}, **fig_kw)
         for i in range(len(paths)):
             axes[0].plot(times, paths[i])
         axes[0].set_title("Simulated Paths")
         axes[0].set_xlabel("Time")
         axes[0].set_ylabel("Value")
         axes[1].imshow(K, cmap=cmap, interpolation="none", origin=origin, extent=extent)
-        cbar = fig.colorbar(axes[1].images[0], ax=axes[1])
+        cbar = fig.colorbar(
+            axes[1].images[0],
+            ax=axes[1],
+            fraction=0.04,
+            pad=0.03,
+            aspect=20,
+        )
         cbar.set_label("K(t, s)")
         axes[1].set_title("Kernel")
         axes[1].set_xlabel("t")
