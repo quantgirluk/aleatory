@@ -231,6 +231,24 @@ class GaussianProcess(SPAnalyticalMarginals):
             paths, times, K, title=title, cmap=cmap, matrix_shape=matrix_shape, **fig_kw
         )
 
+    def _widget_nsteps(self):
+        return int(100 * self.T)
+
+    def _widget_n_samples_slider(self):
+        return widgets.IntSlider(value=5, min=2, max=10, step=1, description="Samples")
+
+    def _widget_plot(self, n_samples, title, cmap, matrix_shape, plot_kwargs):
+        fig_kwargs = {"figsize": (12, 6), **plot_kwargs}
+        self.plot_paths_and_kernel(
+            n=self._widget_nsteps(),
+            N=n_samples,
+            T=self.T,
+            title=title,
+            cmap=cmap,
+            matrix_shape=matrix_shape,
+            **fig_kwargs,
+        )
+
 
 class GaussianSigma(GaussianProcess):
 
@@ -251,26 +269,21 @@ class GaussianSigma(GaussianProcess):
         covariance_matrix = self.covariance_function(times)
         return np.diag(covariance_matrix)
 
-    def make_widget(self, matrix_shape=False, cmap="coolwarm", figsize=(12, 6)):
+    def make_widget(self, cmap="coolwarm", matrix_shape=False, **plot_kwargs):
 
         sigma_slider = widgets.FloatSlider(
             value=self.sigma, min=0.25, max=3.0, step=0.25, description="Sigma"
         )
-        n_samples_slider = widgets.IntSlider(
-            value=5, min=2, max=10, step=1, description="Samples"
-        )
+        n_samples_slider = self._widget_n_samples_slider()
 
         def update(sigma=self.sigma, n_samples=5):
             self.sigma = sigma
-            n_steps = int(100 * self.T)
-            self.plot_paths_and_kernel(
-                n=n_steps,
-                N=n_samples,
-                T=self.T,
+            self._widget_plot(
+                n_samples=n_samples,
                 title=f"GP ($\\sigma$={sigma:.2f})",
                 cmap=cmap,
                 matrix_shape=matrix_shape,
-                figsize=figsize,
+                plot_kwargs=plot_kwargs,
             )
 
         widget = interact(update, sigma=sigma_slider, n_samples=n_samples_slider)
@@ -296,7 +309,7 @@ class GaussianLengthScaleSigma(GaussianProcess):
         covariance_matrix = self.covariance_function(times)
         return np.diag(covariance_matrix)
 
-    def make_widget(self, matrix_shape=False, cmap="coolwarm", figsize=(12, 6)):
+    def make_widget(self, cmap="coolwarm", matrix_shape=False, **plot_kwargs):
         length_slider = widgets.FloatSlider(
             value=self.length_scale,
             min=0.1,
@@ -307,22 +320,17 @@ class GaussianLengthScaleSigma(GaussianProcess):
         sigma_slider = widgets.FloatSlider(
             value=self.sigma, min=0.25, max=3.0, step=0.25, description="Sigma"
         )
-        n_samples_slider = widgets.IntSlider(
-            value=5, min=2, max=10, step=1, description="Samples"
-        )
+        n_samples_slider = self._widget_n_samples_slider()
 
         def update(length_scale, sigma, n_samples=5):
             self.length_scale = length_scale
             self.sigma = sigma
-            nsteps = int(100 * self.T)
-            self.plot_paths_and_kernel(
-                n=nsteps,
-                N=n_samples,
-                T=self.T,
+            self._widget_plot(
+                n_samples=n_samples,
                 title=f"{self.short_name} (l={length_scale:.2f}, $\\sigma$={sigma:.2f})",
                 cmap=cmap,
                 matrix_shape=matrix_shape,
-                figsize=figsize,
+                plot_kwargs=plot_kwargs,
             )
 
         widget = interact(
@@ -354,7 +362,7 @@ class GaussianThreeParameter(GaussianProcess):
         covariance_matrix = self.covariance_function(times)
         return np.diag(covariance_matrix)
 
-    def make_widget(self, matrix_shape=False, cmap="coolwarm", figsize=(12, 6)):
+    def make_widget(self, cmap="coolwarm", matrix_shape=False, **plot_kwargs):
         length_slider = widgets.FloatSlider(
             value=self.length_scale,
             min=0.1,
@@ -368,23 +376,18 @@ class GaussianThreeParameter(GaussianProcess):
         nu_slider = widgets.FloatSlider(
             value=self.nu, min=0.5, max=2.5, step=0.5, description="Nu"
         )
-        n_samples_slider = widgets.IntSlider(
-            value=5, min=2, max=10, step=1, description="Samples"
-        )
+        n_samples_slider = self._widget_n_samples_slider()
 
         def update(length_scale, sigma, nu, n_samples):
             self.length_scale = length_scale
             self.sigma = sigma
             self.nu = nu
-            nsteps = int(100 * self.T)
-            self.plot_paths_and_kernel(
-                n=nsteps,
-                N=n_samples,
-                T=self.T,
+            self._widget_plot(
+                n_samples=n_samples,
                 title=f"{self.short_name} (l={length_scale:.2f}, $\\sigma$={sigma:.2f}, $\\nu$={nu:.2f})",
                 cmap=cmap,
                 matrix_shape=matrix_shape,
-                figsize=figsize,
+                plot_kwargs=plot_kwargs,
             )
 
         widget = interact(
