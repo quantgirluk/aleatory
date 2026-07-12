@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import ipywidgets as widgets
-from ipywidgets import interact, interactive
+from ipywidgets import interact
 
 
 from scipy.stats import norm
