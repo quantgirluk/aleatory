@@ -16,13 +16,15 @@ def constant_kernel_diag(times, sigma=1.0):
     return sigma**2 * np.ones_like(times, dtype=float)
 
 
-def linear_kernel(times, sigma=1.0):
-    return sigma**2 * np.outer(times, times)
+def linear_kernel(times, sigma=1.0, c=0.0, sigma_b=0.0):
+    centered_times = _as_array_1d(times) - c
+    return sigma**2 * np.outer(centered_times, centered_times) + sigma_b
 
 
-def linear_kernel_diag(times, sigma=1.0):
+def linear_kernel_diag(times, sigma=1.0, c=0.0, sigma_b=0.0):
     times = _as_array_1d(times)
-    return sigma**2 * times**2
+    centered_times = times - c
+    return sigma**2 * centered_times**2 + sigma_b
 
 
 def squared_exponential_kernel(times, length_scale=1.0, sigma=1.0):
@@ -180,6 +182,7 @@ def rational_quadratic_kernel(times, length_scale=1.0, sigma=1.0, alpha=1.0):
 def rational_quadratic_kernel_diag(times, length_scale=1.0, sigma=1.0, alpha=1.0):
     times = _as_array_1d(times)
     return sigma**2 * np.ones_like(times, dtype=float)
+
 
 if __name__ == "__main__":
 
